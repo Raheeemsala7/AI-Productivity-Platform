@@ -36,13 +36,12 @@ export default function LoginForm() {
                 redirect: false
             })
 
-            console.log(res)
-
             if (res?.error === "Invalid credentials") {
                 toast.error("Invalid credentials")
                 return
             }
             toast.success("Login successful")
+            window.location.href = "/dashboard"
         })
 
     };
