@@ -1,6 +1,7 @@
 import Credentials from "next-auth/providers/credentials";
 import { NextAuthOptions } from "next-auth";
-import { IApiResponse } from "./shared/types/api";
+import { loginAction } from "./features/auth/apis/auth.action";
+import { sessionMaxAge } from "./shared/constant/session.constant";
 
 
 
@@ -9,36 +10,27 @@ export const authOptions: NextAuthOptions = {
         Credentials({
             name: "Credentials",
             credentials: {
-                username: {},
+                email: {},
                 password: {},
                 token: {},
-                user: {}
             },
             authorize: async (credentials) => {
-
-                const res = await fetch(`${process.env.API_URL}/auth/login`, {
-                    method: "POST",
-                    body: JSON.stringify({ username: credentials?.username, password: credentials?.password }),
-                    headers: {
-                        "Content-Type": "application/json",
-                    }
-                })
-
-                const data: IApiResponse<{}> = await res.json()
-                console.log("data login", data)
-                if (!data.status) {
-                    throw Error(data.message)
+                if (!credentials) {
+                    return null;
                 }
-
-                const loginData = data.payload
-
+                const loginData = await loginAction({
+                    email: credentials.email,
+                    password: credentials.password,
+                    remember: false
+                });
                 return {
-                    id: loginData.user.id,
-                    token: loginData.token,
-                    user: loginData.user
+                    id: loginData.access_token,
+                    token: loginData.access_token,
+                    user: {
+                        "name": "Kareem",
+                        "email": "karemmustafa20@gmail.com",
+                    },
                 }
-
-
             }
         })
     ],
@@ -58,5 +50,16 @@ export const authOptions: NextAuthOptions = {
 
             return session
         }
-    }
+    },
+    session: {
+        strategy: 'jwt',
+        maxAge: sessionMaxAge,
+    },
+    jwt: {
+        maxAge: sessionMaxAge,
+    },
+    pages: {
+        signIn: '/login',
+        error: '/login',
+    },
 }
