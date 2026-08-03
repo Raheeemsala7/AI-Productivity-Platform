@@ -162,7 +162,7 @@ export default function LoginForm() {
             <p className="mt-6 text-center text-sm text-muted-foreground">
                 New to ORICO?{" "}
                 <Link
-                    href="/signup"
+                    href="/auth/register"
                     className="font-medium text-primary hover:text-primary-glow"
                 >
                     Create an account

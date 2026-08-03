@@ -5,3 +5,8 @@ export interface LoginResponse {
     token_type: "bearer",
     expires_in: number
 }
+
+/**
+ * Register form values
+ */
+export type RegisterFormValues = z.infer<typeof registerSchema>;
