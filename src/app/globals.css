@@ -82,6 +82,16 @@
   ::selection { background: rgba(121, 183, 155, 0.28); color: #ECF2EF; }
 }
 
+
+[data-sidebar="sidebar"] {
+  background: linear-gradient(180deg, rgba(20, 56, 43, 0.65) 0%, rgba(15, 42, 32, 0.5) 100%);
+  backdrop-filter: blur(14px);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-card);
+  /* margin: 10px; */
+
+}
+
 @utility glass {
   background: linear-gradient(180deg, rgba(20, 56, 43, 0.65) 0%, rgba(15, 42, 32, 0.5) 100%);
   backdrop-filter: blur(14px);

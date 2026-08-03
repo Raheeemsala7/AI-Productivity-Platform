@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 
 import * as React from "react";
 import Link from "next/link";
@@ -23,6 +23,8 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from "@/shared/components/ui/sidebar";
+import { cn } from "@/shared/lib/utils";
+import SignOutButton from "./sign-out-button";
 
 const items = [
     {
@@ -54,13 +56,13 @@ const items = [
 
 export function AppSidebar() {
     return (
-        <Sidebar collapsible="icon" variant="inset">
+        <Sidebar collapsible="icon" variant="floating" className="py-6 border-none shadow-non" >
             {/* Logo */}
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg">
-                            <Link href="/dashboard">
+                            <Link href="/dashboard" className="flex items-center gap-4">
                                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[image:var(--gradient-primary)]">
                                     <Sparkles className="h-5 w-5 text-white" />
                                 </div>
@@ -80,14 +82,13 @@ export function AppSidebar() {
             {/* Menu */}
             <SidebarContent>
                 <SidebarGroup>
-                    <SidebarGroupLabel>Navigation</SidebarGroupLabel>
 
                     <SidebarGroupContent>
                         <SidebarMenu>
                             {items.map((item) => (
                                 <SidebarMenuItem key={item.title}>
                                     <SidebarMenuButton tooltip={item.title}>
-                                        <Link href={item.url}>
+                                        <Link className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm transition-colors" href={item.url}>
                                             <item.icon className="h-4 w-4" />
                                             <span>{item.title}</span>
                                         </Link>
@@ -101,22 +102,20 @@ export function AppSidebar() {
 
             {/* Footer */}
             <SidebarFooter>
+                <div className="rounded-xl border border-[color:var(--border-strong)] p-3 mb-2">
+                    <p className="text-xs font-medium">Professional plan</p>
+                    <p className="mt-1 text-[11px] text-muted-foreground">840 / 1,000 credits</p>
+                    <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-[color:var(--muted)]">
+                        <div className="h-full rounded-full bg-[image:var(--gradient-primary)]" style={{ width: "84%" }} />
+                    </div>
+                </div>
                 <SidebarMenu>
                     <SidebarMenuItem>
-                        <SidebarMenuButton>
-                            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground">
-                                K
-                            </div>
-
-                            <div className="flex flex-col">
-                                <span className="text-sm font-medium">Kareem Mustafa</span>
-
-                                <span className="text-xs text-muted-foreground">Admin</span>
-                            </div>
-                        </SidebarMenuButton>
+                        <SignOutButton />
                     </SidebarMenuItem>
                 </SidebarMenu>
             </SidebarFooter>
+
         </Sidebar>
     );
 }
