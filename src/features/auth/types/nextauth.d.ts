@@ -1,24 +1,20 @@
-import { UserData } from "@/src/features/auth/types/auth";
+import { DefaultSession, DefaultUser } from "next-auth";
 
 declare module 'next-auth' {
     /**
      * Returned by `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
      */
 
-    interface User {
-        user: {
-            name: string
-            email: string
-        };
-        token: string;
-    }
+    interface User extends DefaultUser {
+    token: string;
+  }
+
 
     interface Session {
-        user: {
-            name: string
-            email: string
-        };
-    }
+    token: string;
+    user: DefaultSession["user"];
+  }
+
 }
 
 declare module 'next-auth/jwt' {

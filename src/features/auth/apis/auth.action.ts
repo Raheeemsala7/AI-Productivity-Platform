@@ -14,11 +14,11 @@ export async function loginAction(values: LoginFormValues) {
         }
     })
 
-    const data: IApiResponse<LoginResponse> = await res.json()
+    const data: LoginResponse = await res.json()
     console.log("data login", data)
-    if (!data.status) {
+    if (!data.success) {
         throw Error(data.message)
     }
 
-    return data.payload
+    return data
 } 

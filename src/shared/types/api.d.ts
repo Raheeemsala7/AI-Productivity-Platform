@@ -2,13 +2,13 @@ import { IPagination } from '../../../features/exams/types/exam';
 
 
 declare type SuccessResponse<T> = {
-    status: true
+    success: true
     code: number;
     message?: string
     payload: T
 }
 declare type IErrorResponse = {
-    status: false
+    success: false
     code: number;
     message?: string;
     errors?: Array<{

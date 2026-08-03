@@ -7,6 +7,7 @@ import { Field, FieldError, FieldLabel } from '@/shared/components/ui/field';
 import { useState, useTransition } from 'react';
 import Link from 'next/link';
 import { signIn } from 'next-auth/react';
+import { toast } from 'sonner';
 
 export default function LoginForm() {
     const [showPassword, setShowPassword] = useState(false)
@@ -26,13 +27,22 @@ export default function LoginForm() {
  */
     const onSubmit = async (data: LoginFormValues) => {
         console.log(data);
-        startTransition( async() => {
+        startTransition(async () => {
 
-            await signIn("credentials", {
+            const res = await signIn("credentials", {
                 email: data.email,
                 password: data.password,
                 remember: data.remember,
+                redirect: false
             })
+
+            console.log(res)
+
+            if (res?.error === "Invalid credentials") {
+                toast.error("Invalid credentials")
+                return
+            }
+            toast.success("Login successful")
         })
 
     };
