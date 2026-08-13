@@ -36,13 +36,14 @@ export default function LoginForm() {
                 remember: data.remember,
                 redirect: false
             })
+            console.log("res", res)
 
             if (res?.error === "Invalid credentials") {
                 toast.error(t("invalidCredentials"))
                 return
             }
             toast.success(t("loginSuccess"))
-            router.push("/dashboard")
+            window.location.href = "/dashboard"
         })
     };
 

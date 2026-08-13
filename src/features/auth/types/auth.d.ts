@@ -1,9 +1,18 @@
+
+
+type User = {
+    name: string;
+    email: string;
+    slogan: string;
+    avatar: string | null;
+    avatar_color: string;
+};
+
+
 export interface LoginResponse {
-    success: boolean
-    message: string
-    access_token: string
-    token_type: "bearer",
-    expires_in: number
+    access_token: string;
+    expires_in: number;
+    user: User
 }
 
 /**

@@ -15,9 +15,9 @@ export async function loginAction(values: LoginFormValues) {
         }
     })
 
-    const data: LoginResponse = await res.json()
-    console.log("data login", data)
-    if (!data.success) {
+    const data: IApiResponse<LoginResponse> = await res.json()
+    console.log("Backend response", data)
+    if (!data.status) {
         throw Error(data.message)
     }
 
@@ -57,7 +57,7 @@ export async function loginGoogleAction(id_token: string) {
     const data: IApiResponse<{}> = await res.json();
 
     console.log(data)
-    if (!data.success) {
+    if (!data.status) {
         throw new Error("Failed Error")
     }
     return data

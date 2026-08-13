@@ -27,10 +27,10 @@ export const authOptions: NextAuthOptions = {
                 console.log("loginData", loginData);
 
                 return {
-                    id: "2",
-                    name: "Kareem",
-                    email: "karemmustafa20@gmail.com",
-                    token: loginData.access_token,
+                    id: loginData.payload.user.email,
+                    name: loginData.payload.user.name,
+                    email: loginData.payload.user.email,
+                    token: loginData.payload.access_token,
                 };
 
             }
