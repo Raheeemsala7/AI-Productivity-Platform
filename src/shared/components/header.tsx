@@ -2,6 +2,7 @@
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { ThemeToggle } from "./theme-toggle";
 
 export function Header() {
     const [scrolled, setScrolled] = useState(false);
@@ -28,6 +29,7 @@ export function Header() {
                     <a href="#faq" className="hover:text-foreground transition">FAQ</a>
                 </nav>
                 <div className="flex items-center gap-3">
+                    <ThemeToggle />
                     <Link href={"/auth/login"} className="hidden sm:inline text-sm text-muted-foreground hover:text-foreground transition">Sign in</Link>
                     <button className="btn-primary rounded-lg px-4 py-2 text-sm font-medium inline-flex items-center gap-1.5">
                         Get started <ArrowRight className="w-3.5 h-3.5" />
