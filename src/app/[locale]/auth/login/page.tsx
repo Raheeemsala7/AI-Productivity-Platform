@@ -1,9 +1,11 @@
 import LoginForm from '@/features/auth/_components/login-form'
 import { Sparkles } from 'lucide-react'
-import Link from 'next/link'
-import React from 'react'
+import { Link } from '@/i18n/navigation'
+import { getTranslations } from 'next-intl/server'
 
-export default function LoginPage() {
+export default async function LoginPage() {
+    const t = await getTranslations("Auth")
+
     return (
         <>
             <div className="mb-8 flex flex-col items-center text-center">
@@ -14,10 +16,10 @@ export default function LoginPage() {
                     <span className="text-lg font-semibold tracking-tight">ORICO</span>
                 </Link>
                 <span className="rounded-full border border-[color:var(--border-strong)] px-3 py-1 text-[11px] uppercase tracking-widest text-muted-foreground">
-                    Welcome back
+                    {t("welcomeBack")}
                 </span>
-                <h1 className="mt-4 text-3xl font-semibold tracking-tight text-gradient">Sign in to ORICO</h1>
-                <p className="mt-2 max-w-sm text-sm text-muted-foreground">Continue building your business plan where you left off.</p>
+                <h1 className="mt-4 text-3xl font-semibold tracking-tight text-gradient">{t("signInTitle")}</h1>
+                <p className="mt-2 max-w-sm text-sm text-muted-foreground">{t("signInSubtitle")}</p>
             </div>
 
             <div className="glass rounded-2xl p-6 sm:p-7">

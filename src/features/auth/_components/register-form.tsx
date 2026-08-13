@@ -1,19 +1,20 @@
 "use client"
 import { zodResolver } from '@hookform/resolvers/zod';
-import React, { useState, useTransition } from 'react'
+import { useState, useTransition } from 'react'
 import { Controller, useForm } from 'react-hook-form';
 import { registerSchema } from '../schema/auth.schema';
 import { RegisterFormValues } from '../types/auth';
 import { ArrowRight, Eye, EyeOff, Lock, Mail, User } from 'lucide-react';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 import { Field, FieldError, FieldLabel } from '@/shared/components/ui/field';
 import { useRegisterMutation } from '../hooks/auth.hook';
+import { useTranslations } from 'next-intl';
 
 export default function RegisterForm() {
-
     const [showPassword, setShowPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
     const [isPending, startTransition] = useTransition()
+    const t = useTranslations("Auth")
 
     const { mutateAsync } = useRegisterMutation()
     const form = useForm<RegisterFormValues>({
@@ -27,28 +28,23 @@ export default function RegisterForm() {
         },
     });
 
-    /**
-     * Submit register form
-     */
     const onSubmit = async (data: RegisterFormValues) => {
         startTransition(async () => {
-            console.log(data);
-
             await mutateAsync(data);
         });
     };
+
     return (
         <form
             className="space-y-4"
             onSubmit={form.handleSubmit(onSubmit)}
         >
-            {/* Name */}
             <Controller
                 name="name"
                 control={form.control}
                 render={({ field, fieldState }) => (
                     <Field>
-                        <FieldLabel>Full name</FieldLabel>
+                        <FieldLabel>{t("fullName")}</FieldLabel>
 
                         <div className="flex items-center gap-2 rounded-xl border border-input px-3">
                             <User className="h-4 w-4 text-muted-foreground" />
@@ -56,7 +52,7 @@ export default function RegisterForm() {
                             <input
                                 {...field}
                                 type="text"
-                                placeholder="Karem Mostafa"
+                                placeholder={t("namePlaceholder")}
                                 className="w-full bg-transparent py-3 text-sm outline-none"
                             />
                         </div>
@@ -68,13 +64,12 @@ export default function RegisterForm() {
                 )}
             />
 
-            {/* Email */}
             <Controller
                 name="email"
                 control={form.control}
                 render={({ field, fieldState }) => (
                     <Field>
-                        <FieldLabel>Email</FieldLabel>
+                        <FieldLabel>{t("workEmail")}</FieldLabel>
 
                         <div className="flex items-center gap-2 rounded-xl border border-input px-3">
                             <Mail className="h-4 w-4 text-muted-foreground" />
@@ -82,7 +77,7 @@ export default function RegisterForm() {
                             <input
                                 {...field}
                                 type="email"
-                                placeholder="karem@gmail.com"
+                                placeholder={t("emailPlaceholder")}
                                 className="w-full bg-transparent py-3 text-sm outline-none"
                             />
                         </div>
@@ -94,13 +89,12 @@ export default function RegisterForm() {
                 )}
             />
 
-            {/* Password */}
             <Controller
                 name="password"
                 control={form.control}
                 render={({ field, fieldState }) => (
                     <Field>
-                        <FieldLabel>Password</FieldLabel>
+                        <FieldLabel>{t("password")}</FieldLabel>
 
                         <div className="flex items-center gap-2 rounded-xl border border-input px-3">
                             <Lock className="h-4 w-4 text-muted-foreground" />
@@ -131,13 +125,12 @@ export default function RegisterForm() {
                 )}
             />
 
-            {/* Confirm Password */}
             <Controller
                 name="password_confirmation"
                 control={form.control}
                 render={({ field, fieldState }) => (
                     <Field>
-                        <FieldLabel>Confirm password</FieldLabel>
+                        <FieldLabel>{t("confirmPassword")}</FieldLabel>
 
                         <div className="flex items-center gap-2 rounded-xl border border-input px-3">
                             <Lock className="h-4 w-4 text-muted-foreground" />
@@ -170,13 +163,12 @@ export default function RegisterForm() {
                 )}
             />
 
-            {/* Submit */}
             <button
                 type="submit"
                 disabled={isPending}
                 className="btn-primary mt-2 inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl text-sm font-semibold disabled:opacity-70"
             >
-                {isPending ? "Creating account..." : "Create account"}
+                {isPending ? t("signingUp") : t("signUp")}
 
                 {!isPending && (
                     <ArrowRight className="h-4 w-4" />
@@ -184,12 +176,12 @@ export default function RegisterForm() {
             </button>
 
             <p className="text-center text-sm text-muted-foreground">
-                Already have an account?{" "}
+                {t("alreadyHaveAccount")}{" "}
                 <Link
                     href="/auth/login"
                     className="font-medium text-primary hover:text-primary-glow"
                 >
-                    Sign in
+                    {t("signIn")}
                 </Link>
             </p>
         </form>

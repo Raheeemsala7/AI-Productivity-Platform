@@ -1,14 +1,16 @@
 
-
 "use client";
 
 import { Loader2, LogOut } from "lucide-react";
 import { Button } from "../ui/button";
 import { signOut } from "next-auth/react";
 import { useTransition } from "react";
+import { useTranslations } from "next-intl";
 
 export default function SignOutButton() {
     const [isPending, startTransition] = useTransition();
+    const t = useTranslations("Auth");
+
     const handleSignOut = async () => {
         startTransition(async () => await signOut({
             callbackUrl: "/auth/login",
@@ -23,7 +25,7 @@ export default function SignOutButton() {
         >
             {isPending && <Loader2 className="animate-spin transition-all" />}
             <LogOut className="h-4 w-4" />
-            Sign out
+            {t("signOut")}
         </Button>
     )
 }

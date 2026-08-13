@@ -1,3 +1,300 @@
 {
-  
+  "Header": {
+    "features": "Features",
+    "demo": "Demo",
+    "pricing": "Pricing",
+    "faq": "FAQ",
+    "signIn": "Sign in",
+    "getStarted": "Get started"
+  },
+  "Footer": {
+    "tagline": "The AI business partner for founders, freelancers and teams shipping their next idea.",
+    "product": "Product",
+    "company": "Company",
+    "legal": "Legal",
+    "links": {
+      "features": "Features",
+      "pricing": "Pricing",
+      "documentation": "Documentation",
+      "changelog": "Changelog",
+      "blog": "Blog",
+      "contact": "Contact",
+      "careers": "Careers",
+      "press": "Press",
+      "privacy": "Privacy",
+      "terms": "Terms",
+      "security": "Security",
+      "dpa": "DPA"
+    },
+    "copyright": "All rights reserved.",
+    "slogan": "Turn ideas into successful businesses with AI."
+  },
+  "Auth": {
+    "welcomeBack": "Welcome back",
+    "signInTitle": "Sign in to ORICO",
+    "signInSubtitle": "Continue building your business plan where you left off.",
+    "createAccount": "Create an account",
+    "signUpTitle": "Sign up to ORICO",
+    "signUpSubtitle": "Create your account to start building your business plan.",
+    "workEmail": "Work email",
+    "emailPlaceholder": "founder@company.com",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "rememberMe": "Keep me signed in",
+    "forgotPassword": "Forgot password?",
+    "signingIn": "Signing in...",
+    "signIn": "Sign in",
+    "signingUp": "Creating account...",
+    "signUp": "Create account",
+    "newToOrico": "New to ORICO?",
+    "alreadyHaveAccount": "Already have an account?",
+    "fullName": "Full name",
+    "namePlaceholder": "Your name",
+    "invalidCredentials": "Invalid credentials",
+    "loginSuccess": "Login successful",
+    "registerSuccess": "Account created successfully",
+    "signOut": "Sign out",
+    "protectedWorkspace": "Protected workspace · Arabic & English support"
+  },
+  "Hero": {
+    "badge": "ORICO — The Arabic-First AI Business Platform",
+    "title": "Your Business Plan, Written by",
+    "titleHighlight": "AI That Speaks Arabic.",
+    "subtitle": "ORICO's flagship Business Plan Generator builds investor-ready plans, market analysis and financial forecasts natively in Arabic and English — backed by a full AI suite for presentations, landing pages, images, voice and content.",
+    "generatePlan": "Generate Business Plan",
+    "watchDemo": "Watch Demo",
+    "businessPlan": "Business Plan",
+    "live": "Live",
+    "generating": "Generating…",
+    "draft": "Draft · v1.2",
+    "projectTitle": "Coastal Roast — Online Coffee Shop",
+    "aiDrafting": "AI drafting",
+    "export": "Export",
+    "overallCompletion": "Overall completion",
+    "revenueForecast": "Revenue forecast · 24 mo",
+    "revenue": "Revenue",
+    "profit": "Profit",
+    "executiveSummary": "Executive Summary",
+    "summaryText": "Coastal Roast delivers single-origin subscriptions to remote professionals, blending curated roasts with a lean D2C model.",
+    "sections": {
+      "executiveSummary": "Executive Summary",
+      "marketAnalysis": "Market Analysis",
+      "competitorResearch": "Competitor Research",
+      "revenueModel": "Revenue Model",
+      "financialForecast": "Financial Forecast",
+      "marketingStrategy": "Marketing Strategy",
+      "riskAnalysis": "Risk Analysis",
+      "investorPitch": "Investor Pitch"
+    },
+    "tags": {
+      "d2c": "D2C",
+      "subscription": "Subscription",
+      "specialty": "Specialty",
+      "sustainability": "Sustainability"
+    },
+    "kpi": {
+      "onPlan": "on plan"
+    }
+  },
+  "WhyOrico": {
+    "eyebrow": "Why ORICO",
+    "title": "The clearest path from idea to launch.",
+    "cards": {
+      "planning": {
+        "title": "AI-Powered Business Planning",
+        "desc": "Create complete startup business plans in minutes, tailored to your industry and market."
+      },
+      "investor": {
+        "title": "Investor Ready",
+        "desc": "Generate polished, professional documents formatted to the standards investors expect."
+      },
+      "platform": {
+        "title": "Everything in One Platform",
+        "desc": "Landing pages, presentations, images, marketing copy, voice tools, and much more."
+      }
+    }
+  },
+  "CoreFeatures": {
+    "eyebrow": "Core Features",
+    "title": "Built around the Business Plan Generator.",
+    "subtitle": "A complete AI business suite, anchored by the deepest planning engine on the market.",
+    "flagship": "Flagship",
+    "generatorTitle": "AI Business Plan Generator",
+    "generatorDesc": "Ten deeply-researched modules working together — from executive summary to funding requirements — assembled into one investor-ready plan.",
+    "generateNow": "Generate now",
+    "avgDraftTime": "Avg. draft time:",
+    "avgDraftTimeValue": "3 min 12s",
+    "planItems": {
+      "executiveSummary": "Executive Summary",
+      "marketResearch": "Market Research",
+      "swotAnalysis": "SWOT Analysis",
+      "businessModelCanvas": "Business Model Canvas",
+      "pricingStrategy": "Pricing Strategy",
+      "financialForecast": "Financial Forecast",
+      "marketingPlan": "Marketing Plan",
+      "salesStrategy": "Sales Strategy",
+      "operationsPlan": "Operations Plan",
+      "fundingRequirements": "Funding Requirements"
+    },
+    "secondary": {
+      "landingPage": "Landing Page Builder",
+      "presentation": "Presentation Builder",
+      "imageGenerator": "AI Image Generator",
+      "chatAssistant": "AI Chat Assistant",
+      "voiceAi": "Voice AI",
+      "speechToText": "Speech to Text",
+      "textToSpeech": "Text to Speech",
+      "translation": "AI Translation",
+      "logoGenerator": "Logo Generator",
+      "resumeBuilder": "Resume Builder",
+      "marketingCopy": "Marketing Copy",
+      "socialMedia": "Social Media Content"
+    }
+  },
+  "DemoSection": {
+    "eyebrow": "Live Demo",
+    "title": "Watch a business plan write itself.",
+    "prompt": "Prompt",
+    "result": "Result",
+    "generating": "Generating…",
+    "promptText": "I want to open an online coffee shop.",
+    "planReady": "Business Plan Ready",
+    "pagesInfo": "32 pages · investor-ready format",
+    "downloadPdf": "Download PDF",
+    "steps": {
+      "executiveSummary": "Executive Summary",
+      "targetAudience": "Target Audience",
+      "marketAnalysis": "Market Analysis",
+      "revenueForecast": "Revenue Forecast",
+      "marketingStrategy": "Marketing Strategy",
+      "investmentPlan": "Investment Plan"
+    }
+  },
+  "Pricing": {
+    "eyebrow": "Pricing",
+    "title": "Simple plans that scale with you.",
+    "mostPopular": "Most popular",
+    "plans": {
+      "starter": {
+        "name": "Starter",
+        "cadence": "forever",
+        "desc": "For founders exploring their first idea.",
+        "features": {
+          "plan": "1 business plan / month",
+          "analysis": "Basic market analysis",
+          "export": "PDF export",
+          "support": "Community support"
+        },
+        "cta": "Start free"
+      },
+      "professional": {
+        "name": "Professional",
+        "cadence": "per month",
+        "desc": "For serious founders and freelancers.",
+        "features": {
+          "plans": "Unlimited business plans",
+          "forecasts": "Full financial forecasts",
+          "pitch": "Investor pitch decks",
+          "builder": "Landing page & logo builder",
+          "export": "PDF, DOCX, PPTX export",
+          "priority": "Priority AI"
+        },
+        "cta": "Start 14-day trial"
+      },
+      "enterprise": {
+        "name": "Enterprise",
+        "price": "Custom",
+        "cadence": "annual",
+        "desc": "For accelerators, studios and teams.",
+        "features": {
+          "workspaces": "Team workspaces",
+          "brandKits": "Brand kits & templates",
+          "sso": "SSO & audit logs",
+          "manager": "Dedicated success manager"
+        },
+        "cta": "Contact sales"
+      }
+    }
+  },
+  "FAQ": {
+    "eyebrow": "FAQ",
+    "title": "Answers to the questions founders ask most.",
+    "items": {
+      "accuracy": {
+        "q": "How accurate are the AI-generated business plans?",
+        "a": "ORICO cross-references live market data with proven planning frameworks. Every module is editable, and we surface the assumptions behind every number so you can adjust with confidence."
+      },
+      "export": {
+        "q": "What export formats do you support?",
+        "a": "PDF, DOCX and PPTX for plans and pitch decks. Landing pages export as production-ready HTML/CSS. Images are provided as PNG and SVG where applicable."
+      },
+      "languages": {
+        "q": "Which languages does ORICO support?",
+        "a": "Plans and assets can be generated in over 40 languages, including English, Arabic, Spanish, French, German, Portuguese and Mandarin."
+      },
+      "privacy": {
+        "q": "Is my data private?",
+        "a": "Your data is encrypted in transit and at rest. We never train on your content. Enterprise plans include region-locked storage and SSO."
+      },
+      "collaboration": {
+        "q": "Can my team collaborate on the same plan?",
+        "a": "Yes. Professional and Enterprise plans include shared workspaces, roles, comments and real-time editing."
+      },
+      "refunds": {
+        "q": "Do you offer refunds?",
+        "a": "Every paid plan starts with a 14-day trial. If ORICO isn't the right fit, cancel any time — no questions asked."
+      }
+    }
+  },
+  "Metrics": {
+    "plansGenerated": "Business Plans Generated",
+    "startupsLaunched": "Startups Launched",
+    "satisfaction": "Customer Satisfaction",
+    "countries": "Countries"
+  },
+  "HowItWorks": {
+    "eyebrow": "How it works",
+    "title": "From idea to investor deck in four steps.",
+    "steps": {
+      "describe": {
+        "title": "Describe your business idea",
+        "desc": "One sentence is enough. ORICO fills the rest."
+      },
+      "analyze": {
+        "title": "AI analyzes your industry",
+        "desc": "Market size, competitors, trends and risk vectors."
+      },
+      "generate": {
+        "title": "Generate a complete business plan",
+        "desc": "Ten modules assembled into a coherent document."
+      },
+      "export": {
+        "title": "Edit, export, and share",
+        "desc": "Refine, export as PDF/DOCX, and share with your team."
+      }
+    }
+  },
+  "Dashboard": {
+    "welcome": "Welcome back, Omar",
+    "subtitle": "Here's what your AI workspace produced recently.",
+    "overview": "Overview",
+    "businessPlans": "Business Plans",
+    "marketAnalysis": "Market Analysis",
+    "pitchDecks": "Pitch Decks",
+    "projects": "Projects",
+    "settings": "Settings",
+    "nav": {
+      "dashboard": "Dashboard",
+      "projects": "Projects",
+      "users": "Users",
+      "analytics": "Analytics",
+      "settings": "Settings"
+    },
+    "professionalPlan": "Professional plan",
+    "credits": "840 / 1,000 credits"
+  },
+  "LocaleSwitcher": {
+    "en": "EN",
+    "ar": "العربية"
+  }
 }

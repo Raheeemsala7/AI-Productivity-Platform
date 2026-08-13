@@ -1,10 +1,11 @@
-import LoginForm from '@/features/auth/_components/login-form'
 import RegisterForm from '@/features/auth/_components/register-form'
 import { Sparkles } from 'lucide-react'
-import Link from 'next/link'
-import React from 'react'
+import { Link } from '@/i18n/navigation'
+import { getTranslations } from 'next-intl/server'
 
-export default function RegisterPage() {
+export default async function RegisterPage() {
+    const t = await getTranslations("Auth")
+
     return (
         <>
             <div className="mb-8 flex flex-col items-center text-center">
@@ -15,10 +16,10 @@ export default function RegisterPage() {
                     <span className="text-lg font-semibold tracking-tight">ORICO</span>
                 </Link>
                 <span className="rounded-full border border-[color:var(--border-strong)] px-3 py-1 text-[11px] uppercase tracking-widest text-muted-foreground">
-                    Create an account
+                    {t("createAccount")}
                 </span>
-                <h1 className="mt-4 text-3xl font-semibold tracking-tight text-gradient">Sign up to ORICO</h1>
-                <p className="mt-2 max-w-sm text-sm text-muted-foreground">Create your account to start building your business plan.</p>
+                <h1 className="mt-4 text-3xl font-semibold tracking-tight text-gradient">{t("signUpTitle")}</h1>
+                <p className="mt-2 max-w-sm text-sm text-muted-foreground">{t("signUpSubtitle")}</p>
             </div>
 
             <div className="glass rounded-2xl p-6 sm:p-7">

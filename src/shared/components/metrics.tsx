@@ -1,12 +1,16 @@
 import { Counter } from "./counter";
+import { getTranslations } from "next-intl/server";
 
-export function Metrics() {
+export async function Metrics() {
+    const t = await getTranslations("Metrics");
+
     const stats = [
-        { v: 250000, s: "K+", label: "Business Plans Generated", d: 1000 },
-        { v: 40000, s: "K+", label: "Startups Launched", d: 1000 },
-        { v: 98, s: "%", label: "Customer Satisfaction", d: 1 },
-        { v: 120, s: "+", label: "Countries", d: 1 },
+        { v: 250000, s: "K+", label: t("plansGenerated"), d: 1000 },
+        { v: 40000, s: "K+", label: t("startupsLaunched"), d: 1000 },
+        { v: 98, s: "%", label: t("satisfaction"), d: 1 },
+        { v: 120, s: "+", label: t("countries"), d: 1 },
     ];
+
     return (
         <section className="py-24 md:py-32 border-t border-border/60">
             <div className="max-w-7xl mx-auto px-6">
@@ -22,4 +26,3 @@ export function Metrics() {
         </section>
     );
 }
-

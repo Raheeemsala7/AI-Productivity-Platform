@@ -1,18 +1,32 @@
 "use client"
 import { ArrowRight, CheckCircle2, DollarSign, FileText, LineChart, LineChartIcon, Megaphone, Play, ShieldAlert, Sparkles, Target, Users } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 
-const PLAN_SECTIONS = [
-  { label: "Executive Summary", icon: FileText },
-  { label: "Market Analysis", icon: LineChart },
-  { label: "Competitor Research", icon: Users },
-  { label: "Revenue Model", icon: DollarSign },
-  { label: "Financial Forecast", icon: LineChartIcon },
-  { label: "Marketing Strategy", icon: Megaphone },
-  { label: "Risk Analysis", icon: ShieldAlert },
-  { label: "Investor Pitch", icon: Target },
+const PLAN_SECTION_KEYS = [
+  "executiveSummary",
+  "marketAnalysis",
+  "competitorResearch",
+  "revenueModel",
+  "financialForecast",
+  "marketingStrategy",
+  "riskAnalysis",
+  "investorPitch",
+] as const;
+
+const PLAN_SECTION_ICONS = [
+  FileText,
+  LineChart,
+  Users,
+  DollarSign,
+  LineChartIcon,
+  Megaphone,
+  ShieldAlert,
+  Target,
 ];
 export function Hero() {
+    const t = useTranslations("Hero");
+
     return (
         <section className="relative pt-32 pb-24 md:pt-40 md:pb-32">
             <div className="absolute inset-0 grid-bg pointer-events-none" />
@@ -21,24 +35,22 @@ export function Hero() {
                 <div className="max-w-3xl mx-auto text-center fade-up">
                     <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card/40 px-3 py-1 text-xs text-muted-foreground">
                         <Sparkles className="w-3.5 h-3.5 text-accent" />
-                        ORICO — The Arabic-First AI Business Platform
+                        {t("badge")}
                     </div>
                     <h1 className="mt-6 text-4xl md:text-6xl lg:text-7xl font-semibold tracking-tight leading-[1.05]">
-                        Your Business Plan, Written by{" "}
-                        <span className="text-gradient-brand">AI That Speaks Arabic.</span>
+                        {t("title")}{" "}
+                        <span className="text-gradient-brand">{t("titleHighlight")}</span>
                     </h1>
                     <p className="mt-6 text-base md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-                        ORICO&apos;s flagship Business Plan Generator builds investor-ready plans, market analysis
-                        and financial forecasts natively in Arabic and English — backed by a full AI suite for
-                        presentations, landing pages, images, voice and content.
+                        {t("subtitle")}
                     </p>
 
                     <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
                         <button className="btn-primary rounded-xl px-6 py-3 text-sm font-medium inline-flex items-center gap-2">
-                            Generate Business Plan <ArrowRight className="w-4 h-4" />
+                            {t("generatePlan")} <ArrowRight className="w-4 h-4" />
                         </button>
                         <button className="btn-ghost rounded-xl px-6 py-3 text-sm font-medium inline-flex items-center gap-2">
-                            <Play className="w-4 h-4" /> Watch Demo
+                            <Play className="w-4 h-4" /> {t("watchDemo")}
                         </button>
                     </div>
                 </div>
@@ -52,6 +64,11 @@ export function Hero() {
 }
 
 function PlanDashboard() {
+    const t = useTranslations("Hero");
+    const planSections = PLAN_SECTION_KEYS.map((key, index) => ({
+        label: t(`sections.${key}`),
+        icon: PLAN_SECTION_ICONS[index],
+    }));
     const [progress, setProgress] = useState(0);
     const [completed, setCompleted] = useState<number>(-1);
     const ref = useRef<HTMLDivElement>(null);
@@ -59,10 +76,10 @@ function PlanDashboard() {
 
     useEffect(() => {
         const t = setInterval(() => {
-            setCompleted((c) => (c < PLAN_SECTIONS.length - 1 ? c + 1 : c));
+            setCompleted((c) => (c < planSections.length - 1 ? c + 1 : c));
         }, 700);
         return () => clearInterval(t);
-    }, []);
+    }, [planSections.length]);
 
     useEffect(() => {
         const t = setInterval(() => {
@@ -104,16 +121,15 @@ function PlanDashboard() {
                     <div className="text-xs text-muted-foreground font-mono">orico.ai / business-plan</div>
                     <div className="flex items-center gap-2 text-xs text-muted-foreground">
                         <span className="w-1.5 h-1.5 rounded-full bg-accent pulse-dot" />
-                        Live
+                        {t("live")}
                     </div>
                 </div>
 
                 <div className="grid md:grid-cols-[260px_1fr] min-h-[520px]">
-                    {/* Sidebar */}
                     <aside className="border-r border-border p-4 bg-surface/40 hidden md:block">
-                        <div className="text-[11px] uppercase tracking-wider text-muted-foreground mb-3">Business Plan</div>
+                        <div className="text-[11px] uppercase tracking-wider text-muted-foreground mb-3">{t("businessPlan")}</div>
                         <div className="space-y-1">
-                            {PLAN_SECTIONS.map((s, i) => {
+                            {planSections.map((s, i) => {
                                 const done = i <= completed;
                                 const Icon = s.icon;
                                 return (
@@ -131,7 +147,7 @@ function PlanDashboard() {
                                         {done ? (
                                             <CheckCircle2 className="w-4 h-4 text-accent" />
                                         ) : i === completed + 1 ? (
-                                            <span className="text-[10px] text-primary-glow">Generating…</span>
+                                            <span className="text-[10px] text-primary-glow">{t("generating")}</span>
                                         ) : (
                                             <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground/30" />
                                         )}
@@ -145,21 +161,20 @@ function PlanDashboard() {
                     <div className="p-5 md:p-7 space-y-5">
                         <div className="flex flex-wrap items-center justify-between gap-3">
                             <div>
-                                <div className="text-xs text-muted-foreground">Draft · v1.2</div>
-                                <h3 className="text-lg md:text-xl font-semibold mt-0.5">Coastal Roast — Online Coffee Shop</h3>
+                                <div className="text-xs text-muted-foreground">{t("draft")}</div>
+                                <h3 className="text-lg md:text-xl font-semibold mt-0.5">{t("projectTitle")}</h3>
                             </div>
                             <div className="flex items-center gap-2">
                                 <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card/60 px-2.5 py-1 text-xs text-muted-foreground">
-                                    <span className="w-1.5 h-1.5 rounded-full bg-highlight" /> AI drafting
+                                    <span className="w-1.5 h-1.5 rounded-full bg-highlight" /> {t("aiDrafting")}
                                 </span>
-                                <button className="rounded-md btn-ghost text-xs px-3 py-1.5">Export</button>
+                                <button className="rounded-md btn-ghost text-xs px-3 py-1.5">{t("export")}</button>
                             </div>
                         </div>
 
-                        {/* Progress */}
                         <div>
                             <div className="flex items-center justify-between text-xs text-muted-foreground mb-2">
-                                <span>Overall completion</span>
+                                <span>{t("overallCompletion")}</span>
                                 <span className="font-mono text-foreground">{Math.min(progress, 100)}%</span>
                             </div>
                             <div className="h-1.5 rounded-full bg-card overflow-hidden">
@@ -173,7 +188,7 @@ function PlanDashboard() {
                         {/* KPI grid */}
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                             <KPI label="TAM" value="$12.4B" trend="+8.2%" />
-                            <KPI label="Break-even" value="14 mo" trend="on plan" />
+                            <KPI label="Break-even" value="14 mo" trend={t("kpi.onPlan")} />
                             <KPI label="CAC" value="$18" trend="-12%" />
                             <KPI label="Yr 1 ARR" value="$420K" trend="+34%" />
                         </div>
@@ -182,22 +197,22 @@ function PlanDashboard() {
                         <div className="grid md:grid-cols-5 gap-3">
                             <div className="md:col-span-3 rounded-xl border border-border bg-card/40 p-4">
                                 <div className="flex items-center justify-between mb-3">
-                                    <div className="text-xs text-muted-foreground">Revenue forecast · 24 mo</div>
+                                    <div className="text-xs text-muted-foreground">{t("revenueForecast")}</div>
                                     <div className="flex gap-1.5 text-[10px]">
-                                        <span className="inline-flex items-center gap-1 text-muted-foreground"><span className="w-2 h-2 rounded-sm bg-primary-glow" />Revenue</span>
-                                        <span className="inline-flex items-center gap-1 text-muted-foreground"><span className="w-2 h-2 rounded-sm bg-accent" />Profit</span>
+                                        <span className="inline-flex items-center gap-1 text-muted-foreground"><span className="w-2 h-2 rounded-sm bg-primary-glow" />{t("revenue")}</span>
+                                        <span className="inline-flex items-center gap-1 text-muted-foreground"><span className="w-2 h-2 rounded-sm bg-accent" />{t("profit")}</span>
                                     </div>
                                 </div>
                                 <MiniChart />
                             </div>
                             <div className="md:col-span-2 rounded-xl border border-border bg-card/40 p-4">
-                                <div className="text-xs text-muted-foreground mb-2">Executive Summary</div>
+                                <div className="text-xs text-muted-foreground mb-2">{t("executiveSummary")}</div>
                                 <p className="text-sm text-foreground/90 leading-relaxed">
-                                    Coastal Roast delivers <span className="text-accent">single-origin subscriptions</span> to remote professionals, blending curated roasts with a lean D2C model.
+                                    {t("summaryText")}
                                 </p>
                                 <div className="mt-3 flex flex-wrap gap-1.5">
-                                    {["D2C", "Subscription", "Specialty", "Sustainability"].map((t) => (
-                                        <span key={t} className="text-[10px] px-2 py-0.5 rounded-full border border-border text-muted-foreground bg-surface/50">{t}</span>
+                                    {(["d2c", "subscription", "specialty", "sustainability"] as const).map((tag) => (
+                                        <span key={tag} className="text-[10px] px-2 py-0.5 rounded-full border border-border text-muted-foreground bg-surface/50">{t(`tags.${tag}`)}</span>
                                     ))}
                                 </div>
                             </div>
