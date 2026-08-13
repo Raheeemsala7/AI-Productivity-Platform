@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Instrument_Sans, Inter_Tight, Noto_Sans_Arabic } from "next/font/google";
+import { Geist, Geist_Mono, IBM_Plex_Sans_Arabic, Instrument_Sans, Inter_Tight, Noto_Sans_Arabic } from "next/font/google";
 import "../globals.css";
 import { Providers } from "@/shared/context/global/providers";
 import { cn } from "@/shared/lib/utils";
@@ -28,11 +28,12 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const notoSansArabic = Noto_Sans_Arabic({
+const ibmPlexSansArabic = IBM_Plex_Sans_Arabic({
   subsets: ["arabic"],
   variable: "--font-arabic-family",
+  weight: ["100", "200", "300", "400", "500", "600", "700"],
+  display: "swap",
 });
-
 export const metadata: Metadata = {
   title: "ORICO — AI Business Platform",
   description: "The Arabic-first AI business platform for founders and teams.",
@@ -69,8 +70,8 @@ export default async function LocaleLayout({ children, params }: Props) {
         geistMono.variable,
         instrumentSans.variable,
         interTight.variable,
-        notoSansArabic.variable,
-        locale === "ar" && "font-[family-name:var(--font-arabic-family)]",
+        ibmPlexSansArabic.variable,
+        locale === "ar" && "font-arabic",
       )}
     >
       <body className="min-h-full flex flex-col">

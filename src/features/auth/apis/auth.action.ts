@@ -56,7 +56,6 @@ export async function loginGoogleAction(id_token: string) {
 
     const data: IApiResponse<{}> = await res.json();
 
-    console.log(data)
     if (!data.status) {
         throw new Error("Failed Error")
     }
