@@ -33,9 +33,9 @@ export async function registerAction(values: RegisterFormValues) {
         }
     })
 
-    const data = await res.json()
+    const data : IApiResponse<{}>  = await res.json()
     console.log("data register", data)
-    if (!data.success) {
+    if (!data.status) {
         throw Error(data.message)
     }
 

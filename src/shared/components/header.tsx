@@ -9,6 +9,7 @@ import { useSession, signOut } from "next-auth/react";
 import { Skeleton } from "./ui/skeleton";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { cn } from "@/shared/lib/utils";
+import { buttonVariants } from "./ui/button";
 
 export function Header() {
     const [scrolled, setScrolled] = useState(false);
@@ -64,10 +65,10 @@ export function Header() {
                     <span className="font-semibold tracking-tight text-lg">ORICO</span>
                 </Link>
                 <nav className="hidden md:flex items-center gap-8 text-sm text-muted-foreground">
-                    <a href="#features" className="hover:text-foreground transition">{t("features")}</a>
-                    <a href="#demo" className="hover:text-foreground transition">{t("demo")}</a>
-                    <a href="#pricing" className="hover:text-foreground transition">{t("pricing")}</a>
-                    <a href="#faq" className="hover:text-foreground transition">{t("faq")}</a>
+                    <Link href="#features" className="hover:text-foreground transition">{t("features")}</Link>
+                    <Link href="#demo" className="hover:text-foreground transition">{t("demo")}</Link>
+                    <Link href="#pricing" className="hover:text-foreground transition">{t("pricing")}</Link>
+                    <Link href="#faq" className="hover:text-foreground transition">{t("faq")}</Link>
                 </nav>
                 <div className="flex items-center gap-3">
                     <LocaleSwitcher className="hidden sm:inline-flex" />
@@ -156,9 +157,9 @@ export function Header() {
                     ) : (
                         <>
                             <Link href="/auth/login" className="hidden sm:inline text-sm text-muted-foreground hover:text-foreground transition">{t("signIn")}</Link>
-                            <button className="btn-primary rounded-lg px-4 py-2 text-sm font-medium inline-flex items-center gap-1.5">
+                            <Link href={"/auth/register"} className={cn("btn-primary rounded-lg px-4 py-2 text-sm font-medium inline-flex items-center gap-1.5" , buttonVariants({}))}>
                                 {t("getStarted")} <ArrowRight className="w-3.5 h-3.5" />
-                            </button>
+                            </Link>
                         </>
                     )}
                 </div>

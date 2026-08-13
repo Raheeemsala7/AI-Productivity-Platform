@@ -11,6 +11,7 @@ import { useRegisterMutation } from '../hooks/auth.hook';
 import { useTranslations } from 'next-intl';
 import { AuthDivider } from './auth-divider';
 import { GoogleSignInButton } from './google-sign-in-button';
+import { toast } from 'sonner';
 
 export default function RegisterForm() {
     const [showPassword, setShowPassword] = useState(false)
@@ -32,7 +33,18 @@ export default function RegisterForm() {
 
     const onSubmit = async (data: RegisterFormValues) => {
         startTransition(async () => {
-            await mutateAsync(data);
+            try {
+                const res = await mutateAsync(data);
+                console.log(res)
+                if (res.status) {
+                    toast.success(res.message)
+                    form.reset()
+                }
+            } catch (error) {
+                const message = error instanceof Error ? error.message : t("registerError")
+                console.log(error)
+                toast.error(message)
+            }
         });
     };
 

@@ -28,6 +28,7 @@ const NAV_ITEMS = [
     { key: "dashboard" as const, url: "/dashboard", icon: LayoutDashboard },
     { key: "projects" as const, url: "/dashboard/projects", icon: FolderKanban },
     { key: "users" as const, url: "/dashboard/users", icon: Users },
+    { key: "chat" as const, url: "/dashboard/chat", icon: Users },
     { key: "analytics" as const, url: "/dashboard/analytics", icon: BarChart3 },
     { key: "settings" as const, url: "/dashboard/settings", icon: Settings },
 ];
