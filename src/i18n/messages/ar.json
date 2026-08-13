@@ -54,7 +54,22 @@
     "loginSuccess": "تم تسجيل الدخول بنجاح",
     "registerSuccess": "تم إنشاء الحساب بنجاح",
     "signOut": "تسجيل الخروج",
+    "signInWithGoogle": "تسجيل الدخول عبر Google",
+    "signUpWithGoogle": "التسجيل عبر Google",
+    "orContinueWithEmail": "أو المتابعة بالبريد الإلكتروني",
     "protectedWorkspace": "مساحة عمل محمية · دعم العربية والإنجليزية"
+  },
+  "VerifyEmail": {
+    "verifying": "جارٍ التحقق من بريدك الإلكتروني",
+    "verifyingSubtitle": "يرجى الانتظار بينما نؤكد عنوان بريدك الإلكتروني…",
+    "successTitle": "تم التحقق من البريد",
+    "successSubtitle": "تم التحقق من بريدك الإلكتروني بنجاح. يمكنك الآن تسجيل الدخول.",
+    "errorTitle": "فشل التحقق",
+    "errorDefault": "رابط التحقق غير صالح أو منتهي الصلاحية.",
+    "invalidTitle": "رابط غير صالح",
+    "invalidSubtitle": "رابط التحقق ناقص. يرجى استخدام الرابط المرسل إلى بريدك الإلكتروني.",
+    "goToSignIn": "تسجيل الدخول",
+    "createAccount": "إنشاء حساب"
   },
   "Hero": {
     "badge": "ORICO — منصة الأعمال الذكية العربية أولاً",

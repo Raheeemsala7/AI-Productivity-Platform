@@ -2,6 +2,7 @@ import Credentials from "next-auth/providers/credentials";
 import { NextAuthOptions } from "next-auth";
 import { loginAction } from "./features/auth/apis/auth.action";
 import { sessionMaxAge } from "./shared/constant/session.constant";
+import GoogleProvider from "next-auth/providers/google";
 
 
 
@@ -33,7 +34,11 @@ export const authOptions: NextAuthOptions = {
                 };
 
             }
-        })
+        }),
+        GoogleProvider({
+            clientId: process.env.GOOGLE_CLIENT_ID!,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+        }),
     ],
 
     callbacks: {

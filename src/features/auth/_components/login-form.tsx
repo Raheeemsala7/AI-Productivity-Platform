@@ -9,6 +9,8 @@ import { Link, useRouter } from '@/i18n/navigation';
 import { signIn } from 'next-auth/react';
 import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
+import { AuthDivider } from './auth-divider';
+import { GoogleSignInButton } from './google-sign-in-button';
 
 export default function LoginForm() {
     const [showPassword, setShowPassword] = useState(false)
@@ -46,6 +48,9 @@ export default function LoginForm() {
 
     return (
         <div>
+            <GoogleSignInButton variant="signIn" />
+            <AuthDivider />
+
             <form
                 className="space-y-4"
                 onSubmit={form.handleSubmit(onSubmit)}
@@ -146,8 +151,6 @@ export default function LoginForm() {
                     )}
                 </button>
             </form>
-
-            <div className="grid gap-2 sm:grid-cols-2" />
 
             <p className="mt-6 text-center text-sm text-muted-foreground">
                 {t("newToOrico")}{" "}

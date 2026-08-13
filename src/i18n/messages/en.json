@@ -54,7 +54,22 @@
     "loginSuccess": "Login successful",
     "registerSuccess": "Account created successfully",
     "signOut": "Sign out",
+    "signInWithGoogle": "Sign in with Google",
+    "signUpWithGoogle": "Sign up with Google",
+    "orContinueWithEmail": "or continue with email",
     "protectedWorkspace": "Protected workspace · Arabic & English support"
+  },
+  "VerifyEmail": {
+    "verifying": "Verifying your email",
+    "verifyingSubtitle": "Please wait while we confirm your email address…",
+    "successTitle": "Email verified",
+    "successSubtitle": "Your email has been verified successfully. You can now sign in.",
+    "errorTitle": "Verification failed",
+    "errorDefault": "This verification link is invalid or has expired.",
+    "invalidTitle": "Invalid link",
+    "invalidSubtitle": "This verification link is missing required information. Please use the link from your email.",
+    "goToSignIn": "Sign in",
+    "createAccount": "Create an account"
   },
   "Hero": {
     "badge": "ORICO — The Arabic-First AI Business Platform",

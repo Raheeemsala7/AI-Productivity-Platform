@@ -9,6 +9,8 @@ import { Link } from '@/i18n/navigation';
 import { Field, FieldError, FieldLabel } from '@/shared/components/ui/field';
 import { useRegisterMutation } from '../hooks/auth.hook';
 import { useTranslations } from 'next-intl';
+import { AuthDivider } from './auth-divider';
+import { GoogleSignInButton } from './google-sign-in-button';
 
 export default function RegisterForm() {
     const [showPassword, setShowPassword] = useState(false)
@@ -35,10 +37,14 @@ export default function RegisterForm() {
     };
 
     return (
-        <form
-            className="space-y-4"
-            onSubmit={form.handleSubmit(onSubmit)}
-        >
+        <div>
+            <GoogleSignInButton variant="signUp" />
+            <AuthDivider />
+
+            <form
+                className="space-y-4"
+                onSubmit={form.handleSubmit(onSubmit)}
+            >
             <Controller
                 name="name"
                 control={form.control}
@@ -184,6 +190,7 @@ export default function RegisterForm() {
                     {t("signIn")}
                 </Link>
             </p>
-        </form>
+            </form>
+        </div>
     )
 }
