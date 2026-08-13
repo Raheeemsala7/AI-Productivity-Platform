@@ -36,23 +36,20 @@ export function AppSidebar() {
     const t = useTranslations("Dashboard");
 
     return (
-        <Sidebar collapsible="icon" variant="floating" className="py-6 border-none shadow-non" >
+        <Sidebar collapsible="icon" variant="floating" className="py-6 border-none shadow-none">
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>
-                        <SidebarMenuButton size="lg">
-                            <Link href="/dashboard" className="flex items-center gap-4">
-                                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[image:var(--gradient-primary)]">
-                                    <Sparkles className="h-5 w-5 text-white" />
-                                </div>
-
-                                <div className="flex flex-col">
-                                    <span className="font-semibold">ORICO</span>
-                                    <span className="text-xs text-muted-foreground">
-                                        {t("nav.dashboard")}
-                                    </span>
-                                </div>
-                            </Link>
+                        <SidebarMenuButton size="lg" render={<Link href="/dashboard" />}>
+                            <div className="flex aspect-square size-8 items-center justify-center rounded-xl bg-[image:var(--gradient-primary)]">
+                                <Sparkles className="size-4 text-white" />
+                            </div>
+                            <div className="grid flex-1 text-start text-sm leading-tight">
+                                <span className="truncate font-semibold">ORICO</span>
+                                <span className="truncate text-xs text-muted-foreground">
+                                    {t("nav.dashboard")}
+                                </span>
+                            </div>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>
@@ -64,11 +61,12 @@ export function AppSidebar() {
                         <SidebarMenu>
                             {NAV_ITEMS.map((item) => (
                                 <SidebarMenuItem key={item.key}>
-                                    <SidebarMenuButton tooltip={t(`nav.${item.key}`)}>
-                                        <Link className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm transition-colors" href={item.url}>
-                                            <item.icon className="h-4 w-4" />
-                                            <span>{t(`nav.${item.key}`)}</span>
-                                        </Link>
+                                    <SidebarMenuButton
+                                        tooltip={t(`nav.${item.key}`)}
+                                        render={<Link href={item.url} />}
+                                    >
+                                        <item.icon />
+                                        <span>{t(`nav.${item.key}`)}</span>
                                     </SidebarMenuButton>
                                 </SidebarMenuItem>
                             ))}
@@ -78,7 +76,7 @@ export function AppSidebar() {
             </SidebarContent>
 
             <SidebarFooter>
-                <div className="rounded-xl border border-[color:var(--border-strong)] p-3 mb-2">
+                <div className="mb-2 rounded-xl border border-[color:var(--border-strong)] p-3 group-data-[collapsible=icon]:hidden">
                     <p className="text-xs font-medium">{t("professionalPlan")}</p>
                     <p className="mt-1 text-[11px] text-muted-foreground">{t("credits")}</p>
                     <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-[color:var(--muted)]">
