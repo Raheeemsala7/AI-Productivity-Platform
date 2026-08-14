@@ -6,7 +6,7 @@ import {
     LoginFormValues,
     ResetPasswordFormValues,
 } from "../schema/auth.schema";
-import { LoginResponse, RegisterFormValues } from "../types/auth";
+import { GoogleLoginResponse, LoginResponse, RegisterFormValues } from "../types/auth";
 import { IApiResponse } from "@/shared/types/api";
 
 export async function loginAction(values: LoginFormValues) {
@@ -52,8 +52,7 @@ export async function loginGoogleAction(access_token: string) {
         }),
     });
 
-    const data= await res.json();
-    console.log("google login data", data)
+    const data : GoogleLoginResponse= await res.json();
 
     if (!data.success) {
         throw new Error(data.message || "Failed Error")
