@@ -1,6 +1,6 @@
 
 
-type User = {
+export type User = {
     name: string;
     email: string;
     slogan: string;

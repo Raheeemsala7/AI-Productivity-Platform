@@ -5,7 +5,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Field, FieldError, FieldLabel } from '@/shared/components/ui/field';
 import { useState, useTransition } from 'react';
-import { Link, useRouter } from '@/i18n/navigation';
+import { Link } from '@/i18n/navigation';
 import { signIn } from 'next-auth/react';
 import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
@@ -15,7 +15,6 @@ import { GoogleSignInButton } from './google-sign-in-button';
 export default function LoginForm() {
     const [showPassword, setShowPassword] = useState(false)
     const [isPending, startTransition] = useTransition()
-    const router = useRouter()
     const t = useTranslations("Auth")
 
     const form = useForm<LoginFormValues>({

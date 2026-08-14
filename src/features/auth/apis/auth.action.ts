@@ -10,17 +10,14 @@ import { LoginResponse, RegisterFormValues } from "../types/auth";
 import { IApiResponse } from "@/shared/types/api";
 
 export async function loginAction(values: LoginFormValues) {
-
     const res = await fetch(`${process.env.API_URL}/auth/login`, {
         method: "POST",
         body: JSON.stringify(values),
         headers: {
-            "Content-Type": "application/json",
-        }
+            ...HEADERS.JsonBody,
+        },
     })
-
     const data: IApiResponse<LoginResponse> = await res.json()
-    console.log("Backend response", data)
     if (!data.status) {
         throw Error(data.message)
     }
@@ -33,25 +30,22 @@ export async function registerAction(values: RegisterFormValues) {
         method: "POST",
         body: JSON.stringify(values),
         headers: {
-            "Content-Type": "application/json",
-        }
+            ...HEADERS.JsonBody,
+        },
     })
 
-    const data : IApiResponse<{}>  = await res.json()
-    console.log("data register", data)
+    const data: IApiResponse<{}> = await res.json()
     if (!data.status) {
         throw Error(data.message)
     }
 
     return data
 }
-
 export async function loginGoogleAction(id_token: string) {
     const res = await fetch(`${process.env.API_URL}/auth/google`, {
         method: "POST",
         headers: {
             ...HEADERS.JsonBody,
-            ...HEADERS.AcceptLanguage("ar")
         },
         body: JSON.stringify({
             id_token,
@@ -108,7 +102,7 @@ export async function forgotPasswordAction(values: ForgotPasswordFormValues) {
         method: "POST",
         body: JSON.stringify(values),
         headers: {
-            "Content-Type": "application/json",
+            ...HEADERS.JsonBody,
         },
     });
 
@@ -126,7 +120,7 @@ export async function resetPasswordAction(values: ResetPasswordFormValues) {
         method: "POST",
         body: JSON.stringify(values),
         headers: {
-            "Content-Type": "application/json",
+            ...HEADERS.JsonBody,
         },
     });
 

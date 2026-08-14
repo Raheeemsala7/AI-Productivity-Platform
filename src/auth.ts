@@ -17,6 +17,7 @@ export const authOptions: NextAuthOptions = {
             },
             authorize: async (credentials) => {
                 if (!credentials) return null;
+                console.log("credentials" , credentials)
 
                 const loginData = await loginAction({
                     email: credentials.email,
@@ -28,11 +29,9 @@ export const authOptions: NextAuthOptions = {
 
                 return {
                     id: loginData.payload.user.email,
-                    name: loginData.payload.user.name,
-                    email: loginData.payload.user.email,
+                    user: loginData.payload.user,
                     token: loginData.payload.access_token,
                 };
-
             }
         }),
         GoogleProvider({
@@ -43,12 +42,12 @@ export const authOptions: NextAuthOptions = {
 
     callbacks: {
         jwt: async ({ token, user }) => {
-
             if (user) {
-                token.token = user.token
-                // token.user = user.user
+                token.token = user.token;
+                token.user = user.user;
             }
-            return token
+
+            return token;
         },
         session: async ({ session, token }) => {
             session.user = token.user
