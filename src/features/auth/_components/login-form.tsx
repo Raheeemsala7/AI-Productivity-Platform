@@ -136,9 +136,12 @@ export default function LoginForm() {
                         {t("rememberMe")}
                     </label>
 
-                    <span className="cursor-pointer text-primary/90 hover:text-primary">
+                    <Link
+                        href="/auth/forgot-password"
+                        className="text-primary/90 hover:text-primary"
+                    >
                         {t("forgotPassword")}
-                    </span>
+                    </Link>
                 </div>
 
                 <button

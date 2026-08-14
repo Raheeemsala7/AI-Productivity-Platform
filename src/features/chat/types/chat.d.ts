@@ -11,3 +11,10 @@ export type ChatStatus =
   | "idle"
   | "submitted"
   | "streaming";
+
+export type ChatConversation = {
+  id: string;
+  title: string;
+  messages: Message[];
+  updatedAt: number;
+};

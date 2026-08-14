@@ -1,7 +1,11 @@
 "use server"
 
 import { HEADERS } from "@/shared/constant/api.constant";
-import { LoginFormValues } from "../schema/auth.schema";
+import {
+    ForgotPasswordFormValues,
+    LoginFormValues,
+    ResetPasswordFormValues,
+} from "../schema/auth.schema";
 import { LoginResponse, RegisterFormValues } from "../types/auth";
 import { IApiResponse } from "@/shared/types/api";
 
@@ -94,6 +98,42 @@ export async function verifyEmailAction(params: VerifyEmailParams) {
 
     if (!data.status) {
         throw new Error(data.message || "Email verification failed.");
+    }
+
+    return data;
+}
+
+export async function forgotPasswordAction(values: ForgotPasswordFormValues) {
+    const res = await fetch(`${process.env.API_URL}/auth/forgot-password`, {
+        method: "POST",
+        body: JSON.stringify(values),
+        headers: {
+            "Content-Type": "application/json",
+        },
+    });
+
+    const data: IApiResponse<{}> = await res.json();
+
+    if (!data.status) {
+        throw new Error(data.message);
+    }
+
+    return data;
+}
+
+export async function resetPasswordAction(values: ResetPasswordFormValues) {
+    const res = await fetch(`${process.env.API_URL}/auth/reset-password`, {
+        method: "POST",
+        body: JSON.stringify(values),
+        headers: {
+            "Content-Type": "application/json",
+        },
+    });
+
+    const data: IApiResponse<{}> = await res.json();
+
+    if (!data.status) {
+        throw new Error(data.message);
     }
 
     return data;
