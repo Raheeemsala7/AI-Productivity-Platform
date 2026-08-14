@@ -35,7 +35,6 @@ export default function ResetPasswordForm({
       email,
       token,
       password: "",
-      password_confirmation: "",
     },
   });
 
@@ -120,43 +119,6 @@ export default function ResetPasswordForm({
                   onClick={() => setShowPassword((value) => !value)}
                 >
                   {showPassword ? (
-                    <EyeOff className="h-4 w-4" />
-                  ) : (
-                    <Eye className="h-4 w-4" />
-                  )}
-                </button>
-              </div>
-
-              {fieldState.invalid && (
-                <FieldError errors={[fieldState.error]} />
-              )}
-            </Field>
-          )}
-        />
-
-        <Controller
-          name="password_confirmation"
-          control={form.control}
-          render={({ field, fieldState }) => (
-            <Field>
-              <FieldLabel>{t("confirmPassword")}</FieldLabel>
-
-              <div className="flex items-center gap-2 rounded-xl border border-input px-3">
-                <Lock className="h-4 w-4 text-muted-foreground" />
-
-                <input
-                  type={showConfirmPassword ? "text" : "password"}
-                  placeholder="••••••••"
-                  className="w-full !bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground/60"
-                  autoComplete="new-password"
-                  {...field}
-                />
-
-                <button
-                  type="button"
-                  onClick={() => setShowConfirmPassword((value) => !value)}
-                >
-                  {showConfirmPassword ? (
                     <EyeOff className="h-4 w-4" />
                   ) : (
                     <Eye className="h-4 w-4" />

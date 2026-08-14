@@ -41,21 +41,22 @@ export async function registerAction(values: RegisterFormValues) {
 
     return data
 }
-export async function loginGoogleAction(id_token: string) {
+export async function loginGoogleAction(access_token: string) {
     const res = await fetch(`${process.env.API_URL}/auth/google`, {
         method: "POST",
         headers: {
             ...HEADERS.JsonBody,
         },
         body: JSON.stringify({
-            id_token,
+            access_token,
         }),
     });
 
-    const data: IApiResponse<{}> = await res.json();
+    const data= await res.json();
+    console.log("google login data", data)
 
-    if (!data.status) {
-        throw new Error("Failed Error")
+    if (!data.success) {
+        throw new Error(data.message || "Failed Error")
     }
     return data
 }

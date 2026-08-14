@@ -1,6 +1,6 @@
 import Credentials from "next-auth/providers/credentials";
 import { NextAuthOptions } from "next-auth";
-import { loginAction } from "./features/auth/apis/auth.action";
+import { loginAction, loginGoogleAction } from "./features/auth/apis/auth.action";
 import { sessionMaxAge } from "./shared/constant/session.constant";
 import GoogleProvider from "next-auth/providers/google";
 
@@ -17,7 +17,7 @@ export const authOptions: NextAuthOptions = {
             },
             authorize: async (credentials) => {
                 if (!credentials) return null;
-                console.log("credentials" , credentials)
+                console.log("credentials", credentials)
 
                 const loginData = await loginAction({
                     email: credentials.email,
@@ -41,10 +41,17 @@ export const authOptions: NextAuthOptions = {
     ],
 
     callbacks: {
-        jwt: async ({ token, user }) => {
+        jwt: async ({ token, user, account }) => {
             if (user) {
                 token.token = user.token;
                 token.user = user.user;
+            }
+            if (account?.provider === "google") {
+                console.log(account)
+                console.log(account.access_token)
+                const googleData = await loginGoogleAction(account.id_token!)
+
+                console.log("DATA : ", googleData)
             }
 
             return token;

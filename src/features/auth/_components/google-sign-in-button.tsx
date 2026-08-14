@@ -22,7 +22,7 @@ export function GoogleSignInButton({ variant = "signIn", className }: GoogleSign
             type="button"
             aria-label={label}
             className={cn(
-                "inline-flex h-11 w-full items-center justify-center gap-3 rounded-xl border border-border bg-card/60 px-4 text-sm font-medium text-foreground transition hover:bg-card hover:border-border/80",
+                "inline-flex h-11 w-full items-center justify-center gap-3 rounded-xl cursor-pointer border border-border bg-card/60 px-4 text-sm font-medium text-foreground transition hover:bg-card hover:border-border/80",
                 className,
             )}
         >
