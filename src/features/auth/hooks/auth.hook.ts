@@ -9,7 +9,6 @@ export const useRegisterMutation = () => {
     return useMutation({
         mutationFn: registerAction,
         onSuccess: () => {
-            console.log("data register")
             toast.success("Register success")
         }
     })

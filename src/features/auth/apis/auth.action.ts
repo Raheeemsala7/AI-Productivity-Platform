@@ -8,6 +8,7 @@ import {
 } from "../schema/auth.schema";
 import { GoogleLoginResponse, LoginResponse, RegisterFormValues } from "../types/auth";
 import { IApiResponse } from "@/shared/types/api";
+import { getErrorMessage } from "@/shared/lib/utils/get-error-message";
 
 export async function loginAction(values: LoginFormValues) {
     const res = await fetch(`${process.env.API_URL}/auth/login`, {
@@ -34,9 +35,9 @@ export async function registerAction(values: RegisterFormValues) {
         },
     })
 
-    const data: IApiResponse<{}> = await res.json()
-    if (!data.status) {
-        throw Error(data.message)
+    const data = await res.json()
+    if (!data.success!) {
+        throw Error(getErrorMessage(data.message, "Something went wrong"))
     }
 
     return data

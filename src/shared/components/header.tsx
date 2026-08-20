@@ -53,8 +53,7 @@ export function Header() {
 
     const isLoading = status === "loading";
     const isAuthenticated = status === "authenticated"
-    console.log(isAuthenticated, isLoading)
-
+    
     return (
         <header
             className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${scrolled ? "backdrop-blur-xl bg-background/70 border-b border-border" : ""

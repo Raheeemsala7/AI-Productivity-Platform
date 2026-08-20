@@ -17,15 +17,12 @@ export const authOptions: NextAuthOptions = {
             },
             authorize: async (credentials) => {
                 if (!credentials) return null;
-                console.log("credentials", credentials)
-
+                
                 const loginData = await loginAction({
                     email: credentials.email,
                     password: credentials.password,
                     remember: false,
                 });
-
-                console.log("loginData", loginData);
 
                 return {
                     id: loginData.payload.user.email,
