@@ -28,7 +28,7 @@ export function Hero() {
     const t = useTranslations("Hero");
 
     return (
-        <section className="relative pt-32 pb-24 md:pt-40 md:pb-32">
+        <section className="relative pt-32 pb-24 md:pt-40 md:pb-32 overflow-hidden">
             <div className="absolute inset-0 grid-bg pointer-events-none" />
             <div className="absolute inset-0 pointer-events-none" style={{ background: "var(--gradient-hero)" }} />
             <div className="relative max-w-7xl mx-auto px-6">

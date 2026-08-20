@@ -47,8 +47,6 @@ export const authOptions: NextAuthOptions = {
                 token.user = user.user;
             }
             if (account?.provider === "google") {
-                console.log(account)
-                console.log(account.access_token)
                 const googleData = await loginGoogleAction(account.access_token!)
 
                 token.token = googleData.token

@@ -10,6 +10,7 @@ import { Skeleton } from "./ui/skeleton";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { cn } from "@/shared/lib/utils";
 import { buttonVariants } from "./ui/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "./ui/dropdown-menu";
 
 export function Header() {
     const [scrolled, setScrolled] = useState(false);
@@ -52,7 +53,7 @@ export function Header() {
 
     const isLoading = status === "loading";
     const isAuthenticated = status === "authenticated"
-    console.log(isAuthenticated , isLoading)
+    console.log(isAuthenticated, isLoading)
 
     return (
         <header
@@ -77,87 +78,115 @@ export function Header() {
                     {isLoading ? (
                         <Skeleton className="size-9 rounded-full" />
                     ) : isAuthenticated ? (
-                        <div className="relative" ref={menuRef}>
-                            <button
-                                onClick={() => setMenuOpen(!menuOpen)}
-                                className="flex items-center gap-1.5 focus:outline-none"
-                            >
+                        <DropdownMenu>
+                            <DropdownMenuTrigger className="flex items-center gap-1.5 focus:outline-none">
                                 <Avatar>
-                                    {session?.user || session?.user ? (
+                                    {session?.user ? (
                                         <AvatarImage
-                                            src={(session.user as any).image || (session.user as any).avatar}
+                                            src={
+                                                (session.user as any).image ||
+                                                (session.user as any).avatar
+                                            }
                                             alt={session.user?.name || "User"}
                                         />
                                     ) : null}
+
                                     <AvatarFallback
                                         style={{
-                                            backgroundColor: (session?.user as any)?.avatar_color || "hsl(var(--primary))",
+                                            backgroundColor:
+                                                (session?.user as any)?.avatar_color ||
+                                                "hsl(var(--primary))",
                                             color: "hsl(var(--primary-foreground))",
                                         }}
                                     >
-                                        {session?.user?.name ? getInitials(session.user.name) : <User className="size-4" />}
+                                        {session?.user?.name ? (
+                                            getInitials(session.user.name)
+                                        ) : (
+                                            <User className="size-4" />
+                                        )}
                                     </AvatarFallback>
                                 </Avatar>
-                                <ChevronDown className={cn("size-4 text-muted-foreground transition-transform", menuOpen && "rotate-180")} />
-                            </button>
 
-                            {menuOpen && (
-                                <div
-                                    className="absolute right-0 mt-2 w-56 rounded-xl border border-border bg-popover shadow-lg z-50 overflow-hidden animate-in fade-in-0 zoom-in-95"
-                                    style={{ animationDuration: "150ms" }}
-                                >
-                                    <div className="flex items-center gap-3 p-4 border-b border-border">
-                                        <Avatar className="size-10">
-                                            {session?.user || session?.user ? (
-                                                <AvatarImage
-                                                    src={(session.user as any).image || (session.user as any).avatar}
-                                                    alt={session.user?.name || "User"}
-                                                />
-                                            ) : null}
-                                            <AvatarFallback
-                                                style={{
-                                                    backgroundColor: (session?.user as any)?.avatar_color || "hsl(var(--primary))",
-                                                    color: "hsl(var(--primary-foreground))",
-                                                }}
-                                            >
-                                                {session?.user?.name ? getInitials(session.user.name) : <User className="size-4" />}
-                                            </AvatarFallback>
-                                        </Avatar>
-                                        <div className="flex flex-col min-w-0">
-                                            <span className="font-medium text-sm text-foreground truncate">
-                                                {session?.user?.name || "User"}
-                                            </span>
-                                            <span className="text-xs text-muted-foreground truncate">
-                                                {session?.user?.email}
-                                            </span>
+                                <ChevronDown className="size-4 text-muted-foreground transition-transform duration-200 data-[state=open]:rotate-180" />
+                            </DropdownMenuTrigger>
+
+                            <DropdownMenuContent
+                                align="end"
+                                sideOffset={8}
+                                className="w-56 rounded-xl p-1.5"
+                            >
+                                <DropdownMenuGroup>
+                                    {/* User Info */}
+                                    <DropdownMenuLabel className="p-0">
+                                        <div className="flex items-center gap-3 p-3">
+                                            <Avatar className="size-10 shrink-0">
+                                                {session?.user ? (
+                                                    <AvatarImage
+                                                        src={
+                                                            (session.user as any).image ||
+                                                            (session.user as any).avatar
+                                                        }
+                                                        alt={session.user?.name || "User"}
+                                                    />
+                                                ) : null}
+
+                                                <AvatarFallback
+                                                    style={{
+                                                        backgroundColor:
+                                                            (session?.user as any)?.avatar_color ||
+                                                            "hsl(var(--primary))",
+                                                        color: "hsl(var(--primary-foreground))",
+                                                    }}
+                                                >
+                                                    {session?.user?.name ? (
+                                                        getInitials(session.user.name)
+                                                    ) : (
+                                                        <User className="size-4" />
+                                                    )}
+                                                </AvatarFallback>
+                                            </Avatar>
+
+                                            <div className="flex min-w-0 flex-col">
+                                                <span className="truncate text-sm font-medium text-foreground">
+                                                    {session?.user?.name || "User"}
+                                                </span>
+
+                                                <span className="truncate text-xs text-muted-foreground">
+                                                    {session?.user?.email}
+                                                </span>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </DropdownMenuLabel>
 
-                                    <div className="p-1.5 flex flex-col gap-1">
+                                    <DropdownMenuSeparator />
+
+                                    {/* Dashboard */}
+                                    <DropdownMenuItem>
                                         <Link
                                             href="/dashboard"
-                                            className="flex items-center gap-2.5 px-3 py-2 text-sm rounded-lg text-foreground hover:bg-muted transition"
-                                            onClick={() => setMenuOpen(false)}
+                                            className="cursor-pointer flex items-center gap-2.5 rounded-lg "
                                         >
                                             <LayoutDashboard className="size-4 text-muted-foreground" />
-                                            {t("dashboard")}
+                                            <span>{t("dashboard")}</span>
                                         </Link>
-                                        <button
-                                            onClick={handleSignOut}
-                                            className="flex items-center gap-2.5 px-3 py-2 text-sm rounded-lg text-destructive hover:bg-destructive/10 transition w-full text-left"
-                                        >
-                                            <Loader2 className="size-4 animate-spin hidden" />
-                                            <LogOut className="size-4" />
-                                            {t("signOut")}
-                                        </button>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
+                                    </DropdownMenuItem>
+
+                                    {/* Sign out */}
+                                    <DropdownMenuItem
+                                        onClick={handleSignOut}
+                                        className="cursor-pointer gap-2.5 rounded-lg text-destructive focus:bg-destructive/10 focus:text-destructive"
+                                    >
+                                        <LogOut className="size-4" />
+                                        <span>{t("signOut")}</span>
+                                    </DropdownMenuItem>
+                                </DropdownMenuGroup>
+
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     ) : (
                         <>
                             <Link href="/auth/login" className="hidden sm:inline text-sm text-muted-foreground hover:text-foreground transition">{t("signIn")}</Link>
-                            <Link href={"/auth/register"} className={cn("btn-primary rounded-lg px-4 py-2 text-sm font-medium inline-flex items-center gap-1.5" , buttonVariants({}))}>
+                            <Link href={"/auth/register"} className={cn("btn-primary rounded-lg px-4 py-2 text-sm font-medium inline-flex items-center gap-1.5", buttonVariants({}))}>
                                 {t("getStarted")} <ArrowRight className="w-3.5 h-3.5" />
                             </Link>
                         </>
