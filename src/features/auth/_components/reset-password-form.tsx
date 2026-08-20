@@ -24,7 +24,6 @@ export default function ResetPasswordForm({
   email = "",
 }: ResetPasswordFormProps) {
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const t = useTranslations("Auth");

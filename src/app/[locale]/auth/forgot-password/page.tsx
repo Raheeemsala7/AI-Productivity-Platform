@@ -5,7 +5,7 @@ import { Sparkles } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
 export default async function ForgotPasswordPage() {
-  const t = await getTranslations("Auth");
+  const t = await getTranslations("ForgetPassword");
 
   return (
     <>

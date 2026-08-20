@@ -73,6 +73,32 @@
     "goToSignIn": "Sign in",
     "createAccount": "Create an account"
   },
+  "ForgetPassword": {
+    "accountRecovery": "Account Recovery",
+    "forgotPasswordTitle": "Forgot your password?",
+    "forgotPasswordSubtitle": "Enter your email address and we'll send you a link to reset your password.",
+    "workEmail": "Email Address",
+    "emailPlaceholder": "Enter your email address",
+    "sendResetLink": "Send Reset Link",
+    "sendingResetLink": "Sending...",
+    "backToSignIn": "Back to Sign In",
+    "forgotPasswordSuccess": "A password reset link has been sent to your email.",
+    "forgotPasswordError": "Something went wrong. Please try again."
+  },
+  "ResetPassword":{
+      "accountRecovery": "Account Recovery",
+      "resetPasswordTitle": "Reset your password",
+      "resetPasswordSubtitle": "Create a new password for your account.",
+      "workEmail": "Email Address",
+      "newPassword": "New Password",
+      "resetPasswordAction": "Reset Password",
+      "resettingPassword": "Resetting Password...",
+      "backToSignIn": "Back to Sign In",
+      "resetPasswordSuccess": "Your password has been reset successfully.",
+      "resetPasswordError": "Something went wrong while resetting your password.",
+      "resetPasswordInvalidLink": "This password reset link is invalid or has expired.",
+      "requestNewResetLink": "Request a new reset link"
+  },
   "Hero": {
     "badge": "ORICO — The Arabic-First AI Business Platform",
     "title": "Your Business Plan, Written by",

@@ -73,6 +73,32 @@
     "goToSignIn": "تسجيل الدخول",
     "createAccount": "إنشاء حساب"
   },
+  "ForgetPassword": {
+    "accountRecovery": "استعادة الحساب",
+    "forgotPasswordTitle": "هل نسيت كلمة المرور؟",
+    "forgotPasswordSubtitle": "أدخل بريدك الإلكتروني وسنرسل لك رابطًا لإعادة تعيين كلمة المرور.",
+    "workEmail": "البريد الإلكتروني",
+    "emailPlaceholder": "أدخل بريدك الإلكتروني",
+    "sendResetLink": "إرسال رابط إعادة التعيين",
+    "sendingResetLink": "جارٍ الإرسال...",
+    "backToSignIn": "العودة لتسجيل الدخول",
+    "forgotPasswordSuccess": "تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني.",
+    "forgotPasswordError": "حدث خطأ، يرجى المحاولة مرة أخرى."
+  },
+  "ResetPassword": {
+    "accountRecovery": "استعادة الحساب",
+    "resetPasswordTitle": "إعادة تعيين كلمة المرور",
+    "resetPasswordSubtitle": "أنشئ كلمة مرور جديدة لحسابك.",
+    "workEmail": "البريد الإلكتروني",
+    "newPassword": "كلمة المرور الجديدة",
+    "resetPasswordAction": "إعادة تعيين كلمة المرور",
+    "resettingPassword": "جارٍ إعادة تعيين كلمة المرور...",
+    "backToSignIn": "العودة لتسجيل الدخول",
+    "resetPasswordSuccess": "تم تغيير كلمة المرور بنجاح.",
+    "resetPasswordError": "حدث خطأ أثناء إعادة تعيين كلمة المرور.",
+    "resetPasswordInvalidLink": "رابط إعادة تعيين كلمة المرور غير صالح أو منتهي الصلاحية.",
+    "requestNewResetLink": "طلب رابط إعادة تعيين جديد"
+  },
   "Hero": {
     "badge": "ORICO — منصة الأعمال الذكية العربية أولاً",
     "title": "خطتك التجارية، بقلم",
@@ -304,7 +330,7 @@
       "dashboard": "لوحة التحكم",
       "projects": "المشاريع",
       "users": "المستخدمون",
-      "chat" :"Orico chat",
+      "chat": "Orico chat",
       "analytics": "التحليلات",
       "settings": "الإعدادات"
     },

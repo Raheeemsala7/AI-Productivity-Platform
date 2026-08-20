@@ -16,7 +16,7 @@ import { toast } from "sonner";
 
 export default function ForgotPasswordForm() {
   const [isPending, startTransition] = useTransition();
-  const t = useTranslations("Auth");
+  const t = useTranslations("ForgetPassword");
 
   const form = useForm<ForgotPasswordFormValues>({
     resolver: zodResolver(forgotPasswordSchema),
