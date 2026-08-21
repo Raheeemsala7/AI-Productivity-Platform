@@ -34,7 +34,7 @@ export function Hero() {
             <div className="relative max-w-7xl mx-auto px-6">
                 <div className="max-w-3xl mx-auto text-center fade-up">
                     <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card/40 px-3 py-1 text-xs text-muted-foreground">
-                        <Sparkles className="w-3.5 h-3.5 text-accent" />
+                        <Sparkles className="w-3.5 h-3.5 text" />
                         {t("badge")}
                     </div>
                     <h1 className="mt-6 text-4xl md:text-6xl lg:text-7xl font-semibold tracking-tight leading-[1.05]">

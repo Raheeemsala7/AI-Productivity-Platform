@@ -8,8 +8,8 @@
     "getStarted": "Get started",
     "dashboard": "Dashboard",
     "signOut": "Sign out",
-    "theme":"Theme",
-    "language":"Language"
+    "theme": "Theme",
+    "language": "Language"
   },
   "Footer": {
     "tagline": "The AI business partner for founders, freelancers and teams shipping their next idea.",
@@ -87,19 +87,19 @@
     "forgotPasswordSuccess": "A password reset link has been sent to your email.",
     "forgotPasswordError": "Something went wrong. Please try again."
   },
-  "ResetPassword":{
-      "accountRecovery": "Account Recovery",
-      "resetPasswordTitle": "Reset your password",
-      "resetPasswordSubtitle": "Create a new password for your account.",
-      "workEmail": "Email Address",
-      "newPassword": "New Password",
-      "resetPasswordAction": "Reset Password",
-      "resettingPassword": "Resetting Password...",
-      "backToSignIn": "Back to Sign In",
-      "resetPasswordSuccess": "Your password has been reset successfully.",
-      "resetPasswordError": "Something went wrong while resetting your password.",
-      "resetPasswordInvalidLink": "This password reset link is invalid or has expired.",
-      "requestNewResetLink": "Request a new reset link"
+  "ResetPassword": {
+    "accountRecovery": "Account Recovery",
+    "resetPasswordTitle": "Reset your password",
+    "resetPasswordSubtitle": "Create a new password for your account.",
+    "workEmail": "Email Address",
+    "newPassword": "New Password",
+    "resetPasswordAction": "Reset Password",
+    "resettingPassword": "Resetting Password...",
+    "backToSignIn": "Back to Sign In",
+    "resetPasswordSuccess": "Your password has been reset successfully.",
+    "resetPasswordError": "Something went wrong while resetting your password.",
+    "resetPasswordInvalidLink": "This password reset link is invalid or has expired.",
+    "requestNewResetLink": "Request a new reset link"
   },
   "Hero": {
     "badge": "ORICO — The Arabic-First AI Business Platform",
@@ -320,7 +320,7 @@
     }
   },
   "Dashboard": {
-    "welcome": "Welcome back, Omar",
+    "welcome": "Welcome back, {name}",
     "subtitle": "Here's what your AI workspace produced recently.",
     "overview": "Overview",
     "businessPlans": "Business Plans",
