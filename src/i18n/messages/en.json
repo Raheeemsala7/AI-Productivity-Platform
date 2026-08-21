@@ -7,7 +7,9 @@
     "signIn": "Sign in",
     "getStarted": "Get started",
     "dashboard": "Dashboard",
-    "signOut": "Sign out"
+    "signOut": "Sign out",
+    "theme":"Theme",
+    "language":"Language"
   },
   "Footer": {
     "tagline": "The AI business partner for founders, freelancers and teams shipping their next idea.",

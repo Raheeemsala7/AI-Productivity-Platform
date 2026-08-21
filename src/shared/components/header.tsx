@@ -11,6 +11,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { cn } from "@/shared/lib/utils";
 import { buttonVariants } from "./ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "./ui/dropdown-menu";
+import NavSheetContent from "./home/nav-sheet-content";
 
 export function Header() {
     const [scrolled, setScrolled] = useState(false);
@@ -53,7 +54,7 @@ export function Header() {
 
     const isLoading = status === "loading";
     const isAuthenticated = status === "authenticated"
-    
+
     return (
         <header
             className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${scrolled ? "backdrop-blur-xl bg-background/70 border-b border-border" : ""
@@ -71,8 +72,8 @@ export function Header() {
                     <Link href="#faq" className="hover:text-foreground transition">{t("faq")}</Link>
                 </nav>
                 <div className="flex items-center gap-3">
-                    <LocaleSwitcher className="hidden sm:inline-flex" />
-                    <ThemeToggle />
+                    <LocaleSwitcher className="hidden md:inline-flex" />
+                    <ThemeToggle className="hidden md:inline-flex" />
 
                     {isLoading ? (
                         <Skeleton className="size-9 rounded-full" />
@@ -184,12 +185,13 @@ export function Header() {
                         </DropdownMenu>
                     ) : (
                         <>
-                            <Link href="/auth/login" className="hidden sm:inline text-sm text-muted-foreground hover:text-foreground transition">{t("signIn")}</Link>
+                            <Link href="/auth/login" className="hidden md:inline text-sm text-muted-foreground hover:text-foreground transition">{t("signIn")}</Link>
                             <Link href={"/auth/register"} className={cn("btn-primary rounded-lg px-4 py-2 text-sm font-medium inline-flex items-center gap-1.5", buttonVariants({}))}>
                                 {t("getStarted")} <ArrowRight className="w-3.5 h-3.5" />
                             </Link>
                         </>
                     )}
+                <NavSheetContent />
                 </div>
             </div>
         </header>

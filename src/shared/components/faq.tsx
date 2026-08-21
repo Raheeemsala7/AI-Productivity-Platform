@@ -33,7 +33,7 @@ export function FAQ() {
                                     <span className="text-[15px] font-medium">{f.q}</span>
                                     <ChevronDown className={`w-4 h-4 text-muted-foreground shrink-0 transition-transform ${isOpen ? "rotate-180" : ""}`} />
                                 </div>
-                                {isOpen && <p className="text-sm text-muted-foreground leading-relaxed pr-8 fade-up">{f.a}</p>}
+                                {isOpen && <p className="text-sm text-muted-foreground leading-relaxed pe-8 fade-up rtl:text-right">{f.a}</p>}
                             </button>
                         );
                     })}
