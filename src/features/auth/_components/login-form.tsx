@@ -33,7 +33,8 @@ export default function LoginForm() {
                 email: data.email,
                 password: data.password,
                 remember: data.remember,
-                redirect: false
+                redirect: false,
+                callbackUrl:"/dashboard"
             })
 
             if (res?.error === "Invalid credentials") {

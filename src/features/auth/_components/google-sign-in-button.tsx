@@ -17,7 +17,9 @@ export function GoogleSignInButton({ variant = "signIn", className }: GoogleSign
     return (
         <button
         onClick={() => {
-            signIn("google");
+            signIn("google",{
+                callbackUrl:"/dashboard"
+            });
         }}
             type="button"
             aria-label={label}
