@@ -61,7 +61,8 @@
     "signInWithGoogle": "Sign in with Google",
     "signUpWithGoogle": "Sign up with Google",
     "orContinueWithEmail": "or continue with email",
-    "protectedWorkspace": "Protected workspace · Arabic & English support"
+    "protectedWorkspace": "Protected workspace · Arabic & English support",
+    "registerError": "Something error"
   },
   "VerifyEmail": {
     "verifying": "Verifying your email",

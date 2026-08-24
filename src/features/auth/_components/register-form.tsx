@@ -41,7 +41,7 @@ export default function RegisterForm() {
                     form.reset()
                 }
             } catch (error) {
-                toast.error(getErrorMessage(error, t("registerError")));
+                toast.error(getErrorMessage(error,  t("registerError") ));
             }
         });
     };

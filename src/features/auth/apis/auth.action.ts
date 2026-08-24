@@ -20,7 +20,8 @@ export async function loginAction(values: LoginFormValues) {
     })
     const data: IApiResponse<LoginResponse> = await res.json()
     if (!data.status) {
-        throw Error(data.message)
+        throw Error(getErrorMessage(data.message, "Something went wrong"))
+ 
     }
 
     return data
@@ -36,6 +37,7 @@ export async function registerAction(values: RegisterFormValues) {
     })
 
     const data = await res.json()
+    console.log(data)
     if (!data.success!) {
         throw Error(getErrorMessage(data.message, "Something went wrong"))
     }
@@ -53,7 +55,7 @@ export async function loginGoogleAction(access_token: string) {
         }),
     });
 
-    const data : GoogleLoginResponse= await res.json();
+    const data: GoogleLoginResponse = await res.json();
 
     if (!data.success) {
         throw new Error(data.message || "Failed Error")

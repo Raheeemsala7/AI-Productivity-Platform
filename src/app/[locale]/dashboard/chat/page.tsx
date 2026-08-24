@@ -157,8 +157,8 @@ export default function ChatPage() {
 
   return (
     <div className="flex min-h-dvh items-stretch p-4 md:p-6">
-      <div className="glass mx-auto flex h-[calc(100dvh-2rem)] w-full max-w-6xl overflow-hidden rounded-2xl md:h-[calc(100dvh-3rem)]">
-        <ChatHistorySidebar
+      <div className=" mx-auto flex h-[calc(100dvh-2rem)] w-full max-w-6xl overflow-hidden rounded-2xl md:h-[calc(100dvh-3rem)]">
+        {/* <ChatHistorySidebar
           conversations={conversations}
           activeId={activeId}
           onSelect={handleSelectConversation}
@@ -168,7 +168,7 @@ export default function ChatPage() {
             "absolute inset-y-0 start-0 z-20 md:static md:translate-x-0",
             sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0",
           )}
-        />
+        /> */}
 
         {sidebarOpen && (
           <button
@@ -180,12 +180,12 @@ export default function ChatPage() {
         )}
 
         <div className="relative flex min-w-0 flex-1 flex-col">
-          <ChatHeader
+          {/* <ChatHeader
             hasMessages={messages.length > 0}
             onClear={handleClearConversation}
             onToggleSidebar={() => setSidebarOpen((open) => !open)}
-          />
-
+          /> */}
+ 
           <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-6">
             {messages.length === 0 ? (
               <EmptyState onPick={submit} />

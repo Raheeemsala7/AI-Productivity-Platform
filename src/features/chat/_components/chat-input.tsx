@@ -24,7 +24,7 @@ export default function ChatInput({
   const canSend = input.trim().length > 0 || busy;
 
   return (
-    <div className="shrink-0 border-t border-border bg-card/80 px-4 py-3 backdrop-blur-sm">
+    <div className="shrink-0 border-t border-border px-4 py-3 backdrop-blur-sm">
       <div className="mx-auto w-full max-w-2xl">
         <div
           className={cn(

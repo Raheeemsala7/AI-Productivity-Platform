@@ -8,8 +8,8 @@
     "getStarted": "ابدأ الآن",
     "dashboard": "لوحة التحكم",
     "signOut": "تسجيل الخروج",
-    "theme":"الثيم",
-    "language":"اللغه"
+    "theme": "الثيم",
+    "language": "اللغه"
   },
   "Footer": {
     "tagline": "شريكك الذكي في الأعمال للمؤسسين والمستقلين والفرق الذين يطلقون فكرتهم القادمة.",
@@ -61,7 +61,8 @@
     "signInWithGoogle": "تسجيل الدخول عبر Google",
     "signUpWithGoogle": "التسجيل عبر Google",
     "orContinueWithEmail": "أو المتابعة بالبريد الإلكتروني",
-    "protectedWorkspace": "مساحة عمل محمية · دعم العربية والإنجليزية"
+    "protectedWorkspace": "مساحة عمل محمية · دعم العربية والإنجليزية",
+    "registerError": "حدث خطأ اثناء تسجيل"
   },
   "VerifyEmail": {
     "verifying": "جارٍ التحقق من بريدك الإلكتروني",

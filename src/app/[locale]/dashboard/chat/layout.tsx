@@ -31,14 +31,9 @@ export default async function ChatLayout({ children }: { children: ReactNode }) 
   return (
     <SidebarProvider className=''>
       <ChatAppSidebar />
-      <SidebarInset className='rounded-2xl'>
-        <header className="flex h-16 items-center justify-between border-b px-3 md:px-6 py-2">
-          <div className="flex items-center gap-2 md:gap-4">
-            
-          </div>
-          
-        </header>
-        {/* <main className="">{children}</main> */}
+      <SidebarInset>
+        
+        <main className="">{children}</main>
       </SidebarInset>
     </SidebarProvider>
   )
