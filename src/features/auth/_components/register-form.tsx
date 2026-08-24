@@ -36,11 +36,11 @@ export default function RegisterForm() {
         startTransition(async () => {
             const res = await mutateAsync(data);
             console.log(res)
-            if (res.success) {
+            if (!res.success) {
+                toast.error(getErrorMessage(res.message, t("registerError")));
+            } else {
                 toast.success(res.message)
                 form.reset()
-            } else {
-                toast.error(getErrorMessage(res.message, t("registerError")));
             }
         });
     };
