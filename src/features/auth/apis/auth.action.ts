@@ -7,7 +7,7 @@ import {
     ResetPasswordFormValues,
 } from "../schema/auth.schema";
 import { GoogleLoginResponse, LoginResponse, RegisterFormValues } from "../types/auth";
-import { IApiResponse } from "@/shared/types/api";
+import { ActionResult, IApiResponse } from "@/shared/types/api";
 import { getErrorMessage } from "@/shared/lib/utils/get-error-message";
 
 export async function loginAction(values: LoginFormValues) {
@@ -36,13 +36,19 @@ export async function registerAction(values: RegisterFormValues) {
         },
     })
 
-    const data = await res.json()
+    const data : ActionResult<{}> = await res.json()
     console.log(data)
-    if (!data.success!) {
-        throw Error(getErrorMessage(data.message, "Something went wrong"))
+    if (!data.success) {
+        return {
+            success: false,
+            message: getErrorMessage(data.message, "Something went wrong")
+        }
     }
-
-    return data
+    
+    return {
+        success: true,
+        data
+    }
 }
 export async function loginGoogleAction(access_token: string) {
     const res = await fetch(`${process.env.API_URL}/auth/google`, {

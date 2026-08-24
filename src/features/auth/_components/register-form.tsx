@@ -34,14 +34,13 @@ export default function RegisterForm() {
 
     const onSubmit = async (data: RegisterFormValues) => {
         startTransition(async () => {
-            try {
-                const res = await mutateAsync(data);
-                if (res.status) {
-                    toast.success(res.message)
-                    form.reset()
-                }
-            } catch (error) {
-                toast.error(getErrorMessage(error,  t("registerError") ));
+            const res = await mutateAsync(data);
+            console.log(res)
+            if (res.success) {
+                toast.success(res.message)
+                form.reset()
+            } else {
+                toast.error(getErrorMessage(res.message, t("registerError")));
             }
         });
     };

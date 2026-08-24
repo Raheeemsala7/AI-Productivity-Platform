@@ -19,6 +19,9 @@ declare type IErrorResponse = {
 
 declare type IApiResponse<T> = SuccessResponse<T> | IErrorResponse
 
+declare type ActionResult<T> =
+    | { success: true; data: T }
+    | { success: false; message: string };
 declare interface IPagination<T> {
     data: T[];
     metadata: {
