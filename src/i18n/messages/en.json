@@ -340,6 +340,14 @@
     "professionalPlan": "Professional plan",
     "credits": "840 / 1,000 credits"
   },
+  "Chat": {
+    "subtitle": "Your AI Business Partner",
+    "newConversation": "New conversation",
+    "inputPlaceholder": "Describe your business idea or ask anything…",
+    "attachFile": "Attach file",
+    "send": "Send",
+    "stop": "Stop"
+  },
   "LocaleSwitcher": {
     "en": "EN",
     "ar": "العربية"

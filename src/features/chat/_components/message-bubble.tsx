@@ -19,7 +19,7 @@ export default function MessageBubble({
 
   return (
     <div className={cn("flex gap-3", isUser && "flex-row-reverse")}>
-      <Avatar role={role} />
+      {/* <Avatar role={role} /> */}
 
       <div
         className={cn(
@@ -27,9 +27,9 @@ export default function MessageBubble({
           isUser ? "items-end" : "items-start",
         )}
       >
-        <span className="px-1 text-[10.5px] uppercase tracking-widest text-muted-foreground">
+        {/* <span className="px-1 text-[10.5px] uppercase tracking-widest text-muted-foreground">
           {isUser ? "You" : "ORICO"}
-        </span>
+        </span> */}
 
         <div
           className={cn(

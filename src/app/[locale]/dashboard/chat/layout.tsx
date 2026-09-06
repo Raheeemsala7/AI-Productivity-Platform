@@ -32,8 +32,7 @@ export default async function ChatLayout({ children }: { children: ReactNode }) 
     <SidebarProvider className=''>
       <ChatAppSidebar />
       <SidebarInset>
-        
-        <main className="">{children}</main>
+        <main className="min-h-dvh">{children}</main>
       </SidebarInset>
     </SidebarProvider>
   )

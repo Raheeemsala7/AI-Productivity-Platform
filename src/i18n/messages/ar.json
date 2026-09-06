@@ -340,6 +340,14 @@
     "professionalPlan": "الخطة الاحترافية",
     "credits": "840 / 1,000 رصيد"
   },
+  "Chat": {
+    "subtitle": "شريكك الذكي في الأعمال",
+    "newConversation": "محادثة جديدة",
+    "inputPlaceholder": "صف فكرتك التجارية أو اسأل أي شيء…",
+    "attachFile": "إرفاق ملف",
+    "send": "إرسال",
+    "stop": "إيقاف"
+  },
   "LocaleSwitcher": {
     "en": "EN",
     "ar": "العربية"

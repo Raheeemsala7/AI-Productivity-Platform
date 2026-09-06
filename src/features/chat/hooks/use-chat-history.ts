@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useState } from "react";
 import type { ChatConversation, Message } from "../types/chat";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { sendMessageAction } from "../apis/chat.action";
 
 const STORAGE_KEY = "orico-chat-history";
 
@@ -144,4 +146,12 @@ export function useChatHistory() {
     deleteConversation,
     clearActiveConversation,
   };
+}
+
+
+
+export function sendMessageMutation() {
+  return useMutation({
+    mutationFn : sendMessageAction
+  })
 }

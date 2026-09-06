@@ -1,15 +1,14 @@
-"use client";
 
 import { ThemeToggle } from "@/shared/components/theme-toggle";
 import { cn } from "@/shared/lib/utils";
 import { ArrowLeft, PanelLeft, RotateCcw, Sparkles } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
+import { SidebarTrigger } from "@/shared/components/ui/sidebar";
 
 type ChatHeaderProps = {
   hasMessages: boolean;
   onClear: () => void;
-  onToggleSidebar: () => void;
 };
 
 const iconButtonClass =
@@ -18,21 +17,14 @@ const iconButtonClass =
 export default function ChatHeader({
   hasMessages,
   onClear,
-  onToggleSidebar,
 }: ChatHeaderProps) {
   const t = useTranslations("Chat");
 
   return (
     <header className="flex shrink-0 items-center justify-between border-b border-border bg-card/80 px-4 py-3 backdrop-blur-sm">
       <div className="flex items-center gap-3">
-        <button
-          type="button"
-          aria-label={t("toggleHistory")}
-          onClick={onToggleSidebar}
-          className={cn(iconButtonClass, "md:hidden")}
-        >
-          <PanelLeft size={16} />
-        </button>
+        <SidebarTrigger className="group-data-[state=collapsed] block md:hidden" />
+
 
         <Link href="/dashboard" aria-label="Go back" className={iconButtonClass}>
           <ArrowLeft size={16} />

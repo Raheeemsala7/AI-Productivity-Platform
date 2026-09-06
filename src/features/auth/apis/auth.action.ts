@@ -23,7 +23,7 @@ export async function loginAction(values: LoginFormValues) {
         throw Error(getErrorMessage(data.message, "Something went wrong"))
  
     }
-
+ 
     return data
 }
 export async function registerAction(values: RegisterFormValues) {
@@ -37,14 +37,12 @@ export async function registerAction(values: RegisterFormValues) {
     })
 
     const data : ActionResult<{}> = await res.json()
-    console.log(data)
     if (!data.success) {
         return {
             success: false,
             message: getErrorMessage(data.message, "Something went wrong")
         }
     }
-    
     return {
         success: true,
         data
