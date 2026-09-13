@@ -1,6 +1,5 @@
 import { cn } from "@/shared/lib/utils";
 import type { MessageRole } from "../types/chat";
-import Avatar from "./avatar";
 import Shimmer from "./shimmer";
 import ThinkingDots from "./thinking-dots";
 

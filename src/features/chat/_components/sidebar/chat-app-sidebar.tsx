@@ -1,4 +1,3 @@
-import { Link } from '@/i18n/navigation'
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarTrigger } from '@/shared/components/ui/sidebar'
 import { Sparkles } from 'lucide-react'
 
@@ -37,7 +36,7 @@ export default function ChatAppSidebar() {
                 <SidebarGroup>
                     <SidebarGroupContent>
                         <SidebarMenu>
-
+                            
                         </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>

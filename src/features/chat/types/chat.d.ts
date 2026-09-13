@@ -2,11 +2,22 @@ export type MessageRole = "user" | "assistant";
 
 export type Message = {
   id: string;
-  role: MessageRole;
+  role: "user" | "assistant";
   text: string;
   thinking?: boolean;
 };
 
+
+export type SendMessageRequest = {
+  message: string;
+  conversation_id: string;
+};
+
+export type responseSendMessage = {
+  conversation_id: string;
+  title: string | null;
+  response: string;
+}
 export type ChatStatus =
   | "idle"
   | "submitted"
@@ -17,4 +28,9 @@ export type ChatConversation = {
   title: string;
   messages: Message[];
   updatedAt: number;
+};
+
+
+export type ChatInputForm = {
+  message: string;
 };

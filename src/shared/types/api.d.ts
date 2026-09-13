@@ -7,7 +7,7 @@ declare type SuccessResponse<T> = {
     message?: string
     payload: T
 }
-declare type IErrorResponse = {
+declare type ErrorResponse = {
     status: false
     code: number;
     message?: string;
@@ -17,11 +17,13 @@ declare type IErrorResponse = {
     }>
 }
 
-declare type IApiResponse<T> = SuccessResponse<T> | IErrorResponse
+declare type IApiResponse<T> = SuccessResponse<T> | ErrorResponse
 
 declare type ActionResult<T> =
     | { success: true; data: T }
     | { success: false; message: string };
+
+    
 declare interface IPagination<T> {
     data: T[];
     metadata: {
@@ -40,3 +42,24 @@ export interface ITimeStamp {
 export interface IResponseMessage {
     message:string
 }
+
+
+
+
+declare type ISuccessResponse<T> = {
+    success: true
+    code: number;
+    message?: string
+    payload: T
+}
+declare type IErrorResponse = {
+    success: false
+    code: number;
+    message?: string;
+    errors?: Array<{
+        path: string;
+        message: string;
+    }>
+}
+
+declare type ApiResponse<T> = ISuccessResponse<T> | IErrorResponse

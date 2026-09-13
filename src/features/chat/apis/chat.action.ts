@@ -3,30 +3,33 @@
 import { HEADERS } from "@/shared/constant/api.constant"
 import { RESPONSES } from "@/shared/constant/api.responses"
 import { getNextAuthToken } from "@/shared/lib/utils/auth.util"
-import { IApiResponse } from "@/shared/types/api"
+import { ActionResult, ApiResponse, IApiResponse } from "@/shared/types/api"
+import { responseSendMessage, SendMessageRequest } from "../types/chat"
 
 
-export async function sendMessageAction(message: string) {
+export async function sendMessageAction({ conversation_id, message }: SendMessageRequest) : Promise<responseSendMessage> {
     const token = await getNextAuthToken()
 
-    if (!token?.token) return RESPONSES.unauthorized
+    if (!token?.token) {
+        throw new Error("Unauthorized")
+    }
 
     const res = await fetch(`${process.env.API_URL}/user/chat`, {
-        method:"POST",
+        method: "POST",
         headers: {
             ...HEADERS.JsonBody,
             ...HEADERS.authorize(token.token)
         },
-        body :JSON.stringify({message, conversation_id:"dd"})
+        body: JSON.stringify({ message, conversation_id })
     })
 
-    const data: IApiResponse<{}> = await res.json()
-
-    if (!data.status) {
-        throw Error( data.message || "Failed Send message" )
-    }
+    const data: ApiResponse<responseSendMessage> = await res.json()
     console.log(data);
-    
 
-    return data
+    if (!data.success) {
+        throw Error(data.message || "Failed Send message")
+    }
+
+
+    return data.payload
 }

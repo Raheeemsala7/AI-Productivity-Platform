@@ -9,7 +9,7 @@ import {
   Trash2,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
-import type { ChatConversation } from "../types/chat";
+import type { ChatConversation } from "../../types/chat";
 
 type ChatHistorySidebarProps = {
   conversations: ChatConversation[];
