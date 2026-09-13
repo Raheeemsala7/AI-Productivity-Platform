@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { ChatStatus, Message } from "../types/chat";
+import { ChatConversation, ChatStatus, Message } from "../types/chat";
 
 type ChatState = {
     conversationId: string;
@@ -11,6 +11,7 @@ type ChatState = {
     setMessages: (messages: Message[]) => void;
     setStatus: (status: ChatStatus) => void;
     resetChat: () => void;
+    openConversation: (conversation: ChatConversation) => void;
 };
 
 const createConversationId = () => crypto.randomUUID();
@@ -50,6 +51,14 @@ export const useChatStore = create<ChatState>((set) => ({
         set({
             conversationId: createConversationId(),
             messages: [],
+            status: "idle",
+        });
+    },
+
+    openConversation: (conversation) => {
+        set({
+            conversationId: conversation.id,
+            messages: conversation.messages,
             status: "idle",
         });
     },

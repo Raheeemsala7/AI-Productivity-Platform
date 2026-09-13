@@ -343,10 +343,21 @@
   "Chat": {
     "subtitle": "شريكك الذكي في الأعمال",
     "newConversation": "محادثة جديدة",
+    "newChat": "محادثة جديدة",
+    "goBack": "رجوع",
     "inputPlaceholder": "صف فكرتك التجارية أو اسأل أي شيء…",
     "attachFile": "إرفاق ملف",
     "send": "إرسال",
-    "stop": "إيقاف"
+    "stop": "إيقاف",
+    "chatHistory": "سجل المحادثات",
+    "openHistory": "فتح سجل المحادثات",
+    "closeHistory": "إغلاق السجل",
+    "history": "السجل",
+    "today": "اليوم",
+    "yesterday": "أمس",
+    "week": "آخر 7 أيام",
+    "noHistory": "لا توجد محادثات بعد. ابدأ محادثة جديدة!",
+    "deleteConversation": "حذف المحادثة"
   },
   "LocaleSwitcher": {
     "en": "EN",

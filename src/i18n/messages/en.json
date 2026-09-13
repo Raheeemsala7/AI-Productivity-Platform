@@ -343,10 +343,21 @@
   "Chat": {
     "subtitle": "Your AI Business Partner",
     "newConversation": "New conversation",
+    "newChat": "New chat",
+    "goBack": "Go back",
     "inputPlaceholder": "Describe your business idea or ask anything…",
     "attachFile": "Attach file",
     "send": "Send",
-    "stop": "Stop"
+    "stop": "Stop",
+    "chatHistory": "Chat History",
+    "openHistory": "Open chat history",
+    "closeHistory": "Close history",
+    "history": "History",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "week": "Previous 7 days",
+    "noHistory": "No conversations yet. Start a new chat!",
+    "deleteConversation": "Delete conversation"
   },
   "LocaleSwitcher": {
     "en": "EN",
