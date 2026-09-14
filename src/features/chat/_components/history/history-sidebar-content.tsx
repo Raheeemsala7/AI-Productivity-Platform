@@ -128,7 +128,7 @@ export default function HistorySidebarContent({
             </div>
             
             <div className="flex items-center gap-3 rounded-lg border border-border bg-background p-3 shadow-sm">
-              <Avatar className="size-10 shrink-0">
+              {/* <Avatar className="size-10 shrink-0">
                 <AvatarImage src={getAvatarUrl(session.user)} alt={session.user.name || "User"} />
                 <AvatarFallback
                   style={{
@@ -138,7 +138,7 @@ export default function HistorySidebarContent({
                 >
                   {session.user.name ? getInitials(session.user.name) : <User className="size-4" />}
                 </AvatarFallback>
-              </Avatar>
+              </Avatar> */}
               <div className="flex min-w-0 flex-col">
                 <span className="truncate text-sm font-medium text-foreground">
                   {session.user.name || "User"}
