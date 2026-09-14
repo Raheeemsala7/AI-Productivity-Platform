@@ -1,7 +1,8 @@
 import { cn } from "@/shared/lib/utils";
 import { getTextDirection } from "@/shared/lib/text-direction";
 import Markdown from "@/shared/components/ui/markdown";
-import type { MessageRole } from "../types/chat";
+import type { MessageRole, MessageAttachment, MessageAudio } from "../types/chat";
+import { formatFileSize, getDocumentIcon, getFileLabel } from "../constant/chat.attachment";
 import Shimmer from "./shimmer";
 import ThinkingDots from "./thinking-dots";
 
@@ -9,12 +10,16 @@ type MessageBubbleProps = {
   role: MessageRole;
   text: string;
   isThinking?: boolean;
+  attachments?: MessageAttachment[];
+  audio?: MessageAudio | null;
 };
 
 export default function MessageBubble({
   role,
   text,
   isThinking = false,
+  attachments,
+  audio,
 }: MessageBubbleProps) {
   const isUser = role === "user";
   const direction = getTextDirection(text);
@@ -29,9 +34,54 @@ export default function MessageBubble({
           isUser ? "items-end" : "items-start",
         )}
       >
-        {/* <span className="px-1 text-[10.5px] uppercase tracking-widest text-muted-foreground">
-            {isUser ? "You" : "ORICO"}
-          </span> */}
+        {isUser && attachments && attachments.length > 0 ? (
+          <div className="flex w-full max-w-xs flex-wrap justify-end gap-1.5 sm:max-w-sm">
+            {attachments.map((attachment) =>
+              attachment.kind === "image" ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  key={attachment.id}
+                  src={attachment.url}
+                  alt={attachment.name}
+                  title={attachment.name}
+                  loading="lazy"
+                  className="h-16 w-16 rounded-xl object-cover ring-1 ring-black/5 dark:ring-white/10 sm:h-20 sm:w-20"
+                />
+              ) : (
+                <div
+                  key={attachment.id}
+                  className="flex items-center gap-2 rounded-xl bg-background/80 p-2 ring-1 ring-border"
+                >
+                  <DocumentIcon name={attachment.name} />
+                  <div className="min-w-0">
+                    <p className="max-w-32 truncate text-xs font-medium">
+                      {attachment.name}
+                    </p>
+                    <p className="text-[10px] text-muted-foreground">
+                      {getFileLabel(attachment.name)} ·{" "}
+                      {formatFileSize(attachment.size)}
+                    </p>
+                  </div>
+                </div>
+              ),
+            )}
+          </div>
+        ) : null}
+
+        {isUser && audio?.url ? (
+          <audio
+            src={audio.url}
+            controls
+            preload="metadata"
+            className="h-9 w-56 max-w-full"
+            data-slot="message-audio"
+          >
+            <source
+              src={audio.url}
+              type={audio.type ?? "audio/webm"}
+            />
+          </audio>
+        ) : null}
 
         <div
           dir={direction}
@@ -57,6 +107,15 @@ export default function MessageBubble({
           )}
         </div>
       </div>
+    </div>
+  );
+}
+
+function DocumentIcon({ name }: { name: string }) {
+  const icon = getDocumentIcon(name, 15);
+  return (
+    <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground">
+      {icon}
     </div>
   );
 }

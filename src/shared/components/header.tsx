@@ -1,6 +1,6 @@
 "use client"
-import { ArrowRight, ChevronDown, LayoutDashboard, Loader2, LogOut, User } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { ArrowRight, ChevronDown, LayoutDashboard, LogOut, User } from "lucide-react";
+import { useEffect, useState } from "react";
 import { ThemeToggle } from "./theme-toggle";
 import { Link } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
@@ -13,10 +13,14 @@ import { buttonVariants } from "./ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "./ui/dropdown-menu";
 import NavSheetContent from "./home/nav-sheet-content";
 
+type SessionUserLike = {
+    image?: string | null;
+    avatar?: string | null;
+    avatar_color?: string | null;
+};
+
 export function Header() {
     const [scrolled, setScrolled] = useState(false);
-    const [menuOpen, setMenuOpen] = useState(false);
-    const menuRef = useRef<HTMLDivElement>(null);
     const t = useTranslations("Header");
     const { data: session, status } = useSession();
 
@@ -27,18 +31,6 @@ export function Header() {
         return () => window.removeEventListener("scroll", onScroll);
     }, []);
 
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-                setMenuOpen(false);
-            }
-        };
-        if (menuOpen) {
-            document.addEventListener("mousedown", handleClickOutside);
-        }
-        return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, [menuOpen]);
-
     const getInitials = (name: string) => {
         return name
             .split(" ")
@@ -47,6 +39,12 @@ export function Header() {
             .toUpperCase()
             .slice(0, 2);
     };
+
+    const getAvatarUrl = (user?: SessionUserLike | null) =>
+        user?.image ?? user?.avatar ?? "";
+
+    const getAvatarColor = (user?: SessionUserLike | null) =>
+        user?.avatar_color || "hsl(var(--primary))";
 
     const handleSignOut = () => {
         signOut({ callbackUrl: "/auth/login" });
@@ -83,19 +81,14 @@ export function Header() {
                                 <Avatar>
                                     {session?.user ? (
                                         <AvatarImage
-                                            src={
-                                                (session.user as any).image ||
-                                                (session.user as any).avatar
-                                            }
+                                            src={getAvatarUrl(session.user)}
                                             alt={session.user?.name || "User"}
                                         />
                                     ) : null}
 
                                     <AvatarFallback
                                         style={{
-                                            backgroundColor:
-                                                (session?.user as any)?.avatar_color ||
-                                                "hsl(var(--primary))",
+                                            backgroundColor: getAvatarColor(session.user),
                                             color: "hsl(var(--primary-foreground))",
                                         }}
                                     >
@@ -122,19 +115,14 @@ export function Header() {
                                             <Avatar className="size-10 shrink-0">
                                                 {session?.user ? (
                                                     <AvatarImage
-                                                        src={
-                                                            (session.user as any).image ||
-                                                            (session.user as any).avatar
-                                                        }
+                                                        src={getAvatarUrl(session.user)}
                                                         alt={session.user?.name || "User"}
                                                     />
                                                 ) : null}
 
                                                 <AvatarFallback
                                                     style={{
-                                                        backgroundColor:
-                                                            (session?.user as any)?.avatar_color ||
-                                                            "hsl(var(--primary))",
+                                                        backgroundColor: getAvatarColor(session.user),
                                                         color: "hsl(var(--primary-foreground))",
                                                     }}
                                                 >
@@ -187,7 +175,7 @@ export function Header() {
                         <>
                             <Link href="/auth/login" className="hidden md:inline text-sm text-muted-foreground hover:text-foreground transition">{t("signIn")}</Link>
                             <Link href={"/auth/register"} className={cn("btn-primary rounded-lg px-4 py-2 text-sm font-medium inline-flex items-center gap-1.5", buttonVariants({}))}>
-                                {t("getStarted")} <ArrowRight className="w-3.5 h-3.5" />
+                                {t("getStarted")} <ArrowRight className="w-3.5 h-3.5 rtl:rotate-180" />
                             </Link>
                         </>
                     )}

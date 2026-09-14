@@ -1,3 +1,7 @@
+import { File, FileSpreadsheet, FileText } from "lucide-react";
+import { createElement } from "react";
+import type { ReactElement } from "react";
+
 export type FileKind = "image" | "document";
 
 /**
@@ -81,12 +85,27 @@ export const formatDuration = (seconds: number) => {
   return `${m}:${String(r).padStart(2, "0")}`;
 };
 
-import { File, FileSpreadsheet, FileText, type LucideIcon } from "lucide-react";
-
-export const getDocumentIcon = (name: string): LucideIcon => {
+/** Returns a ready-to-render lucide icon for the given document extension. */
+export const getDocumentIcon = (
+  name: string,
+  size = 16,
+): ReactElement => {
   const ext = getFileExtension(name);
-  if (["doc", "docx", "rtf"].includes(ext)) return FileText;
-  if (["xls", "xlsx", "csv"].includes(ext)) return FileSpreadsheet;
-  if (["txt", "md", "json", "log"].includes(ext)) return FileText;
-  return File;
+  if (["doc", "docx", "rtf"].includes(ext)) {
+    return createElement(FileText, { size });
+  }
+  if (["xls", "xlsx", "csv"].includes(ext)) {
+    return createElement(FileSpreadsheet, { size });
+  }
+  if (["txt", "md", "json", "log"].includes(ext)) {
+    return createElement(FileText, { size });
+  }
+  return createElement(File, { size });
+};
+
+/** Short display label: "Image" for images, else the uppercase extension. */
+export const getFileLabel = (name: string) => {
+  if (getFileKind(name) === "image") return "Image";
+  const ext = getFileExtension(name);
+  return ext ? ext.toUpperCase() : "File";
 };

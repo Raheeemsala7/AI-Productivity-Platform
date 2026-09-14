@@ -23,6 +23,8 @@ export default function ChatMessages() {
                                 role={message.role}
                                 text={message.text}
                                 isThinking={message.thinking}
+                                attachments={message.attachments}
+                                audio={message.audio}
                             />
                         ))}
                 </div>

@@ -12,7 +12,10 @@ export type MessageAttachment = {
 
 export type MessageAudio = {
   url: string;
+  /** Duration in seconds */
   duration?: number;
+  /** Audio mime type (falls back to audio/webm for playback) */
+  type?: string;
 };
 
 export type Message = {

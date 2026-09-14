@@ -2,5 +2,6 @@ import z from "zod";
 
 
 export const chatInputSchema = z.object({
-    message: z.string().trim().min(1),
+    // Message may be empty when the user sends attachments / a voice message.
+    message: z.string().trim(),
   });
