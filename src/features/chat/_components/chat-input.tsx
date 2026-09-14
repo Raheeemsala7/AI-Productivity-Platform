@@ -9,11 +9,13 @@ import { useForm } from "react-hook-form";
 import { ChatInputForm } from "../types/chat";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { chatInputSchema } from "../schema/chat.schema";
+import { useRouter } from "next/navigation";
 
 
 export default function ChatInput() {
   const t = useTranslations("Chat");
 
+  const router = useRouter();
 
   const conversationId = useChatStore(
     (state) => state.conversationId,
@@ -70,7 +72,7 @@ export default function ChatInput() {
     });
 
     try {
-      if (conversationId) {
+      if (!conversationId) {
         setPendingNewChat(true)
       }
       const result = await mutateAsync({
@@ -79,11 +81,15 @@ export default function ChatInput() {
           conversation_id: conversationId,
         }),
       });
-      
+
       updateMessage(thinkingMessageId, {
         thinking: false,
         text: result.response,
       })
+      if (!conversationId) {
+        // ده بيجبر Next.js يجيب أحدث داتا من الـ Server Components ويبعتها للصفحة
+        router.refresh();
+      }
       setConversationId(result.conversation_id)
     } catch (error) {
       console.error("SEND MESSAGE ERROR:", error);

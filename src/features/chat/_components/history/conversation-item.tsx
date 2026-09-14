@@ -1,4 +1,4 @@
-import { MessagesSquare } from "lucide-react";
+import { MessagesSquare, Trash2 } from "lucide-react";
 import type { Conversation } from "../../types/chat";
 import { useTranslations } from "next-intl";
 import { cn } from "@/shared/lib/utils";
@@ -46,7 +46,7 @@ export function ConversationItem({ conversation, activeId }: ConversationItemPro
                 // onClick={() => handleDelete(conversation.id)}
                 className="me-2 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive md:h-7 md:w-7 md:opacity-0 md:group-hover:opacity-100"
             >
-                {/* <Trash2 size={14} /> */}
+                <Trash2 size={14} />
             </button>
         </div>
     );

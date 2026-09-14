@@ -2,11 +2,9 @@ import { cn } from "@/shared/lib/utils";
 import { Sparkles } from "lucide-react";
 import { SUGGESTIONS } from "../constant/chat.constant";
 
-type EmptyStateProps = {
-  onPick: (text: string) => void;
-};
 
-export default function EmptyState({ onPick }: EmptyStateProps) {
+
+export default function EmptyState() {
   return (
     <div className="mx-auto flex h-full max-w-xl flex-col items-center justify-center gap-8 px-4 text-center">
       <div className="flex flex-col items-center gap-3">
@@ -29,7 +27,6 @@ export default function EmptyState({ onPick }: EmptyStateProps) {
           <button
             key={suggestion}
             type="button"
-            onClick={() => onPick(suggestion)}
             className={cn(
               "rounded-xl border border-border bg-card px-4 py-3 text-left text-sm leading-snug text-muted-foreground transition-colors",
               "hover:border-brand/40 hover:bg-muted/60 hover:text-foreground",

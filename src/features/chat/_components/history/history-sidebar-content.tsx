@@ -1,12 +1,11 @@
 "use client";
 
 import { cn } from "@/shared/lib/utils";
-import { MessageSquarePlus, MessagesSquare, Trash2 } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
-import { MOCK_CONVERSATIONS } from "../../constant/chat.history.mock";
+import { MessageSquarePlus } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useChatStore } from "../../store/chat.store";
 import type { ChatConversation, Conversation } from "../../types/chat";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { ConversationItem } from "./conversation-item";
 
 type HistorySidebarContentProps = {
@@ -15,45 +14,6 @@ type HistorySidebarContentProps = {
   initialConversations: Conversation[]
 };
 
-type GroupKey = "today" | "yesterday" | "week";
-
-type Group = {
-  key: GroupKey;
-  items: ChatConversation[];
-};
-
-function startOfDay(ts: number) {
-  const date = new Date(ts);
-  date.setHours(0, 0, 0, 0);
-  return date.getTime();
-}
-
-function groupConversations(conversations: ChatConversation[], now: number): Group[] {
-  const todayStart = startOfDay(now);
-  const yesterdayStart = todayStart - 24 * 60 * 60 * 1000;
-  const weekStart = todayStart - 6 * 24 * 60 * 60 * 1000;
-
-  const groups: Group[] = [
-    { key: "today", items: [] },
-    { key: "yesterday", items: [] },
-    { key: "week", items: [] },
-  ];
-
-  for (const conversation of conversations) {
-    const ts = startOfDay(conversation.updatedAt);
-    if (ts >= todayStart) {
-      groups[0].items.push(conversation);
-    } else if (ts >= yesterdayStart) {
-      groups[1].items.push(conversation);
-    } else if (ts >= weekStart) {
-      groups[2].items.push(conversation);
-    }
-  }
-
-  return groups.filter((group) => group.items.length > 0);
-}
-
-
 
 export default function HistorySidebarContent({
   title,
@@ -61,7 +21,6 @@ export default function HistorySidebarContent({
   initialConversations
 }: HistorySidebarContentProps) {
   const t = useTranslations("Chat");
-  const locale = useLocale();
 
 const [conversations, setConversations] = useState<Conversation[]>(initialConversations);
 
@@ -72,8 +31,9 @@ const [conversations, setConversations] = useState<Conversation[]>(initialConver
   const setPendingNewChat = useChatStore(
     (state) => state.setPendingNewChat,
   );
-
-
+  const isPendingNewChat = useChatStore(
+    (state) => state.isPendingNewChat,
+  );
 
 
 
@@ -93,7 +53,7 @@ const [conversations, setConversations] = useState<Conversation[]>(initialConver
 
   // تحديث المحادثات لما السيرفر يعمل revalidateTag
   useEffect(() => {
-    // setConversations(initialConversations);
+    setConversations(initialConversations);
     // أول ما الداتا الجديدة تيجي، نقفل الـ Skeleton فوراً
     setPendingNewChat(false);
   }, [initialConversations, setPendingNewChat]);
@@ -125,6 +85,14 @@ const [conversations, setConversations] = useState<Conversation[]>(initialConver
         </div>
 
         <div className="custom-scrollbar flex-1 space-y-4 overflow-y-auto p-3">
+
+          {/* 👇 هنا بنعرض الـ Skeleton لمحادثة واحدة فقط لو بتتكريت دلوقتي 👇 */}
+          {isPendingNewChat && (
+            <div className="group flex items-center gap-2 rounded-xl border border-transparent px-3 py-2.5">
+              <div className="h-4 w-4 shrink-0 animate-pulse rounded bg-muted-foreground/20" />
+              <div className="h-4 w-3/4 animate-pulse rounded bg-muted-foreground/20" />
+            </div>
+          )}
           {conversations.length === 0 ? (
             <p className="px-2 py-6 text-center text-sm leading-relaxed text-muted-foreground">
               {t("noHistory")}
