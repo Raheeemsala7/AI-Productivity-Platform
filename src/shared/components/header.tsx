@@ -3,7 +3,7 @@ import { ArrowRight, ChevronDown, LayoutDashboard, LogOut, User } from "lucide-r
 import { useEffect, useState } from "react";
 import { ThemeToggle } from "./theme-toggle";
 import { Link } from "@/i18n/navigation";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { LocaleSwitcher } from "./locale-switcher";
 import { useSession, signOut } from "next-auth/react";
 import { Skeleton } from "./ui/skeleton";
@@ -22,6 +22,8 @@ type SessionUserLike = {
 export function Header() {
     const [scrolled, setScrolled] = useState(false);
     const t = useTranslations("Header");
+    const locale = useLocale();
+    const isRtl = locale === 'ar';
     const { data: session, status } = useSession();
 
     useEffect(() => {
@@ -104,9 +106,9 @@ export function Header() {
                             </DropdownMenuTrigger>
 
                             <DropdownMenuContent
-                                align="end"
+                                align={isRtl ? "start" : "end"}
                                 sideOffset={8}
-                                className="w-56 rounded-xl p-1.5"
+                                className="w-56 rounded-xl p-1.5 z-50"
                             >
                                 <DropdownMenuGroup>
                                     {/* User Info */}

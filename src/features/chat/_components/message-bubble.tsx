@@ -5,6 +5,7 @@ import type { MessageRole, MessageAttachment, MessageAudio } from "../types/chat
 import { formatFileSize, getDocumentIcon, getFileLabel } from "../constant/chat.attachment";
 import Shimmer from "./shimmer";
 import ThinkingDots from "./thinking-dots";
+import VoiceMessagePlayer from "./voice-message-player";
 
 type MessageBubbleProps = {
   role: MessageRole;
@@ -69,43 +70,38 @@ export default function MessageBubble({
         ) : null}
 
         {isUser && audio?.url ? (
-          <audio
-            src={audio.url}
-            controls
-            preload="metadata"
-            className="h-9 w-56 max-w-full"
-            data-slot="message-audio"
-          >
-            <source
-              src={audio.url}
-              type={audio.type ?? "audio/webm"}
-            />
-          </audio>
+          <VoiceMessagePlayer
+            url={audio.url}
+            duration={audio.duration}
+            type={audio.type}
+          />
         ) : null}
 
-        <div
-          dir={direction}
-          className={cn(
-            "max-w-full w-full rounded-2xl px-4 py-2.5 text-sm leading-relaxed ",
-            isUser
-              ? "rounded-tr-sm bg-brand text-brand-foreground"
-              : "rounded-tl-sm  text-card-foreground",
-          )}
-          style={{ textAlign: direction === "rtl" ? "right" : "left" }}
-        >
-          {isThinking ? (
-            <Shimmer>
-              Thinking
-              <ThinkingDots />
-            </Shimmer>
-          ) : isUser ? (
-            <p className="m-0 whitespace-pre-wrap [word-wrap:break-word] [overflow-wrap:anywhere]">
-              {text.replace(/\*\*(.*?)\*\*/g, "$1")}
-            </p>
-          ) : (
-            <Markdown content={text} />
-          )}
-        </div>
+        {!isUser || text.trim().length > 0 ? (
+          <div
+            dir={direction}
+            className={cn(
+              "max-w-full w-full rounded-2xl px-4 py-2.5 text-sm leading-relaxed ",
+              isUser
+                ? "rounded-tr-sm bg-brand text-brand-foreground"
+                : "rounded-tl-sm  text-card-foreground",
+            )}
+            style={{ textAlign: direction === "rtl" ? "right" : "left" }}
+          >
+            {isThinking ? (
+              <Shimmer>
+                Thinking
+                <ThinkingDots />
+              </Shimmer>
+            ) : isUser ? (
+              <p className="m-0 whitespace-pre-wrap [word-wrap:break-word] [overflow-wrap:anywhere]">
+                {text.replace(/\*\*(.*?)\*\*/g, "$1")}
+              </p>
+            ) : (
+              <Markdown content={text} />
+            )}
+          </div>
+        ) : null}
       </div>
     </div>
   );
