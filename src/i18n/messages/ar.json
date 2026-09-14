@@ -387,7 +387,8 @@
     "recordingUnsupported": "تسجيل الصوت غير مدعوم في هذا المتصفح.",
     "micPermissionDenied": "تم رفض الوصول إلى الميكروفون.",
     "micError": "تعذّر الوصول إلى الميكروفون.",
-    "recordingError": "حدث خطأ أثناء التسجيل."
+    "recordingError": "حدث خطأ أثناء التسجيل.",
+    "account": "الحساب"
   },
   "LocaleSwitcher": {
     "en": "EN",

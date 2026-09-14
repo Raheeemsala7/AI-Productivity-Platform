@@ -387,7 +387,8 @@
     "recordingUnsupported": "Voice recording is not supported in this browser.",
     "micPermissionDenied": "Microphone access was denied.",
     "micError": "Could not access the microphone.",
-    "recordingError": "An error occurred while recording."
+    "recordingError": "An error occurred while recording.",
+    "account": "Account"
   },
   "LocaleSwitcher": {
     "en": "EN",
