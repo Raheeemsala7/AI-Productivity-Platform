@@ -12,25 +12,27 @@ export const getAllConversations = async () => {
 
     if (!token?.token) return RESPONSES.unauthorizedS
 
-    const res = await fetch(`${process.env.API_URL}/user/conversations`, {
-        next: {
-            tags: ["conversations"],
-        },
-        headers: {
-            ...HEADERS.JsonBody,
-            ...HEADERS.authorize(token.token)
-        },
-    })
+    try {
+        const res = await fetch(`${process.env.API_URL}/user/conversations`, {
+            next: {
+                tags: ["conversations"],
+            },
+            headers: {
+                ...HEADERS.JsonBody,
+                ...HEADERS.authorize(token.token)
+            },
+        })
 
-    const data: ApiResponse<responseGetConversations> = await res.json()
-    console.log(data);
+        const data: ApiResponse<responseGetConversations> = await res.json()
 
-    if (!data.success) {
-        throw Error(data.message || "Failed Send message")
+        if (!data.success) {
+            return { success: false, message: data.message || "Failed to get conversations", payload: { conversations: [] } } as any;
+        }
+
+        return data as ApiResponse<responseGetConversations>
+    } catch (error: any) {
+        return { success: false, message: error.message || "Network error", payload: { conversations: [] } } as any;
     }
-
-
-    return data as ApiResponse<responseGetConversations>
 }
 
 
