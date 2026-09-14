@@ -3,17 +3,21 @@ import { ChatConversation, ChatStatus, Message } from "../types/chat";
 
 type ChatState = {
     conversationId: string | null;
+    isPendingNewChat: boolean;
     messages: Message[];
     status: ChatStatus;
 
     setConversationId: (id: string | null) => void;
-
+    setPendingNewChat: (status: boolean) => void;
     addMessage: (message: Message) => void;
     updateMessage: (messageId: string, updates: { text: string; thinking?: boolean; }) => void;
     setMessages: (messages: Message[]) => void;
     setStatus: (status: ChatStatus) => void;
     resetChat: () => void;
     openConversation: (conversation: ChatConversation) => void;
+
+
+
 };
 
 const createConversationId = () => crypto.randomUUID();
@@ -22,6 +26,9 @@ export const useChatStore = create<ChatState>((set) => ({
     conversationId: createConversationId(),
     messages: [],
     status: "idle",
+
+    isPendingNewChat: false,
+    setPendingNewChat: (status: boolean) => set({ isPendingNewChat: status }),
 
     setConversationId: (id) => {
         set({ conversationId: id })

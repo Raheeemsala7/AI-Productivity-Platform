@@ -28,6 +28,9 @@ export default function ChatInput() {
   const setConversationId = useChatStore(
     (state) => state.setConversationId,
   );
+  const setPendingNewChat = useChatStore(
+    (state) => state.setPendingNewChat,
+  );
   const { mutateAsync, isPending } = sendMessageMutation();
 
   const form =
@@ -67,13 +70,16 @@ export default function ChatInput() {
     });
 
     try {
+      if (conversationId) {
+        setPendingNewChat(true)
+      }
       const result = await mutateAsync({
         message: value,
         ...(conversationId && {
           conversation_id: conversationId,
         }),
       });
-
+      
       updateMessage(thinkingMessageId, {
         thinking: false,
         text: result.response,
@@ -81,6 +87,7 @@ export default function ChatInput() {
       setConversationId(result.conversation_id)
     } catch (error) {
       console.error("SEND MESSAGE ERROR:", error);
+      setPendingNewChat(false)
     }
   };
 

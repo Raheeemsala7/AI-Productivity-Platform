@@ -3,5 +3,10 @@ export const RESPONSES = {
         "status": false as const ,
         "code": 401,
         "message": "No token provided."
+    },
+    unauthorizedS: {
+        "success": false as const ,
+        "code": 401,
+        "message": "No token provided."
     }
 } as const

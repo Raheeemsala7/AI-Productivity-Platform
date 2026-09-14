@@ -34,3 +34,12 @@ export type ChatConversation = {
 export type ChatInputForm = {
   message: string;
 };
+
+export type Conversation = {
+  id: string;
+  title: string;
+}
+
+export type responseGetConversations = {
+  conversations: Conversation[];
+}

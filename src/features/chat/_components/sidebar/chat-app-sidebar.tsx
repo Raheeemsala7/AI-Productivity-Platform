@@ -1,6 +1,6 @@
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarTrigger } from '@/shared/components/ui/sidebar'
 import { Sparkles } from 'lucide-react'
-import HistorySidebarContent from '../history/history-sidebar-content'
+import { ConversationsHistory } from '../history/conversations-history'
 
 export default function ChatAppSidebar() {
     return (
@@ -32,7 +32,7 @@ export default function ChatAppSidebar() {
                 </SidebarMenu>
             </SidebarHeader>
             <SidebarContent>
-                <HistorySidebarContent />
+                <ConversationsHistory />
             </SidebarContent>
 
             <SidebarFooter>
