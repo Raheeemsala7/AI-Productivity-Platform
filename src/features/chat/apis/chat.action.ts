@@ -23,8 +23,11 @@ export async function sendMessageAction({ conversation_id, message }: SendMessag
         body: JSON.stringify({ message, conversation_id })
     })
 
+    console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+    console.log({ message, conversation_id })
+    console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+
     const data: ApiResponse<responseSendMessage> = await res.json()
-    console.log(data);
 
     if (!data.success) {
         throw Error(data.message || "Failed Send message")

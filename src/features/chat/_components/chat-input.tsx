@@ -66,7 +66,9 @@ export default function ChatInput() {
     try {
       const result = await mutateAsync({
         message: value,
-        conversation_id: conversationId,
+        ...(conversationId && {
+          conversation_id: conversationId,
+        }),
       });
 
       updateMessage(thinkingMessageId, {

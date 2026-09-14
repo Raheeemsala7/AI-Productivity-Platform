@@ -2,12 +2,14 @@ import { create } from "zustand";
 import { ChatConversation, ChatStatus, Message } from "../types/chat";
 
 type ChatState = {
-    conversationId: string;
+    conversationId: string | null;
     messages: Message[];
     status: ChatStatus;
 
+    setConversationId: (id: string | null) => void;
+
     addMessage: (message: Message) => void;
-    updateMessage: (messageId:string, updates: {text:string; thinking?: boolean;}) => void;
+    updateMessage: (messageId: string, updates: { text: string; thinking?: boolean; }) => void;
     setMessages: (messages: Message[]) => void;
     setStatus: (status: ChatStatus) => void;
     resetChat: () => void;
@@ -21,14 +23,14 @@ export const useChatStore = create<ChatState>((set) => ({
     messages: [],
     status: "idle",
 
-
-
+    setConversationId: (id) => {
+        set({ conversationId: id })
+    },
     addMessage: (message) => {
         set((state) => ({
             messages: [...state.messages, message],
         }));
     },
-
     updateMessage: (messageId, updates) => {
         set((state) => ({
             messages: state.messages.map((message) =>

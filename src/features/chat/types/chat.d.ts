@@ -10,7 +10,7 @@ export type Message = {
 
 export type SendMessageRequest = {
   message: string;
-  conversation_id: string;
+  conversation_id?: string;
 };
 
 export type responseSendMessage = {

@@ -26,12 +26,14 @@ export default function ChatHeader() {
 
   const hasMessages = useChatStore((state) => state.messages.length > 0);
   const resetChat = useChatStore((state) => state.resetChat);
+  const setConversationId = useChatStore((state) => state.setConversationId);
 
   const [historyOpen, setHistoryOpen] = useState(false);
 
   const handleNewConversation = () => {
     resetChat();
     setHistoryOpen(false);
+    setConversationId(null)
   };
 
   return (
@@ -110,7 +112,6 @@ export default function ChatHeader() {
 
           <HistorySidebarContent
             className="min-h-0 flex-1"
-            onAction={() => setHistoryOpen(false)}
           />
         </SheetContent>
       </Sheet>

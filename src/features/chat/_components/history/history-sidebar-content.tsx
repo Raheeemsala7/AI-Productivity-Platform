@@ -9,7 +9,6 @@ import { useChatStore } from "../../store/chat.store";
 import type { ChatConversation } from "../../types/chat";
 
 type HistorySidebarContentProps = {
-  onAction?: () => void;
   title?: string;
   className?: string;
 };
@@ -77,7 +76,6 @@ function formatRelativeTime(timestamp: number, now: number, locale: string) {
 }
 
 export default function HistorySidebarContent({
-  onAction,
   title,
   className,
 }: HistorySidebarContentProps) {
@@ -90,6 +88,9 @@ export default function HistorySidebarContent({
   const activeId = useChatStore((state) => state.conversationId);
   const openConversation = useChatStore((state) => state.openConversation);
   const resetChat = useChatStore((state) => state.resetChat);
+  const setConversationId = useChatStore((state) => state.setConversationId);
+
+
 
   const groups = useMemo(
     () => groupConversations(conversations, now),
@@ -98,12 +99,11 @@ export default function HistorySidebarContent({
 
   const handleNew = () => {
     resetChat();
-    onAction?.();
+    setConversationId(null)
   };
 
   const handleSelect = (conversation: ChatConversation) => {
     openConversation(conversation);
-    onAction?.();
   };
 
   const handleDelete = (id: string) => {
@@ -136,7 +136,7 @@ export default function HistorySidebarContent({
           </p>
         </div>
 
-        <div className="flex-1 space-y-4 overflow-y-auto p-3">
+        <div className="custom-scrollbar flex-1 space-y-4 overflow-y-auto p-3">
           {conversations.length === 0 ? (
             <p className="px-2 py-6 text-center text-sm leading-relaxed text-muted-foreground">
               {t("noHistory")}

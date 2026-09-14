@@ -1,5 +1,6 @@
-import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarTrigger } from '@/shared/components/ui/sidebar'
+import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarTrigger } from '@/shared/components/ui/sidebar'
 import { Sparkles } from 'lucide-react'
+import HistorySidebarContent from '../history/history-sidebar-content'
 
 export default function ChatAppSidebar() {
     return (
@@ -24,22 +25,14 @@ export default function ChatAppSidebar() {
                                     />
                                 </div>
                             </div>
-
                             {/* Normal Trigger when expanded */}
                             <SidebarTrigger className="group-data-[state=collapsed]:hidden" />
                         </div>
                     </SidebarMenuItem>
                 </SidebarMenu>
             </SidebarHeader>
-
             <SidebarContent>
-                <SidebarGroup>
-                    <SidebarGroupContent>
-                        <SidebarMenu>
-                            
-                        </SidebarMenu>
-                    </SidebarGroupContent>
-                </SidebarGroup>
+                <HistorySidebarContent />
             </SidebarContent>
 
             <SidebarFooter>
