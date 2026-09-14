@@ -11,14 +11,14 @@ import { ConversationItem } from "./conversation-item";
 type HistorySidebarContentProps = {
   title?: string;
   className?: string;
-  initialConversations: Conversation[]
+  initialConversations?: Conversation[];
 };
 
 
 export default function HistorySidebarContent({
   title,
   className,
-  initialConversations
+  initialConversations = []
 }: HistorySidebarContentProps) {
   const t = useTranslations("Chat");
 

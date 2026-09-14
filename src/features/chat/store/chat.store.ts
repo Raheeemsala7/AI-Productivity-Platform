@@ -6,29 +6,28 @@ type ChatState = {
     isPendingNewChat: boolean;
     messages: Message[];
     status: ChatStatus;
+    pendingSuggestion: { text: string; autoSend?: boolean } | null;
 
     setConversationId: (id: string | null) => void;
     setPendingNewChat: (status: boolean) => void;
+    setPendingSuggestion: (suggestion: { text: string; autoSend?: boolean } | null) => void;
     addMessage: (message: Message) => void;
     updateMessage: (messageId: string, updates: { text: string; thinking?: boolean; }) => void;
     setMessages: (messages: Message[]) => void;
     setStatus: (status: ChatStatus) => void;
     resetChat: () => void;
     openConversation: (conversation: ChatConversation) => void;
-
-
-
 };
 
-const createConversationId = () => crypto.randomUUID();
-
 export const useChatStore = create<ChatState>((set) => ({
-    conversationId: createConversationId(),
+    conversationId: null,
     messages: [],
     status: "idle",
-
+    pendingSuggestion: null,
     isPendingNewChat: false,
+
     setPendingNewChat: (status: boolean) => set({ isPendingNewChat: status }),
+    setPendingSuggestion: (suggestion) => set({ pendingSuggestion: suggestion }),
 
     setConversationId: (id) => {
         set({ conversationId: id })
@@ -58,9 +57,10 @@ export const useChatStore = create<ChatState>((set) => ({
 
     resetChat: () => {
         set({
-            conversationId: createConversationId(),
+            conversationId: null,
             messages: [],
             status: "idle",
+            pendingSuggestion: null,
         });
     },
 
@@ -69,6 +69,7 @@ export const useChatStore = create<ChatState>((set) => ({
             conversationId: conversation.id,
             messages: conversation.messages,
             status: "idle",
+            pendingSuggestion: null,
         });
     },
 }));

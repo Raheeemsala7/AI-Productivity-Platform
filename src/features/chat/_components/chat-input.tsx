@@ -10,6 +10,7 @@ import { ChatInputForm } from "../types/chat";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { chatInputSchema } from "../schema/chat.schema";
 import { useRouter } from "next/navigation";
+import { useCallback, useEffect } from "react";
 
 
 export default function ChatInput() {
@@ -33,6 +34,12 @@ export default function ChatInput() {
   const setPendingNewChat = useChatStore(
     (state) => state.setPendingNewChat,
   );
+  const pendingSuggestion = useChatStore(
+    (state) => state.pendingSuggestion,
+  );
+  const setPendingSuggestion = useChatStore(
+    (state) => state.setPendingSuggestion,
+  );
   const { mutateAsync, isPending } = sendMessageMutation();
 
   const form =
@@ -46,56 +53,75 @@ export default function ChatInput() {
 
 
 
-  const onSubmit = async (data: ChatInputForm) => {
-    const value = data.message?.trim();
-    if (!value || isPending) return;
+  const onSubmit = useCallback(
+    async (data: ChatInputForm) => {
+      const value = data.message?.trim();
+      if (!value || isPending) return;
 
-    // Add the user's message immediately to the chat UI.
-    addMessage({
-      id: crypto.randomUUID(),
-      role: "user",
-      text: value,
-      thinking: false,
-    });
-
-    form.reset();
-
-
-    // Create a temporary message that represents the assistant's thinking state.
-    const thinkingMessageId = crypto.randomUUID();
-
-    addMessage({
-      id: thinkingMessageId,
-      role: "assistant",
-      text: "",
-      thinking: true,
-    });
-
-    try {
-      if (!conversationId) {
-        setPendingNewChat(true)
-      }
-      const result = await mutateAsync({
-        message: value,
-        ...(conversationId && {
-          conversation_id: conversationId,
-        }),
+      // Add the user's message immediately to the chat UI.
+      addMessage({
+        id: crypto.randomUUID(),
+        role: "user",
+        text: value,
+        thinking: false,
       });
 
-      updateMessage(thinkingMessageId, {
-        thinking: false,
-        text: result.response,
-      })
-      if (!conversationId) {
-        // ده بيجبر Next.js يجيب أحدث داتا من الـ Server Components ويبعتها للصفحة
-        router.refresh();
+      form.reset();
+
+      // Create a temporary message that represents the assistant's thinking state.
+      const thinkingMessageId = crypto.randomUUID();
+
+      addMessage({
+        id: thinkingMessageId,
+        role: "assistant",
+        text: "",
+        thinking: true,
+      });
+
+      const currentConvId = useChatStore.getState().conversationId;
+
+      try {
+        if (!currentConvId) {
+          setPendingNewChat(true);
+        }
+        const result = await mutateAsync({
+          message: value,
+          ...(currentConvId && {
+            conversation_id: currentConvId,
+          }),
+        });
+
+        updateMessage(thinkingMessageId, {
+          thinking: false,
+          text: result.response,
+        });
+        if (!currentConvId) {
+          // ده بيجبر Next.js يجيب أحدث داتا من الـ Server Components ويبعتها للصفحة
+          router.refresh();
+        }
+        setConversationId(result.conversation_id);
+      } catch (error) {
+        console.error("SEND MESSAGE ERROR:", error);
+        setPendingNewChat(false);
       }
-      setConversationId(result.conversation_id)
-    } catch (error) {
-      console.error("SEND MESSAGE ERROR:", error);
-      setPendingNewChat(false)
+    },
+    [isPending, addMessage, form, mutateAsync, updateMessage, router, setConversationId, setPendingNewChat],
+  );
+
+  useEffect(() => {
+    if (!pendingSuggestion) return;
+    const { text, autoSend } = pendingSuggestion;
+    setPendingSuggestion(null);
+    setConversationId(null);
+
+    form.setValue("message", text, { shouldValidate: true, shouldDirty: true });
+
+    if (autoSend) {
+      onSubmit({ message: text });
+    } else {
+      form.setFocus("message");
     }
-  };
+  }, [pendingSuggestion, form, setPendingSuggestion, setConversationId, onSubmit]);
 
 
 

@@ -9,12 +9,12 @@ export default function ChatMessages() {
 
     // States
     const messages = useChatStore((state) => state.messages);
-
+    const setPendingSuggestion = useChatStore((state) => state.setPendingSuggestion);
 
     return (
         <div className="flex-1 px-3 py-4 sm:px-4 sm:py-6">
             {messages.length === 0 ? (
-                <EmptyState onPick={() => { }} />
+                <EmptyState onPick={(suggestion) => setPendingSuggestion({ text: suggestion, autoSend: true })} />
             ) : (
                 <div className="mx-auto flex w-full max-w-2xl flex-col gap-8 pb-4">
                     {messages.map((message) => (

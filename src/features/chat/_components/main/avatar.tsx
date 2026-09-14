@@ -1,6 +1,6 @@
 import { cn } from "@/shared/lib/utils";
 import { Sparkles } from "lucide-react";
-import type { MessageRole } from "../types/chat";
+import type { MessageRole } from "../../types/chat";
 
 type AvatarProps = {
   role: MessageRole;

@@ -4,7 +4,11 @@ import { SUGGESTIONS } from "../constant/chat.constant";
 
 
 
-export default function EmptyState() {
+type EmptyStateProps = {
+  onPick?: (suggestion: string) => void;
+};
+
+export default function EmptyState({ onPick }: EmptyStateProps) {
   return (
     <div className="mx-auto flex h-full max-w-xl flex-col items-center justify-center gap-8 px-4 text-center">
       <div className="flex flex-col items-center gap-3">
@@ -27,9 +31,10 @@ export default function EmptyState() {
           <button
             key={suggestion}
             type="button"
+            onClick={() => onPick?.(suggestion)}
             className={cn(
-              "rounded-xl border border-border bg-card px-4 py-3 text-left text-sm leading-snug text-muted-foreground transition-colors",
-              "hover:border-brand/40 hover:bg-muted/60 hover:text-foreground",
+              "cursor-pointer rounded-xl border border-border bg-card px-4 py-3 text-left text-sm leading-snug text-muted-foreground transition-all",
+              "hover:border-brand/40 hover:bg-muted/60 hover:text-foreground active:scale-[0.99]",
             )}
           >
             {suggestion}

@@ -1,16 +1,45 @@
 export type MessageRole = "user" | "assistant";
 
+export type MessageAttachment = {
+  id: string;
+  kind: "image" | "document";
+  name: string;
+  type: string;
+  size: number;
+  /** Display url (blob/object url) — images and previews */
+  url?: string;
+};
+
+export type MessageAudio = {
+  url: string;
+  duration?: number;
+};
+
 export type Message = {
   id: string;
   role: "user" | "assistant";
   text: string;
   thinking?: boolean;
+  attachments?: MessageAttachment[];
+  audio?: MessageAudio | null;
 };
 
+/** A file the user picked but that hasn't been sent yet. */
+export type StagedAttachment = {
+  id: string;
+  kind: "image" | "document";
+  file: File;
+  /** Object URL used for image thumbnails */
+  previewUrl?: string;
+};
 
 export type SendMessageRequest = {
   message: string;
   conversation_id?: string;
+  /** Raw files sent to the Server Action for validation + encoding */
+  files?: File[];
+  /** Raw voice message file sent to the Server Action */
+  audio?: File | null;
 };
 
 export type responseSendMessage = {
