@@ -32,8 +32,16 @@ export default function ChatMessages() {
         staleTime: 1000 * 60 * 5, // 5 minutes
     });
 
+    const bottomRef = React.useRef<HTMLDivElement>(null);
+
+    React.useEffect(() => {
+        if (messages.length > 0) {
+            bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+        }
+    }, [messages.length, messages[messages.length - 1]?.text]);
+
     return (
-        <div className="flex-1 px-3 py-4 sm:px-4 sm:py-6 h-full flex flex-col">
+        <div className="flex-1 px-3 py-4 sm:px-4 sm:py-6 h-full flex flex-col overflow-y-auto custom-scrollbar">
             {isLoading ? (
                 <div className="flex h-full flex-1 items-center justify-center flex-col gap-3 text-muted-foreground">
                     <Loader2 className="h-8 w-8 animate-spin text-brand" />
@@ -58,6 +66,7 @@ export default function ChatMessages() {
                             audio={message.audio}
                         />
                     ))}
+                    <div ref={bottomRef} />
                 </div>
             )}
         </div>

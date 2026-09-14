@@ -1,22 +1,17 @@
 "use client";
 
-import { useRef } from "react";
-
 import ChatInput from "../chat-input";
 
 import ChatMessages from "./chat-messages";
 
 export default function ComponentChat() {
 
-    // Refs
-    const scrollRef = useRef<HTMLDivElement>(null);
-
     return (
-        <div ref={scrollRef} className="custom-scrollbar flex min-h-0 flex-1 flex-col overflow-x-hidden overflow-y-auto">
+        <div className="flex flex-col flex-1 min-h-0 h-full overflow-hidden">
             
             <ChatMessages />
 
-            <div className="sticky bottom-0">
+            <div className="shrink-0">
                 <ChatInput />
             </div>
         </div>

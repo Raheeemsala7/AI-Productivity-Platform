@@ -57,33 +57,15 @@ export default function VoiceRecorder({
   useEffect(() => () => cleanup(), []);
 
   const handleStop = () => {
-    const recorder = recorderRef.current;
-    const type = recorder?.mimeType || "audio/webm";
-    cleanup();
     if (completedRef.current) return;
-
-    const blob = new Blob(chunksRef.current, { type });
-    const ext = blob.type.includes("mp4")
-      ? "m4a"
-      : blob.type.includes("ogg")
-        ? "ogg"
-        : "webm";
-    const file = new File([blob], `voice-${Date.now()}.${ext}`, {
-      type: blob.type,
-    });
-    const duration = Math.max(
-      1,
-      Math.round((Date.now() - startedAtRef.current) / 1000),
-    );
-
-    setIsRecording(false);
-    completedRef.current = true;
-    onComplete(file, duration);
+    if (recorderRef.current && recorderRef.current.state !== "inactive") {
+      recorderRef.current.stop();
+    }
   };
 
   const handleCancel = () => {
     completedRef.current = true;
-    if (recorderRef.current && recorderRef.current.state === "recording") {
+    if (recorderRef.current && recorderRef.current.state !== "inactive") {
       recorderRef.current.stop();
     }
     cleanup();
@@ -118,7 +100,33 @@ export default function VoiceRecorder({
       recorder.ondataavailable = (e) => {
         if (e.data && e.data.size > 0) chunksRef.current.push(e.data);
       };
-      recorder.onstop = handleStop;
+      
+      recorder.onstop = () => {
+        if (completedRef.current) return;
+        completedRef.current = true;
+        
+        const type = recorder.mimeType || "audio/webm";
+        const blob = new Blob(chunksRef.current, { type });
+        const ext = blob.type.includes("mp4")
+          ? "m4a"
+          : blob.type.includes("ogg")
+            ? "ogg"
+            : "webm";
+            
+        const file = new File([blob], `voice-${Date.now()}.${ext}`, {
+          type: blob.type,
+        });
+        
+        const duration = Math.max(
+          1,
+          Math.round((Date.now() - startedAtRef.current) / 1000),
+        );
+
+        cleanup();
+        setIsRecording(false);
+        onComplete(file, duration);
+      };
+
       recorder.onerror = () => {
         toast.error(t("recordingError"));
         cleanup();
