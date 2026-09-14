@@ -1,9 +1,8 @@
 "use server"
 
 import { HEADERS } from "@/shared/constant/api.constant"
-import { RESPONSES } from "@/shared/constant/api.responses"
 import { getNextAuthToken } from "@/shared/lib/utils/auth.util"
-import { ActionResult, ApiResponse, IApiResponse } from "@/shared/types/api"
+import { ApiResponse } from "@/shared/types/api"
 import { responseSendMessage, SendMessageRequest } from "../types/chat"
 
 
@@ -22,10 +21,6 @@ export async function sendMessageAction({ conversation_id, message }: SendMessag
         },
         body: JSON.stringify({ message, conversation_id })
     })
-
-    console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
-    console.log({ message, conversation_id })
-    console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
 
     const data: ApiResponse<responseSendMessage> = await res.json()
 

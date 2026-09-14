@@ -25,6 +25,9 @@ export default function ChatInput() {
   const updateMessage = useChatStore(
     (state) => state.updateMessage,
   );
+  const setConversationId = useChatStore(
+    (state) => state.setConversationId,
+  );
   const { mutateAsync, isPending } = sendMessageMutation();
 
   const form =
@@ -75,6 +78,7 @@ export default function ChatInput() {
         thinking: false,
         text: result.response,
       })
+      setConversationId(result.conversation_id)
     } catch (error) {
       console.error("SEND MESSAGE ERROR:", error);
     }
