@@ -61,9 +61,7 @@ export default function HistorySidebarContent({
     setPendingNewChat(false);
   }, [initialConversations, setPendingNewChat]);
 
-  const getInitials = (name: string) => name.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2);
-  const getAvatarUrl = (user: any) => user?.image ?? user?.avatar ?? "";
-  const getAvatarColor = (user: any) => user?.avatar_color || "hsl(var(--primary))";
+  
 
   return (
     <div className={cn("flex h-full min-h-0 flex-col", className)}>
@@ -115,49 +113,6 @@ export default function HistorySidebarContent({
             ))
           )}
         </div>
-      </div>
-
-      <div className="mt-auto border-t border-border bg-card/50 p-4 shrink-0 flex flex-col gap-4">
-        {session?.user && (
-          <>
-            <div className="flex items-center gap-3">
-              <CreditCard className="size-4 text-brand" />
-              <span className="text-xs font-medium text-muted-foreground">
-                120 {t("creditsRemaining")}
-              </span>
-            </div>
-            
-            <div className="flex items-center gap-3 rounded-lg border border-border bg-background p-3 shadow-sm">
-              {/* <Avatar className="size-10 shrink-0">
-                <AvatarImage src={getAvatarUrl(session.user)} alt={session.user.name || "User"} />
-                <AvatarFallback
-                  style={{
-                    backgroundColor: getAvatarColor(session.user),
-                    color: "hsl(var(--primary-foreground))",
-                  }}
-                >
-                  {session.user.name ? getInitials(session.user.name) : <User className="size-4" />}
-                </AvatarFallback>
-              </Avatar> */}
-              <div className="flex min-w-0 flex-col">
-                <span className="truncate text-sm font-medium text-foreground">
-                  {session.user.name || "User"}
-                </span>
-                <span className="truncate text-xs text-muted-foreground">
-                  {session.user.email}
-                </span>
-              </div>
-            </div>
-          </>
-        )}
-
-        <Link
-          href="/dashboard"
-          className="flex items-center gap-2 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
-        >
-          <ArrowLeft className="size-4 rtl:rotate-180" />
-          {t("backToDashboard")}
-        </Link>
       </div>
     </div>
   );
