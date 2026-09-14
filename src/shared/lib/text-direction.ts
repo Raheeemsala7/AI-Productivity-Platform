@@ -3,7 +3,8 @@ const LTR_STRONG = /[A-Za-z\u00C0-\u024F\u0370-\u04FF]/;
 
 export type TextDirection = "ltr" | "rtl";
 
-export function getTextDirection(text: string): TextDirection {
+export function getTextDirection(text: string = ""): TextDirection {
+  if (!text) return "ltr";
   let rtlCount = 0;
   let ltrCount = 0;
   let firstStrong: TextDirection | null = null;

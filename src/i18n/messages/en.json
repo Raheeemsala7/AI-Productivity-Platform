@@ -341,6 +341,19 @@
     "credits": "840 / 1,000 credits"
   },
   "Chat": {
+    "loadingMessages": "Loading conversation...",
+    "creditsRemaining": "Credits remaining",
+    "backToDashboard": "Back to Dashboard",
+    "emptyState": {
+      "title": "What are we building today?",
+      "description": "Bring an idea, a napkin sketch, or a half-finished deck — ORICO helps you shape it into something investors can read.",
+      "suggestions": {
+        "s1": "I want to open an online coffee shop",
+        "s2": "Draft an executive summary for a SaaS invoicing tool",
+        "s3": "Build a 12-month financial forecast outline",
+        "s4": "What should my pitch deck include?"
+      }
+    },
     "subtitle": "Your AI Business Partner",
     "newConversation": "New conversation",
     "newChat": "New chat",

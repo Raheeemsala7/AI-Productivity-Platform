@@ -1,12 +1,16 @@
 "use client";
 
 import { cn } from "@/shared/lib/utils";
-import { MessageSquarePlus } from "lucide-react";
+import { MessageSquarePlus, ArrowLeft, User, CreditCard } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useChatStore } from "../../store/chat.store";
 import type { ChatConversation, Conversation } from "../../types/chat";
 import { useTranslations } from "next-intl";
 import { ConversationItem } from "./conversation-item";
+import { useSidebar } from "@/shared/components/ui/sidebar";
+import { useSession } from "next-auth/react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/shared/components/ui/avatar";
+import { Link } from "@/i18n/navigation";
 
 type HistorySidebarContentProps = {
   title?: string;
@@ -21,42 +25,45 @@ export default function HistorySidebarContent({
   initialConversations = []
 }: HistorySidebarContentProps) {
   const t = useTranslations("Chat");
+  const { data: session } = useSession();
+  const { isMobile, setOpenMobile } = useSidebar();
 
-const [conversations, setConversations] = useState<Conversation[]>(initialConversations);
+  const [conversations, setConversations] = useState<Conversation[]>(initialConversations);
 
   const activeId = useChatStore((state) => state.conversationId);
-  const openConversation = useChatStore((state) => state.openConversation);
   const resetChat = useChatStore((state) => state.resetChat);
   const setConversationId = useChatStore((state) => state.setConversationId);
-  const setPendingNewChat = useChatStore(
-    (state) => state.setPendingNewChat,
-  );
-  const isPendingNewChat = useChatStore(
-    (state) => state.isPendingNewChat,
-  );
-
-
+  
+  const setPendingNewChat = useChatStore((state) => state.setPendingNewChat);
+  const isPendingNewChat = useChatStore((state) => state.isPendingNewChat);
 
   const handleNew = () => {
     resetChat();
-    setConversationId(null)
+    setConversationId(null);
+    if (isMobile) {
+      setOpenMobile(false);
+    }
   };
 
-  const handleSelect = (conversation: ChatConversation) => {
-    openConversation(conversation);
+  const handleSelect = async (conversation: Conversation) => {
+    setConversationId(conversation.id);
+    if (isMobile) {
+      setOpenMobile(false);
+    }
   };
 
   const handleDelete = (id: string) => {
     setConversations((prev) => prev.filter((conversation) => conversation.id !== id));
   };
 
-
-  // تحديث المحادثات لما السيرفر يعمل revalidateTag
   useEffect(() => {
     setConversations(initialConversations);
-    // أول ما الداتا الجديدة تيجي، نقفل الـ Skeleton فوراً
     setPendingNewChat(false);
   }, [initialConversations, setPendingNewChat]);
+
+  const getInitials = (name: string) => name.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2);
+  const getAvatarUrl = (user: any) => user?.image ?? user?.avatar ?? "";
+  const getAvatarColor = (user: any) => user?.avatar_color || "hsl(var(--primary))";
 
   return (
     <div className={cn("flex h-full min-h-0 flex-col", className)}>
@@ -99,18 +106,58 @@ const [conversations, setConversations] = useState<Conversation[]>(initialConver
             </p>
           ) : (
             conversations.map((conversation) => (
-              <div key={conversation.id}>
-                <ConversationItem
+              <ConversationItem
                 key={conversation.id}
                 conversation={conversation}
                 activeId={activeId}
-                // handleSelect={handleSelect}
-                // handleDelete={handleDelete}
+                handleSelect={handleSelect}
               />
-              </div>
             ))
           )}
         </div>
+      </div>
+
+      <div className="mt-auto border-t border-border bg-card/50 p-4 shrink-0 flex flex-col gap-4">
+        {session?.user && (
+          <>
+            <div className="flex items-center gap-3">
+              <CreditCard className="size-4 text-brand" />
+              <span className="text-xs font-medium text-muted-foreground">
+                120 {t("creditsRemaining")}
+              </span>
+            </div>
+            
+            <div className="flex items-center gap-3 rounded-lg border border-border bg-background p-3 shadow-sm">
+              <Avatar className="size-10 shrink-0">
+                <AvatarImage src={getAvatarUrl(session.user)} alt={session.user.name || "User"} />
+                <AvatarFallback
+                  style={{
+                    backgroundColor: getAvatarColor(session.user),
+                    color: "hsl(var(--primary-foreground))",
+                  }}
+                >
+                  {session.user.name ? getInitials(session.user.name) : <User className="size-4" />}
+                </AvatarFallback>
+              </Avatar>
+              <div className="flex min-w-0 flex-col">
+                <span className="truncate text-sm font-medium text-foreground">
+                  {session.user.name || "User"}
+                </span>
+                <span className="truncate text-xs text-muted-foreground">
+                  {session.user.email}
+                </span>
+              </div>
+            </div>
+          </>
+        )}
+
+        <Link
+          href="/dashboard"
+          className="flex items-center gap-2 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
+        >
+          <ArrowLeft className="size-4 rtl:rotate-180" />
+          {t("backToDashboard")}
+        </Link>
       </div>
     </div>
   );

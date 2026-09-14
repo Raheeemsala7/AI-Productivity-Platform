@@ -11,10 +11,11 @@ import {
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
 import { sendMessageMutation } from "../hooks/use-chat-history";
 import { useChatStore } from "../store/chat.store";
 import { useForm } from "react-hook-form";
-import { ChatInputForm, MessageAudio, StagedAttachment } from "../types/chat";
+import { ChatInputForm, MessageAudio, StagedAttachment, Message } from "../types/chat";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { chatInputSchema } from "../schema/chat.schema";
 import { useRouter } from "next/navigation";
@@ -54,10 +55,8 @@ export default function ChatInput() {
   const t = useTranslations("Chat");
 
   const router = useRouter();
+  const queryClient = useQueryClient();
 
-
-  const addMessage = useChatStore((state) => state.addMessage);
-  const updateMessage = useChatStore((state) => state.updateMessage);
   const setConversationId = useChatStore((state) => state.setConversationId);
   const setPendingNewChat = useChatStore((state) => state.setPendingNewChat);
   const pendingSuggestion = useChatStore((state) => state.pendingSuggestion);
@@ -177,8 +176,9 @@ export default function ChatInput() {
       if (isPending || isRecording) return;
       if (!value && !hasMedia) return;
 
-      // Add the user's message immediately to the chat UI.
-      addMessage({
+      const currentConvId = useChatStore.getState().conversationId;
+      
+      const userMessage: Message = {
         id: crypto.randomUUID(),
         role: "user",
         text: value,
@@ -195,24 +195,29 @@ export default function ChatInput() {
               }))
             : undefined,
         audio: audio ? { url: audio.url, duration: audio.duration } : null,
-      });
+      };
+
+      const thinkingMessageId = crypto.randomUUID();
+      const thinkingMessage: Message = {
+        id: thinkingMessageId,
+        role: "assistant",
+        text: "",
+        thinking: true,
+      };
+
+      if (currentConvId) {
+        queryClient.setQueryData<Message[]>(
+          ['conversation', currentConvId],
+          (old = []) => [...old, userMessage, thinkingMessage]
+        );
+      } else {
+        // Handle new chat scenario later or we can still put it in query cache with a fake ID temporarily
+      }
 
       form.reset();
       setAttachments([]);
       setAudio(null);
       setAudioFile(null);
-
-      // Create a temporary message that represents the assistant's thinking state.
-      const thinkingMessageId = crypto.randomUUID();
-
-      addMessage({
-        id: thinkingMessageId,
-        role: "assistant",
-        text: "",
-        thinking: true,
-      });
-
-      const currentConvId = useChatStore.getState().conversationId;
 
       try {
         if (!currentConvId) {
@@ -227,13 +232,14 @@ export default function ChatInput() {
           audio: audioFile,
         });
 
-        updateMessage(thinkingMessageId, {
-          thinking: false,
-          text: result.response,
-        });
-        if (!currentConvId) {
-          // ده بيجبر Next.js يجيب أحدث داتا من الـ Server Components ويبعتها للصفحة
+        if (currentConvId) {
+          queryClient.setQueryData<Message[]>(
+            ['conversation', currentConvId],
+            (old = []) => old.map(msg => msg.id === thinkingMessageId ? { ...msg, thinking: false, text: result.response } : msg)
+          );
+        } else {
           router.refresh();
+          queryClient.setQueryData<Message[]>(['conversation', result.conversation_id], [userMessage, { ...thinkingMessage, thinking: false, text: result.response }]);
         }
         setConversationId(result.conversation_id);
       } catch (error) {
@@ -248,14 +254,13 @@ export default function ChatInput() {
       attachments,
       audio,
       audioFile,
-      addMessage,
       form,
       mutateAsync,
-      updateMessage,
       router,
       setConversationId,
       setPendingNewChat,
       t,
+      queryClient
     ],
   );
 

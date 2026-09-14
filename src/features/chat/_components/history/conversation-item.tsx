@@ -6,11 +6,11 @@ import { cn } from "@/shared/lib/utils";
 interface ConversationItemProps {
     conversation: Conversation;
     activeId: string | null;
-    // handleSelect: (conversation: Conversation) => void;
+    handleSelect: (conversation: Conversation) => void;
     // handleDelete: (id: string) => void;
 }
 
-export function ConversationItem({ conversation, activeId }: ConversationItemProps) {
+export function ConversationItem({ conversation, activeId, handleSelect }: ConversationItemProps) {
     const t = useTranslations("Chat");
     const isActive = activeId === conversation.id;
     return (
@@ -25,7 +25,7 @@ export function ConversationItem({ conversation, activeId }: ConversationItemPro
         >
             <button
                 type="button"
-                // onClick={() => handleSelect(conversation)}
+                onClick={() => handleSelect(conversation)}
                 className="flex min-w-0 flex-1 items-start gap-2 px-3 py-2.5 text-start"
             >
                 <MessagesSquare

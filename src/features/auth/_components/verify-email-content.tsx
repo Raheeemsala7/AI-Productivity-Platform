@@ -5,6 +5,7 @@ import { Link } from "@/i18n/navigation";
 import { CheckCircle2, Loader2, Sparkles, XCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
+import { useMutation } from "@tanstack/react-query";
 
 type VerifyState = "loading" | "success" | "error" | "invalid";
 
@@ -20,30 +21,25 @@ export function VerifyEmailContent({ id, hash, expires, signature }: Props) {
     const [state, setState] = useState<VerifyState>("loading");
     const [message, setMessage] = useState("");
 
+    const { mutate } = useMutation({
+        mutationFn: () => verifyEmailAction({ id: id!, hash: hash!, expires: expires!, signature: signature! }),
+        onSuccess: (data) => {
+            setMessage(data.message);
+            setState("success");
+        },
+        onError: (error: unknown) => {
+            setMessage(error instanceof Error ? error.message : t("errorDefault"));
+            setState("error");
+        }
+    });
+
     useEffect(() => {
         if (!id || !hash || !expires || !signature) {
             setState("invalid");
             return;
         }
-
-        let cancelled = false;
-
-        verifyEmailAction({ id, hash, expires, signature })
-            .then((data) => {
-                if (cancelled) return;
-                setMessage(data.message);
-                setState("success");
-            })
-            .catch((error: unknown) => {
-                if (cancelled) return;
-                setMessage(error instanceof Error ? error.message : t("errorDefault"));
-                setState("error");
-            });
-
-        return () => {
-            cancelled = true;
-        };
-    }, [id, hash, expires, signature, t]);
+        mutate();
+    }, [id, hash, expires, signature, mutate]);
 
     return (
         <div className="mb-8 flex flex-col items-center text-center">

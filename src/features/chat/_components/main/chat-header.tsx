@@ -24,7 +24,6 @@ export default function ChatHeader() {
   const locale = useLocale();
   const drawerSide = locale === "ar" ? "right" : "left";
 
-  const hasMessages = useChatStore((state) => state.messages.length > 0);
   const resetChat = useChatStore((state) => state.resetChat);
   const setConversationId = useChatStore((state) => state.setConversationId);
 
@@ -40,14 +39,6 @@ export default function ChatHeader() {
     <>
       <header className="flex shrink-0 items-center justify-between border-b border-border bg-card/80 px-3 py-3 backdrop-blur-sm sm:px-4">
         <div className="flex min-w-0 items-center gap-2.5">
-          <button
-            type="button"
-            aria-label={t("openHistory")}
-            onClick={() => setHistoryOpen(true)}
-            className={cn(iconButtonClass, "md:hidden")}
-          >
-            <Menu size={18} />
-          </button>
 
           <SidebarTrigger className="size-9 md:hidden" />
 
@@ -79,7 +70,6 @@ export default function ChatHeader() {
           <button
             type="button"
             onClick={handleNewConversation}
-            disabled={!hasMessages}
             className={cn(
               "flex h-9 items-center gap-1.5 rounded-lg border border-border px-2.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:cursor-not-allowed disabled:opacity-40",
             )}
@@ -92,29 +82,6 @@ export default function ChatHeader() {
         </div>
       </header>
 
-      <Sheet open={historyOpen} onOpenChange={setHistoryOpen}>
-        <SheetContent
-          side={drawerSide}
-          showCloseButton={false}
-          className="w-72 max-w-[85vw] p-0"
-        >
-          <SheetHeader className="flex flex-row items-center justify-between gap-0 border-b border-border px-4 py-3">
-            <SheetTitle className="text-sm font-medium">{t("chatHistory")}</SheetTitle>
-            <button
-              type="button"
-              aria-label={t("closeHistory")}
-              onClick={() => setHistoryOpen(false)}
-              className={cn(iconButtonClass, "size-8")}
-            >
-              <X size={16} />
-            </button>
-          </SheetHeader>
-
-          <HistorySidebarContent
-            className="min-h-0 flex-1"
-          />
-        </SheetContent>
-      </Sheet>
     </>
   );
 }

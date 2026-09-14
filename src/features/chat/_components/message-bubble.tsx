@@ -17,13 +17,15 @@ type MessageBubbleProps = {
 
 export default function MessageBubble({
   role,
-  text,
+  text = "",
   isThinking = false,
   attachments,
   audio,
 }: MessageBubbleProps) {
   const isUser = role === "user";
   const direction = getTextDirection(text);
+
+  
 
   return (
     <div className={cn( isUser && "flex gap-3 flex-row ltr:flex-row-reverse")}>

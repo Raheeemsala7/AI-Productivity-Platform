@@ -3,7 +3,7 @@
 import { HEADERS } from "@/shared/constant/api.constant"
 import { getNextAuthToken } from "@/shared/lib/utils/auth.util"
 import { ApiResponse } from "@/shared/types/api"
-import { responseSendMessage, SendMessageRequest } from "../types/chat"
+import { responseSendMessage, SendMessageRequest, Message } from "../types/chat"
 import { revalidateTag } from "next/cache"
 import {
   getFileExtension,
