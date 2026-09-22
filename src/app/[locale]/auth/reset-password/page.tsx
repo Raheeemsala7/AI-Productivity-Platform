@@ -1,6 +1,6 @@
+import { AuthShell } from "@/features/auth/_components/auth-shell";
 import ResetPasswordForm from "@/features/auth/_components/reset-password-form";
 import { Link } from "@/i18n/navigation";
-import { Sparkles } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
 type ResetPasswordPageProps = {
@@ -13,34 +13,54 @@ type ResetPasswordPageProps = {
 export default async function ResetPasswordPage({
   searchParams,
 }: ResetPasswordPageProps) {
-  const t = await getTranslations("Auth");
+  const t = await getTranslations("ResetPassword");
   const { token, email } = await searchParams;
 
   return (
-    <>
-      <div className="mb-8 flex flex-col items-center text-center">
-        <Link href="/" className="mb-6 inline-flex items-center gap-2">
-          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[image:var(--gradient-primary)]">
-            <Sparkles className="h-4 w-4 text-[color:var(--primary-foreground)]" />
+    <AuthShell
+      eyebrow={t("accountRecovery")}
+      statement={
+        <>
+          Create a new
+          <br />
+          <span className="font-serif font-normal italic text-brand">
+            password.
           </span>
-          <span className="text-lg font-semibold tracking-tight">ORICO</span>
-        </Link>
+        </>
+      }
+      note="Choose something secure and memorable. You can always change it again from your workspace settings."
+    >
+      <div className="w-full">
+        {/* Mobile italic lead */}
+        <div className="mb-10 lg:hidden">
+          <p className="font-serif text-2xl italic text-brand">
+            Almost back in.
+          </p>
+        </div>
 
-        <span className="rounded-full border border-[color:var(--border-strong)] px-3 py-1 text-[11px] uppercase tracking-widest text-muted-foreground">
+        <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-brand">
           {t("accountRecovery")}
-        </span>
-
-        <h1 className="mt-4 text-3xl font-semibold tracking-tight text-gradient">
+        </p>
+        <h1 className="font-display text-4xl font-semibold tracking-normal text-foreground sm:text-5xl">
           {t("resetPasswordTitle")}
         </h1>
-        <p className="mt-2 max-w-sm text-sm text-muted-foreground">
+        <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
           {t("resetPasswordSubtitle")}
         </p>
-      </div>
 
-      <div className="glass rounded-2xl p-6 sm:p-7">
-        <ResetPasswordForm token={token} email={email} />
+        <div className="mt-9">
+          <ResetPasswordForm token={token} email={email} />
+        </div>
+
+        <p className="mt-8 text-center text-sm text-muted-foreground">
+          <Link
+            href="/auth/login"
+            className="font-medium text-foreground transition-colors hover:text-brand"
+          >
+            ← {t("backToSignIn")}
+          </Link>
+        </p>
       </div>
-    </>
+    </AuthShell>
   );
 }

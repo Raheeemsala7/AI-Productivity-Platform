@@ -1,13 +1,17 @@
-import { Footer } from '@/shared/components/footer'
-import { Header } from '@/shared/components/header'
-import React from 'react'
+import { SiteFooter } from "@/shared/components/site-footer";
+import { SiteHeader } from "@/shared/components/site-header";
+import React from "react";
 
-export default function WebsiteLayout({ children }: { children: React.ReactNode }) {
-    return (
-        <div>
-            <Header />
-            {children}
-            <Footer />
-        </div>
-    )
+export default function WebsiteLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="overflow-clip">
+      <SiteHeader />
+      {children}
+      <SiteFooter />
+    </div>
+  );
 }
