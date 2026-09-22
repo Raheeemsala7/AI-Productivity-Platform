@@ -1,32 +1,48 @@
+import { getTranslations } from "next-intl/server";
 import { Brand } from "./brand";
 
-const cols: Record<string, [string, string][]> = {
-  Product: [
-    ["AI Chat", "#product"],
-    ["AI Editor", "#product"],
-    ["Templates", "#templates"],
-    ["Presentations", "#tools"],
-    ["Image", "#tools"],
-    ["Audio", "#tools"],
-    ["Video", "#tools"],
-  ],
-  Company: [
-    ["About", "#"],
-    ["Contact", "#"],
-    ["Careers", "#"],
-  ],
-  Resources: [
-    ["Documentation", "#"],
-    ["Help Center", "#"],
-    ["Blog", "#"],
-  ],
-  Legal: [
-    ["Privacy", "#"],
-    ["Terms", "#"],
-  ],
-};
+export async function SiteFooter() {
+  const t = await getTranslations("SiteFooter");
+  const year = new Date().getFullYear();
 
-export function SiteFooter() {
+  const cols = [
+    {
+      title: t("columns.product"),
+      items: [
+        [t("links.aiChat"), "#product"],
+        [t("links.aiEditor"), "#product"],
+        [t("links.templates"), "#templates"],
+        [t("links.presentations"), "#tools"],
+        [t("links.image"), "#tools"],
+        [t("links.audio"), "#tools"],
+        [t("links.video"), "#tools"],
+      ],
+    },
+    {
+      title: t("columns.company"),
+      items: [
+        [t("links.about"), "#"],
+        [t("links.contact"), "#"],
+        [t("links.careers"), "#"],
+      ],
+    },
+    {
+      title: t("columns.resources"),
+      items: [
+        [t("links.documentation"), "#"],
+        [t("links.helpCenter"), "#"],
+        [t("links.blog"), "#"],
+      ],
+    },
+    {
+      title: t("columns.legal"),
+      items: [
+        [t("links.privacy"), "#"],
+        [t("links.terms"), "#"],
+      ],
+    },
+  ] as { title: string; items: [string, string][] }[];
+
   return (
     <footer className="bg-background px-5 pb-8 pt-20 md:px-10">
       <div className="mx-auto max-w-[1400px]">
@@ -34,16 +50,16 @@ export function SiteFooter() {
           <div>
             <Brand />
             <p className="mt-5 max-w-xs text-sm leading-relaxed text-muted-foreground">
-              One intelligent workspace for creating almost anything.
+              {t("tagline")}
             </p>
           </div>
-          {Object.entries(cols).map(([title, items]) => (
-            <div key={title}>
+          {cols.map((col) => (
+            <div key={col.title}>
               <h3 className="text-xs font-semibold uppercase tracking-[.16em]">
-                {title}
+                {col.title}
               </h3>
               <ul className="mt-5 space-y-3">
-                {items.map(([label, href]) => (
+                {col.items.map(([label, href]) => (
                   <li key={label}>
                     <a
                       href={href}
@@ -58,7 +74,7 @@ export function SiteFooter() {
           ))}
         </div>
         <div className="flex flex-col gap-4 pt-7 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-          <span>© {new Date().getFullYear()} ORICO Creative Systems.</span>
+          <span>{t("copyright", { year })}</span>
           <div className="flex gap-6">
             <a
               href="https://x.com"
@@ -66,7 +82,7 @@ export function SiteFooter() {
               rel="noreferrer"
               className="transition-colors hover:text-brand"
             >
-              X
+              {t("socialX")}
             </a>
             <a
               href="https://linkedin.com"
@@ -74,7 +90,7 @@ export function SiteFooter() {
               rel="noreferrer"
               className="transition-colors hover:text-brand"
             >
-              LinkedIn
+              {t("socialLinkedIn")}
             </a>
             <a
               href="https://instagram.com"
@@ -82,7 +98,7 @@ export function SiteFooter() {
               rel="noreferrer"
               className="transition-colors hover:text-brand"
             >
-              Instagram
+              {t("socialInstagram")}
             </a>
           </div>
         </div>

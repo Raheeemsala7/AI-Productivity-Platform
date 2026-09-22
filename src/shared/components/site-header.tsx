@@ -36,6 +36,7 @@ export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const t = useTranslations("Header");
+  const tHeader = useTranslations("SiteHeader");
   const { data: session, status } = useSession();
 
   useEffect(() => {
@@ -140,10 +141,11 @@ export function SiteHeader() {
             <>
               <Link
                 href="/auth/login"
-                className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                className="px-3 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
               >
                 {t("signIn")}
               </Link>
+              <span className="h-4 w-px bg-border" aria-hidden="true" />
               <Link
                 href="/auth/register"
                 className="group inline-flex items-center gap-1.5 rounded-lg bg-brand px-4 py-2 text-sm font-medium text-brand-foreground shadow-sm transition-opacity hover:opacity-90"
@@ -159,7 +161,7 @@ export function SiteHeader() {
           type="button"
           className="flex size-9 items-center justify-center rounded-lg border border-border md:hidden"
           onClick={() => setOpen((v) => !v)}
-          aria-label="Toggle menu"
+          aria-label={tHeader("toggleMenu")}
         >
           {open ? <X className="size-4" /> : <Menu className="size-4" />}
         </button>

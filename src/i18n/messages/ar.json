@@ -12,7 +12,7 @@
     "dashboard": "لوحة التحكم",
     "signOut": "تسجيل الخروج",
     "theme": "الثيم",
-    "language": "اللغه"
+    "language": "اللغة"
   },
   "Footer": {
     "tagline": "شريكك الذكي في الأعمال للمؤسسين والمستقلين والفرق الذين يطلقون فكرتهم القادمة.",
@@ -65,7 +65,43 @@
     "signUpWithGoogle": "التسجيل عبر Google",
     "orContinueWithEmail": "أو المتابعة بالبريد الإلكتروني",
     "protectedWorkspace": "مساحة عمل محمية · دعم العربية والإنجليزية",
-    "registerError": "حدث خطأ اثناء تسجيل"
+    "registerError": "حدث خطأ أثناء التسجيل",
+    "login": {
+      "statement": "أنشئ بلا توقف",
+      "statementAccent": "من حيث توقفت.",
+      "note": "مساحة عملك للكتابة والتصميم والعرض والإنشاء — تماماً من حيث تركت.",
+      "mobileLead": "أنشئ بلا حدود."
+    },
+    "register": {
+      "statement": "ابدأ في الإنشاء.",
+      "statementAccent": "من مساحة عمل واحدة.",
+      "note": "ابنِ وأنشئ وولّد من مساحة إبداعية واحدة — خطط أعمال وعروض تقديمية وصور والمزيد.",
+      "mobileLead": "أنشئ بلا حدود.",
+      "formEyebrow": "حساب ORICO"
+    },
+    "forgotPassword": {
+      "statement": "نسيت",
+      "statementAccent": "كلمة المرور؟",
+      "note": "أدخل بريدك الإلكتروني وسنرسل لك رابطاً آمناً للعودة إلى مساحة عملك.",
+      "mobileLead": "سنساعدك على العودة."
+    },
+    "resetPassword": {
+      "statement": "أنشئ كلمة مرور",
+      "statementAccent": "جديدة.",
+      "note": "اختر كلمة مرور آمنة وسهلة التذكر. يمكنك تغييرها لاحقاً من الإعدادات.",
+      "mobileLead": "على وشك الدخول."
+    },
+    "shell": {
+      "tagline": "اكتب · صمّم · اعرض · أنشئ",
+      "backToHome": "العودة للرئيسية"
+    },
+    "verifyEmail": {
+      "layout": {
+        "label": "التحقق من البريد الإلكتروني",
+        "copyright": "© {year} ORICO",
+        "backToHome": "العودة للرئيسية"
+      }
+    }
   },
   "VerifyEmail": {
     "verifying": "جارٍ التحقق من بريدك الإلكتروني",
@@ -336,12 +372,44 @@
       "dashboard": "لوحة التحكم",
       "projects": "المشاريع",
       "users": "المستخدمون",
-      "chat": "Orico chat",
+      "chat": "دردشة أوريكو",
       "analytics": "التحليلات",
       "settings": "الإعدادات"
     },
     "professionalPlan": "الخطة الاحترافية",
-    "credits": "840 / 1,000 رصيد"
+    "credits": "840 / 1,000 رصيد",
+    "startNewConversation": "ابدأ محادثة جديدة",
+    "generateBusinessPlan": "إنشاء خطة أعمال",
+    "yourActivity": "نشاطك",
+    "creativeTools": "الأدوات الإبداعية",
+    "aiActive": "الذكاء الاصطناعي نشط",
+    "recentWork": "الأعمال الأخيرة",
+    "viewAll": "عرض الكل",
+    "proPlan": "الخطة الاحترافية",
+    "creditsUsed": "840 / 1,000 رصيد مستخدم هذا الشهر",
+    "managePlan": "إدارة الخطة",
+    "tools": {
+      "chat": "الدردشة الذكية",
+      "chatDesc": "شكّل الأفكار، أنشئ المحتوى، واحصل على إجابات فورية.",
+      "plan": "خطة الأعمال",
+      "planDesc": "أنشئ خططاً جاهزة للمستثمرين في دقائق.",
+      "presentations": "العروض التقديمية",
+      "presentationsDesc": "حوّل أفكارك إلى شرائح احترافية.",
+      "images": "صور الذكاء الاصطناعي",
+      "imagesDesc": "أنشئ صوراً من الكلمات.",
+      "voice": "الذكاء الصوتي",
+      "voiceDesc": "حوّل النص إلى كلام طبيعي.",
+      "video": "الفيديو",
+      "videoDesc": "أحضر المفاهيم إلى الحياة بالحركة."
+    },
+    "recent": {
+      "today": "اليوم",
+      "yesterday": "أمس",
+      "daysAgo": "منذ {count} أيام",
+      "kindPlan": "خطة",
+      "kindDeck": "عرض",
+      "kindAnalysis": "تحليل"
+    }
   },
   "Chat": {
     "loadingMessages": "جاري تحميل المحادثة...",
@@ -391,10 +459,230 @@
     "micPermissionDenied": "تم رفض الوصول إلى الميكروفون.",
     "micError": "تعذّر الوصول إلى الميكروفون.",
     "recordingError": "حدث خطأ أثناء التسجيل.",
-    "account": "الحساب"
+    "account": "الحساب",
+    "thinking": "يفكر…",
+    "errorOccurred": "حدث خطأ",
+    "failedLoadConversations": "فشل تحميل المحادثات",
+    "defaultUserName": "مستخدم"
   },
   "LocaleSwitcher": {
-    "en": "EN",
-    "ar": "العربية"
+    "en": "English",
+    "ar": "العربية",
+    "switchToArabic": "التبديل إلى العربية",
+    "switchToEnglish": "Switch to English",
+    "label": "اللغة"
+  },
+  "Landing": {
+    "hero": {
+      "eyebrow": "أنشئ بلا حدود",
+      "title1": "أفكارك",
+      "title2": "تستحق",
+      "titleEm": "أكثر",
+      "title3": "من أداة واحدة.",
+      "subtitle": "مساحة عمل ذكية واحدة للكتابة والتصميم والعرض وتحويل الخيال إلى عمل مكتمل.",
+      "ctaPrimary": "ابدأ الإنشاء",
+      "ctaSecondary": "استكشف مساحة العمل",
+      "tagline": "اكتب. صمّم. اعرض. أنشئ.\nمساحة عمل واحدة."
+    },
+    "product": {
+      "eyebrow": "داخل ORICO",
+      "title": "كل ما تحتاجه لتحويل فكرة إلى {em}.",
+      "titleEm": "شيء حقيقي.",
+      "module1": {
+        "number": "01 / المحادثة",
+        "title": "ابدأ بفكرة.",
+        "copy": "أحضر فكرة غير مكتملة، ملفاً، أو سؤالاً صعباً. ORICO يحتفظ بالسياق ويساعدك في إيجاد الشكل."
+      },
+      "module2": {
+        "number": "02 / الكتابة",
+        "title": "اكتب أفضل.",
+        "titleItalic": "وابقَ في التدفق.",
+        "copy": "حوّل الجملة أمامك دون مغادرة الصفحة — أو فقدان الصوت الذي جعلها مميزة."
+      }
+    },
+    "tools": {
+      "eyebrow": "أربع طرق أخرى للإنشاء",
+      "title": "ليست كلمات فقط.",
+      "titleEm": "عوالم.",
+      "subtitle": "انتقل من الطلب إلى المخرج المصقول دون ربط عشرات الأدوات المنفصلة.",
+      "image": { "tag": "الصور", "title": "حوّل الكلمات إلى صور." },
+      "slides": { "tag": "العروض التقديمية", "title": "حوّل الأفكار إلى شرائح." },
+      "audio": { "tag": "الصوت", "title": "حوّل النص إلى صوت." },
+      "video": { "tag": "الفيديو", "title": "حوّل المفاهيم إلى حركة." }
+    },
+    "templates": {
+      "eyebrow": "القوالب",
+      "title": "ابدأ من فكرة.",
+      "titleAccent": "أو ابدأ من قالب.",
+      "subtitle": "ليست صناديق فارغة. نقاط انطلاق مدروسة مبنية للعمل الذي يصنعه الناس فعلاً.",
+      "gallery": {
+        "social": "أفكار تستحق المشاركة",
+        "business": "منظور سنوي",
+        "education": "علم الرؤية",
+        "marketing": "مصنوع للحركة",
+        "writing": "ملاحظات عن الانتباه",
+        "presentation": "طقوس جديدة",
+        "kindSocial": "تواصل اجتماعي",
+        "kindBusiness": "أعمال",
+        "kindEducation": "تعليم",
+        "kindMarketing": "تسويق",
+        "kindWriting": "كتابة",
+        "kindPresentation": "عرض تقديمي"
+      }
+    },
+    "workspace": {
+      "eyebrow": "مساحة العمل الكاملة",
+      "title": "مساحة عمل واحدة.",
+      "titleEm": "احتمالات لا تحصى."
+    },
+    "rhythm": {
+      "eyebrow": "إيقاع بسيط",
+      "step1": "ابدأ بفكرة",
+      "step2": "شكّلها بالذكاء الاصطناعي",
+      "step3": "أنشئ شيئاً حقيقياً"
+    },
+    "pricing": {
+      "eyebrow": "اختر لوحتك",
+      "title": "اصنع شيئاً واحداً.",
+      "titleAccent": "ثم اصنع كل شيء.",
+      "subtitle": "ابدأ مجاناً. طوّر عندما تحتاج أفكارك مزيداً من المساحة.",
+      "mostPopular": "الأكثر شعبية",
+      "perMonth": "/ شهر",
+      "choosePlan": "اختر {plan}",
+      "plans": {
+        "starter": {
+          "name": "مجاني / مبتدئ",
+          "price": "0$",
+          "copy": "لإيجاد فكرتك الأولى.",
+          "f1": "الدردشة والمحرر الأساسيان",
+          "f2": "20 إنشاء / شهر",
+          "f3": "القوالب الأساسية"
+        },
+        "pro": {
+          "name": "احترافي",
+          "price": "24$",
+          "copy": "لتحقيق الأفكار.",
+          "f1": "جميع الأدوات الإبداعية",
+          "f2": "مشاريع غير محدودة",
+          "f3": "إنشاء مميز"
+        },
+        "business": {
+          "name": "الأعمال",
+          "price": "64$",
+          "copy": "للفرق التي تصنع معاً.",
+          "f1": "مساحات عمل مشتركة",
+          "f2": "أنظمة العلامات التجارية",
+          "f3": "دعم أولوي"
+        }
+      }
+    },
+    "cta": {
+      "title": "فكرتك القادمة",
+      "titleEm": "تبدأ هنا.",
+      "button": "ابدأ الإنشاء"
+    },
+    "desk": {
+      "label": "فكرة واحدة / أشكال متعددة",
+      "imageTag": "صورة / 01",
+      "imageTitle": "عوالم أخرى",
+      "draftTag": "مسودة 03",
+      "draftTitle": "شكل فكرة غير مكتملة",
+      "draftCopy": "الإبداع نادراً ما يأتي مكتملاً. يبدأ كعبارة، شعور، شظية تستحق المتابعة.",
+      "slideTag": "04",
+      "slideTitle": "النظام الإبداعي الجديد",
+      "slideDate": "نموذج / 2026",
+      "filmLabel": "فيلم المفهوم · 00:18",
+      "deskAriaLabel": "تكوين من أدوات الكتابة والصور والعروض والصوت والفيديو"
+    },
+    "chatPreview": {
+      "windowTitle": "محادثة / مفهوم حملة",
+      "youLabel": "أنت",
+      "oricoLabel": "ORICO",
+      "prompt": "ساعدني في تحويل البحث المرفق إلى فكرة حملة تبدو إنسانية وليست تقنية.",
+      "attachment": "field-notes.pdf · 2.4 MB",
+      "responseTitle": "لنبنيها حول الأفكار غير المكتملة.",
+      "responseBody": "بدلاً من وعد الكمال الفوري، تحتفل الحملة بالبدايات الغريبة غير المكتملة خلف الأعمال ذات المعنى.",
+      "campaignLineLabel": "شعار الحملة",
+      "campaignLine": "ابدأ بفوضى. اصنع شيئاً حقيقياً.",
+      "actionBrief": "اصنع موجزاً",
+      "actionDraft": "صغ المفاهيم",
+      "actionEditor": "افتح في المحرر",
+      "placeholder": "تابع تشكيل هذه الفكرة…",
+      "sendAriaLabel": "إرسال"
+    },
+    "editorPreview": {
+      "docTitle": "مقال بدون عنوان",
+      "saved": "محفوظ",
+      "draftLabel": "مقال / مسودة",
+      "editorTitle": "ما نصنعه يشكّلنا أيضاً.",
+      "p1": "كل قرار إبداعي يترك أثراً.",
+      "p1Highlight": "الأدوات التي نختارها يمكنها تسطيح هذه العملية، أو خلق مساحة لأسئلة أفضل.",
+      "p2": "بنينا ORICO للنوع الثاني من العمل.",
+      "actionRewrite": "أعد الكتابة",
+      "actionImprove": "حسّن",
+      "actionExpand": "وسّع",
+      "actionSummarize": "لخّص",
+      "statsWords": "كلمات",
+      "statsTone": "النبرة",
+      "statsToneValue": "تأملي",
+      "statsReading": "القراءة",
+      "statsReadingValue": "دقيقتان"
+    },
+    "workspacePreview": {
+      "brandName": "ORICO",
+      "navNew": "＋ جديد",
+      "navChat": "⌁ محادثة",
+      "navDocs": "▤ المستندات",
+      "navPresentations": "▦ العروض",
+      "navMedia": "◫ الوسائط",
+      "campaignTitle": "حملة / طقوس جديدة",
+      "shareLabel": "مشاركة",
+      "conceptLabel": "ملاحظة مفهوم",
+      "conceptTitle": "طريقة أفضل للبدء.",
+      "conceptBody": "يجب أن تلتقي الأدوات بالأفكار أينما كانت.",
+      "imageTitle": "طقوس جديدة",
+      "oricoLabel": "ORICO",
+      "oricoMessage": "لقد شكّلت ثلاثة اتجاهات من موجزك. الثاني يبدو الأقرب للنبرة التي وصفتها.",
+      "openDirection": "افتح الاتجاه 02 ←"
+    }
+  },
+  "SiteHeader": {
+    "toggleMenu": "تبديل القائمة"
+  },
+  "SiteFooter": {
+    "tagline": "مساحة عمل ذكية واحدة لإنشاء أي شيء تقريباً.",
+    "columns": {
+      "product": "المنتج",
+      "company": "الشركة",
+      "resources": "الموارد",
+      "legal": "قانوني"
+    },
+    "links": {
+      "aiChat": "الدردشة الذكية",
+      "aiEditor": "المحرر الذكي",
+      "templates": "القوالب",
+      "presentations": "العروض التقديمية",
+      "image": "الصور",
+      "audio": "الصوت",
+      "video": "الفيديو",
+      "about": "من نحن",
+      "contact": "تواصل معنا",
+      "careers": "الوظائف",
+      "documentation": "التوثيق",
+      "helpCenter": "مركز المساعدة",
+      "blog": "المدونة",
+      "privacy": "الخصوصية",
+      "terms": "الشروط"
+    },
+    "copyright": "© {year} ORICO Creative Systems.",
+    "socialX": "X",
+    "socialLinkedIn": "LinkedIn",
+    "socialInstagram": "Instagram"
+  },
+  "AuthShell": {
+    "tagline": "اكتب · صمّم · اعرض · أنشئ",
+    "backToHome": "العودة للرئيسية",
+    "emailVerification": "التحقق من البريد الإلكتروني",
+    "copyright": "© {year} ORICO"
   }
 }

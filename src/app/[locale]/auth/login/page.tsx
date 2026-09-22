@@ -11,24 +11,22 @@ export default async function LoginPage() {
       eyebrow={t("welcomeBack")}
       statement={
         <>
-          Create without
+          {t("login.statement")}
           <br />
           <span className="font-serif font-normal italic text-brand">
-            starting over.
+            {t("login.statementAccent")}
           </span>
         </>
       }
-      note="Your workspace for writing, designing, presenting and generating — right where you left off."
+      note={t("login.note")}
     >
       <div className="w-full">
-        {/* Mobile italic lead */}
         <div className="mb-10 lg:hidden">
           <p className="font-serif text-2xl italic text-brand">
-            Create without limits.
+            {t("login.mobileLead")}
           </p>
         </div>
 
-        {/* Form header */}
         <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-brand">
           {t("welcomeBack")}
         </p>
@@ -39,10 +37,19 @@ export default async function LoginPage() {
           {t("signInSubtitle")}
         </p>
 
-        {/* Form body — existing logic preserved */}
         <div className="mt-9">
           <LoginForm />
         </div>
+
+        <p className="mt-8 text-center text-sm text-muted-foreground">
+          {t("newToOrico")}{" "}
+          <Link
+            href="/auth/register"
+            className="font-medium text-foreground transition-colors hover:text-brand"
+          >
+            {t("createAccount")}
+          </Link>
+        </p>
       </div>
     </AuthShell>
   );

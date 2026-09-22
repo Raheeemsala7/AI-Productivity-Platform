@@ -3,6 +3,7 @@
 import { Link } from "@/i18n/navigation";
 import { ArrowLink } from "@/shared/components/brand";
 import { useReveal } from "@/shared/hooks/use-reveal";
+import { useTranslations } from "next-intl";
 import {
   ArrowRight,
   ChevronRight,
@@ -10,11 +11,17 @@ import {
   Paperclip,
   Play,
   Send,
-  Sparkle,
 } from "lucide-react";
 
 export function LandingPage() {
   useReveal();
+  const t = useTranslations("Landing");
+
+  const rhythmSteps = [
+    ["01", t("rhythm.step1")],
+    ["02", t("rhythm.step2")],
+    ["03", t("rhythm.step3")],
+  ] as const;
 
   return (
     <div className="overflow-clip bg-background text-foreground">
@@ -22,36 +29,33 @@ export function LandingPage() {
         {/* ── HERO ── */}
         <section className="hero-grid mx-auto min-h-[min(900px,100svh)] max-w-[1500px] px-5 pb-16 pt-28 md:px-10 md:pt-36">
           <div className="hero-copy" data-reveal>
-            <p className="eyebrow">Create without limits</p>
+            <p className="eyebrow">{t("hero.eyebrow")}</p>
             <h1 className="hero-title">
-              Your ideas
+              {t("hero.title1")}
               <br />
-              deserve <em>more</em>
+              {t("hero.title2")} <em>{t("hero.titleEm")}</em>
               <br />
-              than one tool.
+              {t("hero.title3")}
             </h1>
             <p className="mt-7 max-w-lg text-base leading-relaxed text-muted-foreground md:text-lg">
-              A single intelligent workspace to write, design, present, and turn
-              imagination into finished work.
+              {t("hero.subtitle")}
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <Link
                 href="/auth/register"
                 className="group inline-flex items-center gap-2 rounded-lg bg-brand px-6 py-3 text-sm font-medium text-brand-foreground shadow-sm transition-opacity hover:opacity-90"
               >
-                <ArrowLink>Start Creating</ArrowLink>
+                <ArrowLink>{t("hero.ctaPrimary")}</ArrowLink>
               </Link>
               <a
                 href="#workspace"
                 className="inline-flex items-center gap-2 rounded-lg border border-border-strong bg-transparent px-6 py-3 text-sm font-medium transition-colors hover:border-brand/40 hover:bg-muted"
               >
-                Explore the Workspace <ArrowRight className="size-4" />
+                {t("hero.ctaSecondary")} <ArrowRight className="size-4" />
               </a>
             </div>
-            <p className="mt-6 text-xs uppercase leading-relaxed tracking-[0.16em] text-muted-foreground">
-              Write. Design. Present. Generate.
-              <br />
-              One workspace.
+            <p className="mt-6 whitespace-pre-line text-xs uppercase leading-relaxed tracking-[0.16em] text-muted-foreground">
+              {t("hero.tagline")}
             </p>
           </div>
           <CreativeDesk />
@@ -64,14 +68,11 @@ export function LandingPage() {
         >
           <div className="mx-auto max-w-[1400px]">
             <p className="eyebrow" data-reveal>
-              Inside ORICO
+              {t("product.eyebrow")}
             </p>
-            <h2
-              className="section-title max-w-5xl"
-              data-reveal
-            >
-              Everything you need to turn an idea into{" "}
-              <em>something real.</em>
+            <h2 className="section-title max-w-5xl" data-reveal>
+              {t("product.title", { em: "" }).replace("{em}", "")}{" "}
+              <em>{t("product.titleEm")}</em>
             </h2>
 
             {/* 01 Chat */}
@@ -80,15 +81,13 @@ export function LandingPage() {
               data-reveal
             >
               <div>
-                <span className="section-number">01 / CONVERSATION</span>
+                <span className="section-number">
+                  {t("product.module1.number")}
+                </span>
                 <h3 className="module-title">
-                  Start with
-                  <br />a thought.
+                  {t("product.module1.title")}
                 </h3>
-                <p className="module-copy">
-                  Bring a half-formed idea, a file, or a difficult question.
-                  ORICO holds the context and helps you find the shape.
-                </p>
+                <p className="module-copy">{t("product.module1.copy")}</p>
               </div>
               <ChatPreview />
             </div>
@@ -100,18 +99,17 @@ export function LandingPage() {
             >
               <EditorPreview />
               <div className="lg:order-2">
-                <span className="section-number">02 / WRITING</span>
+                <span className="section-number">
+                  {t("product.module2.number")}
+                </span>
                 <h3 className="module-title">
-                  Write better.
+                  {t("product.module2.title")}
                   <br />
                   <span className="font-serif font-normal italic">
-                    Stay in flow.
+                    {t("product.module2.titleItalic")}
                   </span>
                 </h3>
-                <p className="module-copy">
-                  Transform the sentence in front of you without leaving the
-                  page — or losing the voice that made it yours.
-                </p>
+                <p className="module-copy">{t("product.module2.copy")}</p>
               </div>
             </div>
           </div>
@@ -128,16 +126,15 @@ export function LandingPage() {
               data-reveal
             >
               <div>
-                <p className="eyebrow text-brand">Four more ways to make</p>
+                <p className="eyebrow text-brand">{t("tools.eyebrow")}</p>
                 <h2 className="section-title max-w-4xl text-[var(--color-paper)]">
-                  Not just words.
+                  {t("tools.title")}
                   <br />
-                  <em>Worlds.</em>
+                  <em>{t("tools.titleEm")}</em>
                 </h2>
               </div>
               <p className="max-w-sm text-sm leading-relaxed text-[var(--color-paper)]/55">
-                Move from prompt to polished output without stitching together a
-                dozen disconnected tools.
+                {t("tools.subtitle")}
               </p>
             </div>
             <CreativeTools />
@@ -152,13 +149,12 @@ export function LandingPage() {
           <div className="mx-auto max-w-[1400px]">
             <div className="grid gap-8 lg:grid-cols-2" data-reveal>
               <h2 className="section-title">
-                Start from an idea.
+                {t("templates.title")}
                 <br />
-                Or start from <em>a template.</em>
+                <em>{t("templates.titleAccent")}</em>
               </h2>
               <p className="max-w-md self-end text-base leading-relaxed text-muted-foreground lg:justify-self-end">
-                Not empty boxes. Thoughtful starting points built for the work
-                people actually make.
+                {t("templates.subtitle")}
               </p>
             </div>
             <TemplateGallery />
@@ -172,11 +168,11 @@ export function LandingPage() {
         >
           <div className="mx-auto max-w-[1400px]">
             <div className="text-center" data-reveal>
-              <p className="eyebrow">The complete workspace</p>
+              <p className="eyebrow">{t("workspace.eyebrow")}</p>
               <h2 className="section-title mx-auto max-w-4xl">
-                One workspace.
+                {t("workspace.title")}
                 <br />
-                <em>Countless possibilities.</em>
+                <em>{t("workspace.titleEm")}</em>
               </h2>
             </div>
             <WorkspacePreview />
@@ -187,14 +183,10 @@ export function LandingPage() {
         <section className="bg-background px-5 py-24 md:px-10 md:py-32">
           <div className="mx-auto max-w-[1400px]">
             <p className="eyebrow" data-reveal>
-              A simple rhythm
+              {t("rhythm.eyebrow")}
             </p>
             <div className="mt-10 border-y border-border" data-reveal>
-              {[
-                ["01", "Start with an idea"],
-                ["02", "Shape it with AI"],
-                ["03", "Create something real"],
-              ].map(([n, title]) => (
+              {rhythmSteps.map(([n, title]) => (
                 <div
                   key={n}
                   className="group grid grid-cols-[4rem_1fr_auto] items-center border-b border-border py-7 last:border-0 md:grid-cols-[8rem_1fr_auto]"
@@ -203,7 +195,7 @@ export function LandingPage() {
                   <h3 className="font-display text-2xl font-medium md:text-5xl">
                     {title}
                   </h3>
-                  <ArrowRight className="size-5 text-muted-foreground transition-transform group-hover:translate-x-2 group-hover:text-brand md:size-8" />
+                  <ArrowRight className="size-5 text-muted-foreground transition-transform group-hover:translate-x-2 group-hover:text-brand md:size-8 rtl:rotate-180 rtl:group-hover:-translate-x-2 rtl:group-hover:translate-x-0" />
                 </div>
               ))}
             </div>
@@ -221,15 +213,15 @@ export function LandingPage() {
               data-reveal
             >
               <div>
-                <p className="eyebrow">Choose your canvas</p>
+                <p className="eyebrow">{t("pricing.eyebrow")}</p>
                 <h2 className="section-title">
-                  Make one thing.
+                  {t("pricing.title")}
                   <br />
-                  Then <em>make everything.</em>
+                  <em>{t("pricing.titleAccent")}</em>
                 </h2>
               </div>
               <p className="max-w-sm text-sm text-muted-foreground">
-                Start free. Upgrade when your ideas need more room.
+                {t("pricing.subtitle")}
               </p>
             </div>
             <PricingCards />
@@ -243,17 +235,17 @@ export function LandingPage() {
               className="font-display text-[clamp(3.6rem,9vw,9rem)] font-semibold leading-[.86] tracking-normal"
               data-reveal
             >
-              Your next idea
+              {t("cta.title")}
               <br />
               <span className="font-serif font-normal italic text-brand">
-                starts here.
+                {t("cta.titleEm")}
               </span>
             </h2>
             <Link
               href="/auth/register"
               className="group inline-flex shrink-0 items-center gap-2 rounded-lg bg-brand px-8 py-4 text-base font-medium text-brand-foreground shadow-sm transition-opacity hover:opacity-90"
             >
-              <ArrowLink>Start Creating</ArrowLink>
+              <ArrowLink>{t("cta.button")}</ArrowLink>
             </Link>
           </div>
         </section>
@@ -264,46 +256,30 @@ export function LandingPage() {
 
 /* ─── Creative Desk ─────────────────────────────────────── */
 function CreativeDesk() {
+  const t = useTranslations("Landing.desk");
   return (
     <div
       className="creative-desk"
       data-reveal
-      aria-label="A composition of writing, image, presentation, audio, and video tools"
+      aria-label={t("deskAriaLabel")}
     >
-      <div className="desk-label">ONE IDEA / MANY FORMS</div>
+      <div className="desk-label">{t("label")}</div>
       <div className="desk-image">
         <div className="sun-disc" />
-        <span>IMAGE / 01</span>
-        <strong>
-          Other
-          <br />
-          worlds
-        </strong>
+        <span>{t("imageTag")}</span>
+        <strong>{t("imageTitle")}</strong>
       </div>
       <div className="desk-doc">
-        <span>DRAFT 03</span>
-        <h3>
-          The shape of
-          <br />
-          an unfinished idea
-        </h3>
-        <p>
-          Creativity rarely arrives complete. It begins as a phrase, a feeling,
-          a fragment worth following.
-        </p>
+        <span>{t("draftTag")}</span>
+        <h3>{t("draftTitle")}</h3>
+        <p>{t("draftCopy")}</p>
         <div />
         <div />
       </div>
       <div className="desk-slide">
-        <span>04</span>
-        <strong>
-          THE NEW
-          <br />
-          CREATIVE
-          <br />
-          SYSTEM
-        </strong>
-        <i>FORM / 2026</i>
+        <span>{t("slideTag")}</span>
+        <strong>{t("slideTitle")}</strong>
+        <i>{t("slideDate")}</i>
       </div>
       <div className="desk-audio">
         <Mic2 className="size-4" />
@@ -316,7 +292,7 @@ function CreativeDesk() {
       </div>
       <div className="desk-video">
         <Play className="size-4" />
-        <span>CONCEPT FILM · 00:18</span>
+        <span>{t("filmLabel")}</span>
       </div>
     </div>
   );
@@ -324,47 +300,42 @@ function CreativeDesk() {
 
 /* ─── Chat Preview ──────────────────────────────────────── */
 function ChatPreview() {
+  const t = useTranslations("Landing.chatPreview");
   return (
     <div className="product-window chat-window">
       <div className="window-bar">
         <span />
-        <span>Conversation / Campaign concept</span>
+        <span>{t("windowTitle")}</span>
         <i>•••</i>
       </div>
       <div className="chat-body">
         <div className="chat-prompt">
-          <small>YOU</small>
-          <p>
-            Help me turn the attached research into a campaign idea that feels
-            human, not techy.
-          </p>
+          <small>{t("youLabel")}</small>
+          <p>{t("prompt")}</p>
           <span>
-            <Paperclip className="size-3" /> field-notes.pdf · 2.4 MB
+            <Paperclip className="size-3" /> {t("attachment")}
           </span>
         </div>
         <div className="chat-answer">
-          <small>ORICO</small>
-          <h4>Let&apos;s build it around unfinished thoughts.</h4>
-          <p>
-            Instead of promising instant perfection, the campaign celebrates the
-            strange, half-formed beginnings behind meaningful work.
-          </p>
+          <small>{t("oricoLabel")}</small>
+          <h4>{t("responseTitle")}</h4>
+          <p>{t("responseBody")}</p>
           <div className="idea-strip">
-            <span>Campaign line</span>
-            <strong>Start messy. Make it real.</strong>
+            <span>{t("campaignLineLabel")}</span>
+            <strong>{t("campaignLine")}</strong>
           </div>
           <div className="chat-actions">
-            <span>Make a brief</span>
-            <span>Draft concepts</span>
-            <span>Open in editor</span>
+            <span>{t("actionBrief")}</span>
+            <span>{t("actionDraft")}</span>
+            <span>{t("actionEditor")}</span>
           </div>
         </div>
       </div>
       <div className="chat-input">
-        <span>Keep shaping this idea…</span>
+        <span>{t("placeholder")}</span>
         <button
           type="button"
-          aria-label="Send"
+          aria-label={t("sendAriaLabel")}
           className="flex size-8 items-center justify-center rounded-full bg-brand text-brand-foreground"
         >
           <Send className="size-3.5" />
@@ -376,44 +347,36 @@ function ChatPreview() {
 
 /* ─── Editor Preview ────────────────────────────────────── */
 function EditorPreview() {
+  const t = useTranslations("Landing.editorPreview");
   return (
     <div className="product-window editor-window">
       <div className="editor-tools">
-        <span>Untitled essay</span>
-        <div>
-          B&nbsp;&nbsp; <i>I</i>&nbsp;&nbsp; H1&nbsp;&nbsp; &quot;
-        </div>
-        <span>Saved</span>
+        <span>{t("docTitle")}</span>
+        <div>B&nbsp;&nbsp; <i>I</i>&nbsp;&nbsp; H1&nbsp;&nbsp; &quot;</div>
+        <span>{t("saved")}</span>
       </div>
       <div className="editor-page">
-        <p className="eyebrow">Essay / Draft</p>
-        <h4>
-          What we make
-          <br />
-          shapes us, too.
-        </h4>
+        <p className="eyebrow">{t("draftLabel")}</p>
+        <h4>{t("editorTitle")}</h4>
         <p>
-          Every creative decision leaves a trace.{" "}
-          <mark>
-            The tools we choose can flatten that process, or they can create
-            space for better questions.
-          </mark>
+          {t("p1")}{" "}
+          <mark>{t("p1Highlight")}</mark>
         </p>
-        <p>We built ORICO for the second kind of work.</p>
+        <p>{t("p2")}</p>
         <div className="selection-menu">
-          <span>Rewrite</span>
-          <span>Improve</span>
-          <span>Expand</span>
-          <span>Summarize</span>
+          <span>{t("actionRewrite")}</span>
+          <span>{t("actionImprove")}</span>
+          <span>{t("actionExpand")}</span>
+          <span>{t("actionSummarize")}</span>
         </div>
       </div>
       <aside>
-        <span>WORDS</span>
+        <span>{t("statsWords")}</span>
         <strong>284</strong>
-        <span>TONE</span>
-        <strong>Reflective</strong>
-        <span>READING</span>
-        <strong>2 min</strong>
+        <span>{t("statsTone")}</span>
+        <strong>{t("statsToneValue")}</strong>
+        <span>{t("statsReading")}</span>
+        <strong>{t("statsReadingValue")}</strong>
       </aside>
     </div>
   );
@@ -421,55 +384,36 @@ function EditorPreview() {
 
 /* ─── Creative Tools ────────────────────────────────────── */
 function CreativeTools() {
+  const t = useTranslations("Landing.tools");
   return (
     <div className="tools-layout mt-16" data-reveal>
-      {/* Image */}
       <article className="tool-image">
         <div className="tool-meta">
-          <span>IMAGE / 03</span>
-          <h3>
-            Turn words
-            <br />
-            into visuals.
-          </h3>
+          <span>{t("image.tag")}</span>
+          <h3>{t("image.title")}</h3>
         </div>
         <div className="image-canvas">
           <span className="shape-a" />
           <span className="shape-b" />
           <span className="shape-c" />
-          <p>
-            A study in
-            <br />
-            form and light
-          </p>
         </div>
       </article>
 
-      {/* Slides */}
       <article className="tool-slides">
         <div className="slide-stack">
           <div />
           <div />
           <div>
             <small>IDEA / 01</small>
-            <strong>
-              MAKE
-              <br />
-              THE POINT.
-            </strong>
+            <strong>MAKE<br />THE POINT.</strong>
           </div>
         </div>
         <div className="tool-meta">
-          <span>PRESENTATIONS</span>
-          <h3>
-            Turn ideas
-            <br />
-            into slides.
-          </h3>
+          <span>{t("slides.tag")}</span>
+          <h3>{t("slides.title")}</h3>
         </div>
       </article>
 
-      {/* Audio */}
       <article className="tool-audio">
         <div className="audio-lines">
           {Array.from({ length: 42 }, (_, i) => (
@@ -477,36 +421,26 @@ function CreativeTools() {
           ))}
         </div>
         <div className="tool-meta">
-          <span>AUDIO</span>
-          <h3>
-            Turn text into <em>voice.</em>
-          </h3>
+          <span>{t("audio.tag")}</span>
+          <h3>{t("audio.title")}</h3>
         </div>
         <div className="timecode">01:42 / 03:10</div>
       </article>
 
-      {/* Video */}
       <article className="tool-video">
         <div className="frame-grid">
-          <span />
-          <span />
-          <span />
-          <span />
+          <span /><span /><span /><span />
         </div>
         <button
           type="button"
-          aria-label="Play video"
+          aria-label={t("video.title")}
           className="flex size-10 items-center justify-center rounded-full bg-brand text-brand-foreground"
         >
           <Play className="size-4" />
         </button>
         <div className="tool-meta">
-          <span>VIDEO</span>
-          <h3>
-            Turn concepts
-            <br />
-            into motion.
-          </h3>
+          <span>{t("video.tag")}</span>
+          <h3>{t("video.title")}</h3>
         </div>
       </article>
     </div>
@@ -514,40 +448,31 @@ function CreativeTools() {
 }
 
 /* ─── Template Gallery ──────────────────────────────────── */
-const TEMPLATES = [
-  { kind: "SOCIAL", title: "Ideas worth sharing", cls: "template-social" },
-  { kind: "BUSINESS", title: "Annual perspective", cls: "template-business" },
-  {
-    kind: "EDUCATION",
-    title: "The science of seeing",
-    cls: "template-education",
-  },
-  {
-    kind: "MARKETING",
-    title: "Made for movement",
-    cls: "template-marketing",
-  },
-  { kind: "WRITING", title: "Notes on attention", cls: "template-writing" },
-  {
-    kind: "PRESENTATION",
-    title: "New rituals",
-    cls: "template-presentation",
-  },
+const TEMPLATE_KEYS = [
+  { kindKey: "kindSocial" as const, titleKey: "social" as const, cls: "template-social" },
+  { kindKey: "kindBusiness" as const, titleKey: "business" as const, cls: "template-business" },
+  { kindKey: "kindEducation" as const, titleKey: "education" as const, cls: "template-education" },
+  { kindKey: "kindMarketing" as const, titleKey: "marketing" as const, cls: "template-marketing" },
+  { kindKey: "kindWriting" as const, titleKey: "writing" as const, cls: "template-writing" },
+  { kindKey: "kindPresentation" as const, titleKey: "presentation" as const, cls: "template-presentation" },
 ];
 
 function TemplateGallery() {
+  const t = useTranslations("Landing.templates.gallery");
   return (
     <div className="template-gallery mt-16" data-reveal>
-      {TEMPLATES.map((item, index) => (
-        <article className={`template ${item.cls}`} key={item.kind}>
+      {TEMPLATE_KEYS.map((item, index) => (
+        <article className={`template ${item.cls}`} key={item.kindKey}>
           <div className="template-art">
             <span className="template-index">0{index + 1}</span>
-            <strong>{item.title}</strong>
+            <strong>{t(item.titleKey)}</strong>
             <i />
           </div>
           <div className="mt-4 flex items-center justify-between px-3 pb-3">
-            <span className="text-xs text-muted-foreground">{item.kind}</span>
-            <ChevronRight className="size-4 text-muted-foreground" />
+            <span className="text-xs text-muted-foreground">
+              {t(item.kindKey)}
+            </span>
+            <ChevronRight className="size-4 text-muted-foreground rtl:rotate-180" />
           </div>
         </article>
       ))}
@@ -557,51 +482,41 @@ function TemplateGallery() {
 
 /* ─── Workspace Preview ─────────────────────────────────── */
 function WorkspacePreview() {
+  const t = useTranslations("Landing.workspacePreview");
   return (
     <div className="workspace-scene mt-16" data-reveal>
       <div className="workspace-sidebar">
-        <div className="text-[var(--color-paper)] font-display font-semibold text-base">
-          ORICO
+        <div className="font-display font-semibold text-base text-[var(--color-paper)]">
+          {t("brandName")}
         </div>
         <div>
-          <span className="active">＋ New</span>
-          <span>⌁ Chat</span>
-          <span>▤ Documents</span>
-          <span>▦ Presentations</span>
-          <span>◫ Media</span>
+          <span className="active">{t("navNew")}</span>
+          <span>{t("navChat")}</span>
+          <span>{t("navDocs")}</span>
+          <span>{t("navPresentations")}</span>
+          <span>{t("navMedia")}</span>
         </div>
         <small>JH&nbsp;&nbsp; Jordan Hall</small>
       </div>
       <div className="workspace-main">
         <div className="workspace-top">
-          <span>Campaign / New rituals</span>
-          <span>Share&nbsp;&nbsp; •••</span>
+          <span>{t("campaignTitle")}</span>
+          <span>{t("shareLabel")}&nbsp;&nbsp; •••</span>
         </div>
         <div className="workspace-board">
           <div className="ws-doc">
-            <small>CONCEPT NOTE</small>
-            <h4>
-              A better way
-              <br />
-              to begin.
-            </h4>
-            <p>Tools should meet ideas where they are.</p>
+            <small>{t("conceptLabel")}</small>
+            <h4>{t("conceptTitle")}</h4>
+            <p>{t("conceptBody")}</p>
           </div>
           <div className="ws-image">
             <span />
-            <strong>
-              NEW
-              <br />
-              RITUALS
-            </strong>
+            <strong>{t("imageTitle")}</strong>
           </div>
           <div className="ws-chat">
-            <small>ORICO</small>
-            <p>
-              I&apos;ve shaped three directions from your brief. The second
-              feels closest to the tone you described.
-            </p>
-            <button type="button">Open direction 02 →</button>
+            <small>{t("oricoLabel")}</small>
+            <p>{t("oricoMessage")}</p>
+            <button type="button">{t("openDirection")}</button>
           </div>
           <div className="ws-wave">
             {Array.from({ length: 18 }, (_, i) => (
@@ -615,47 +530,31 @@ function WorkspacePreview() {
 }
 
 /* ─── Pricing ───────────────────────────────────────────── */
-const PLANS = [
-  {
-    name: "Free / Starter",
-    price: "$0",
-    copy: "For finding your first idea.",
-    features: [
-      "Core chat and editor",
-      "20 generations / month",
-      "Essential templates",
-    ],
-    featured: false,
-  },
-  {
-    name: "Pro",
-    price: "$24",
-    copy: "For making ideas happen.",
-    features: [
-      "Every creative tool",
-      "Unlimited projects",
-      "Premium generation",
-    ],
-    featured: true,
-  },
-  {
-    name: "Business",
-    price: "$64",
-    copy: "For teams making together.",
-    features: ["Shared workspaces", "Brand systems", "Priority support"],
-    featured: false,
-  },
-];
+const PLAN_KEYS = ["starter", "pro", "business"] as const;
 
 function PricingCards() {
+  const t = useTranslations("Landing.pricing");
+  const plans = PLAN_KEYS.map((key) => ({
+    key,
+    name: t(`plans.${key}.name`),
+    price: t(`plans.${key}.price`),
+    copy: t(`plans.${key}.copy`),
+    features: [
+      t(`plans.${key}.f1`),
+      t(`plans.${key}.f2`),
+      t(`plans.${key}.f3`),
+    ],
+    featured: key === "pro",
+  }));
+
   return (
     <div
       className="mt-16 grid border border-border bg-background lg:grid-cols-3"
       data-reveal
     >
-      {PLANS.map((plan) => (
+      {plans.map((plan) => (
         <article
-          key={plan.name}
+          key={plan.key}
           className={`relative p-7 md:p-10 ${
             plan.featured
               ? "bg-ink text-[var(--color-paper)]"
@@ -663,8 +562,8 @@ function PricingCards() {
           }`}
         >
           {plan.featured && (
-            <span className="absolute right-5 top-5 bg-brand px-2 py-1 text-[.6rem] font-semibold uppercase text-brand-foreground">
-              Most popular
+            <span className="absolute end-5 top-5 bg-brand px-2 py-1 text-[.6rem] font-semibold uppercase text-brand-foreground">
+              {t("mostPopular")}
             </span>
           )}
           <p className="text-xs uppercase tracking-[.16em] opacity-60">
@@ -674,7 +573,7 @@ function PricingCards() {
             <strong className="font-display text-5xl font-semibold">
               {plan.price}
             </strong>
-            <span className="mb-1 text-xs opacity-60">/ month</span>
+            <span className="mb-1 text-xs opacity-60">{t("perMonth")}</span>
           </div>
           <p className="mt-4 text-sm opacity-65">{plan.copy}</p>
           <ul className="my-9 space-y-3 text-sm">
@@ -693,7 +592,7 @@ function PricingCards() {
                 : "border border-border hover:border-brand hover:text-brand"
             }`}
           >
-            Choose {plan.name.split(" /")[0]}
+            {t("choosePlan", { plan: plan.name.split(" /")[0] })}
           </Link>
         </article>
       ))}

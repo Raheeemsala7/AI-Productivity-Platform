@@ -1,34 +1,30 @@
 import { Brand } from "@/shared/components/brand";
 import { Link } from "@/i18n/navigation";
+import { getTranslations } from "next-intl/server";
 import type { ReactNode } from "react";
 
 type AuthShellProps = {
-  /** Small uppercase label shown above the headline on the left panel */
   eyebrow: string;
-  /** Large headline on the left panel — can include JSX for italic/brand spans */
   statement: ReactNode;
-  /** Subtext below the headline on the left panel */
   note: string;
   children: ReactNode;
 };
 
-/**
- * Two-column auth shell — dark ink left panel with decorative art + right form panel.
- * Mirrors the lovable AuthShell design exactly, adapted for Next.js/next-intl.
- */
-export function AuthShell({
+export async function AuthShell({
   eyebrow,
   statement,
   note,
   children,
 }: AuthShellProps) {
+  const t = await getTranslations("AuthShell");
+  const year = new Date().getFullYear();
+
   return (
     <main className="min-h-screen bg-background lg:grid lg:grid-cols-[minmax(0,1.08fr)_minmax(28rem,.92fr)]">
-      {/* ── Left panel — dark ink with decorative art ── */}
+      {/* ── Left panel ── */}
       <section className="relative hidden min-h-screen overflow-hidden bg-ink p-10 text-[var(--color-paper)] lg:flex lg:flex-col lg:justify-between xl:p-16">
         <Brand inverted />
 
-        {/* Decorative art */}
         <div className="auth-art" aria-hidden="true">
           <div className="auth-art-paper">
             <span>NEW DOCUMENT</span>
@@ -41,7 +37,6 @@ export function AuthShell({
           </div>
         </div>
 
-        {/* Statement */}
         <div className="relative z-10 max-w-xl">
           <p className="mb-6 text-xs font-semibold uppercase tracking-[0.18em] text-brand">
             {eyebrow}
@@ -55,13 +50,12 @@ export function AuthShell({
         </div>
 
         <p className="relative z-10 text-xs uppercase tracking-[0.16em] text-[var(--color-paper)]/45">
-          Write · Design · Present · Generate
+          {t("tagline")}
         </p>
       </section>
 
-      {/* ── Right panel — form ── */}
+      {/* ── Right panel ── */}
       <section className="flex min-h-screen flex-col px-5 py-6 sm:px-10 lg:px-16 xl:px-24">
-        {/* Mobile header */}
         <div className="flex items-center justify-between lg:hidden">
           <Brand />
           <span className="text-xs uppercase tracking-[0.16em] text-muted-foreground">
@@ -69,16 +63,14 @@ export function AuthShell({
           </span>
         </div>
 
-        {/* Form centred vertically */}
         <div className="mx-auto flex w-full max-w-md flex-1 items-center py-12">
           {children}
         </div>
 
-        {/* Footer */}
         <div className="flex justify-between border-t border-border pt-5 text-xs text-muted-foreground">
-          <span>© {new Date().getFullYear()} ORICO</span>
+          <span>{t("copyright", { year })}</span>
           <Link href="/" className="transition-colors hover:text-foreground">
-            Back to home
+            {t("backToHome")}
           </Link>
         </div>
       </section>

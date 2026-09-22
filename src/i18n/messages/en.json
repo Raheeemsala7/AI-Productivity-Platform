@@ -341,7 +341,39 @@
       "settings": "Settings"
     },
     "professionalPlan": "Professional plan",
-    "credits": "840 / 1,000 credits"
+    "credits": "840 / 1,000 credits",
+    "startNewConversation": "Start a new conversation",
+    "generateBusinessPlan": "Generate business plan",
+    "yourActivity": "Your activity",
+    "creativeTools": "Creative tools",
+    "aiActive": "AI Active",
+    "recentWork": "Recent work",
+    "viewAll": "View all",
+    "proPlan": "Pro plan",
+    "creditsUsed": "840 / 1,000 credits used this month",
+    "managePlan": "Manage plan",
+    "tools": {
+      "chat": "AI Chat",
+      "chatDesc": "Shape ideas, write content, and get instant answers.",
+      "plan": "Business Plan",
+      "planDesc": "Generate investor-ready plans in minutes.",
+      "presentations": "Presentations",
+      "presentationsDesc": "Turn your ideas into polished slide decks.",
+      "images": "AI Images",
+      "imagesDesc": "Create visuals from words.",
+      "voice": "Voice AI",
+      "voiceDesc": "Convert text to natural-sounding speech.",
+      "video": "Video",
+      "videoDesc": "Bring concepts to life with motion."
+    },
+    "recent": {
+      "today": "Today",
+      "yesterday": "Yesterday",
+      "daysAgo": "{count} days ago",
+      "kindPlan": "Plan",
+      "kindDeck": "Deck",
+      "kindAnalysis": "Analysis"
+    }
   },
   "Chat": {
     "loadingMessages": "Loading conversation...",
@@ -391,10 +423,230 @@
     "micPermissionDenied": "Microphone access was denied.",
     "micError": "Could not access the microphone.",
     "recordingError": "An error occurred while recording.",
-    "account": "Account"
+    "account": "Account",
+    "thinking": "Thinking…",
+    "errorOccurred": "An error occurred",
+    "failedLoadConversations": "Failed to load conversations",
+    "defaultUserName": "User"
   },
   "LocaleSwitcher": {
-    "en": "EN",
-    "ar": "العربية"
+    "en": "English",
+    "ar": "العربية",
+    "switchToArabic": "Switch to Arabic",
+    "switchToEnglish": "Switch to English",
+    "label": "Language"
+  },
+  "Landing": {
+    "hero": {
+      "eyebrow": "Create without limits",
+      "title1": "Your ideas",
+      "title2": "deserve",
+      "titleEm": "more",
+      "title3": "than one tool.",
+      "subtitle": "A single intelligent workspace to write, design, present, and turn imagination into finished work.",
+      "ctaPrimary": "Start Creating",
+      "ctaSecondary": "Explore the Workspace",
+      "tagline": "Write. Design. Present. Generate.\nOne workspace."
+    },
+    "product": {
+      "eyebrow": "Inside ORICO",
+      "title": "Everything you need to turn an idea into {em}.",
+      "titleEm": "something real.",
+      "module1": {
+        "number": "01 / CONVERSATION",
+        "title": "Start with\na thought.",
+        "copy": "Bring a half-formed idea, a file, or a difficult question. ORICO holds the context and helps you find the shape."
+      },
+      "module2": {
+        "number": "02 / WRITING",
+        "title": "Write better.",
+        "titleItalic": "Stay in flow.",
+        "copy": "Transform the sentence in front of you without leaving the page — or losing the voice that made it yours."
+      }
+    },
+    "tools": {
+      "eyebrow": "Four more ways to make",
+      "title": "Not just words.",
+      "titleEm": "Worlds.",
+      "subtitle": "Move from prompt to polished output without stitching together a dozen disconnected tools.",
+      "image": { "tag": "IMAGE", "title": "Turn words into visuals." },
+      "slides": { "tag": "PRESENTATIONS", "title": "Turn ideas into slides." },
+      "audio": { "tag": "AUDIO", "title": "Turn text into voice." },
+      "video": { "tag": "VIDEO", "title": "Turn concepts into motion." }
+    },
+    "templates": {
+      "eyebrow": "Templates",
+      "title": "Start from an idea.",
+      "titleAccent": "Or start from a template.",
+      "subtitle": "Not empty boxes. Thoughtful starting points built for the work people actually make.",
+      "gallery": {
+        "social": "Ideas worth sharing",
+        "business": "Annual perspective",
+        "education": "The science of seeing",
+        "marketing": "Made for movement",
+        "writing": "Notes on attention",
+        "presentation": "New rituals",
+        "kindSocial": "SOCIAL",
+        "kindBusiness": "BUSINESS",
+        "kindEducation": "EDUCATION",
+        "kindMarketing": "MARKETING",
+        "kindWriting": "WRITING",
+        "kindPresentation": "PRESENTATION"
+      }
+    },
+    "workspace": {
+      "eyebrow": "The complete workspace",
+      "title": "One workspace.",
+      "titleEm": "Countless possibilities."
+    },
+    "rhythm": {
+      "eyebrow": "A simple rhythm",
+      "step1": "Start with an idea",
+      "step2": "Shape it with AI",
+      "step3": "Create something real"
+    },
+    "pricing": {
+      "eyebrow": "Choose your canvas",
+      "title": "Make one thing.",
+      "titleAccent": "Then make everything.",
+      "subtitle": "Start free. Upgrade when your ideas need more room.",
+      "mostPopular": "Most popular",
+      "perMonth": "/ month",
+      "choosePlan": "Choose {plan}",
+      "plans": {
+        "starter": {
+          "name": "Free / Starter",
+          "price": "$0",
+          "copy": "For finding your first idea.",
+          "f1": "Core chat and editor",
+          "f2": "20 generations / month",
+          "f3": "Essential templates"
+        },
+        "pro": {
+          "name": "Pro",
+          "price": "$24",
+          "copy": "For making ideas happen.",
+          "f1": "Every creative tool",
+          "f2": "Unlimited projects",
+          "f3": "Premium generation"
+        },
+        "business": {
+          "name": "Business",
+          "price": "$64",
+          "copy": "For teams making together.",
+          "f1": "Shared workspaces",
+          "f2": "Brand systems",
+          "f3": "Priority support"
+        }
+      }
+    },
+    "cta": {
+      "title": "Your next idea",
+      "titleEm": "starts here.",
+      "button": "Start Creating"
+    },
+    "desk": {
+      "label": "ONE IDEA / MANY FORMS",
+      "imageTag": "IMAGE / 01",
+      "imageTitle": "Other worlds",
+      "draftTag": "DRAFT 03",
+      "draftTitle": "The shape of an unfinished idea",
+      "draftCopy": "Creativity rarely arrives complete. It begins as a phrase, a feeling, a fragment worth following.",
+      "slideTag": "04",
+      "slideTitle": "THE NEW CREATIVE SYSTEM",
+      "slideDate": "FORM / 2026",
+      "filmLabel": "CONCEPT FILM · 00:18",
+      "deskAriaLabel": "A composition of writing, image, presentation, audio, and video tools"
+    },
+    "chatPreview": {
+      "windowTitle": "Conversation / Campaign concept",
+      "youLabel": "YOU",
+      "oricoLabel": "ORICO",
+      "prompt": "Help me turn the attached research into a campaign idea that feels human, not techy.",
+      "attachment": "field-notes.pdf · 2.4 MB",
+      "responseTitle": "Let's build it around unfinished thoughts.",
+      "responseBody": "Instead of promising instant perfection, the campaign celebrates the strange, half-formed beginnings behind meaningful work.",
+      "campaignLineLabel": "Campaign line",
+      "campaignLine": "Start messy. Make it real.",
+      "actionBrief": "Make a brief",
+      "actionDraft": "Draft concepts",
+      "actionEditor": "Open in editor",
+      "placeholder": "Keep shaping this idea…",
+      "sendAriaLabel": "Send"
+    },
+    "editorPreview": {
+      "docTitle": "Untitled essay",
+      "saved": "Saved",
+      "draftLabel": "Essay / Draft",
+      "editorTitle": "What we make shapes us, too.",
+      "p1": "Every creative decision leaves a trace.",
+      "p1Highlight": "The tools we choose can flatten that process, or they can create space for better questions.",
+      "p2": "We built ORICO for the second kind of work.",
+      "actionRewrite": "Rewrite",
+      "actionImprove": "Improve",
+      "actionExpand": "Expand",
+      "actionSummarize": "Summarize",
+      "statsWords": "WORDS",
+      "statsTone": "TONE",
+      "statsToneValue": "Reflective",
+      "statsReading": "READING",
+      "statsReadingValue": "2 min"
+    },
+    "workspacePreview": {
+      "brandName": "ORICO",
+      "navNew": "＋ New",
+      "navChat": "⌁ Chat",
+      "navDocs": "▤ Documents",
+      "navPresentations": "▦ Presentations",
+      "navMedia": "◫ Media",
+      "campaignTitle": "Campaign / New rituals",
+      "shareLabel": "Share",
+      "conceptLabel": "CONCEPT NOTE",
+      "conceptTitle": "A better way to begin.",
+      "conceptBody": "Tools should meet ideas where they are.",
+      "imageTitle": "NEW RITUALS",
+      "oricoLabel": "ORICO",
+      "oricoMessage": "I've shaped three directions from your brief. The second feels closest to the tone you described.",
+      "openDirection": "Open direction 02 →"
+    }
+  },
+  "SiteHeader": {
+    "toggleMenu": "Toggle menu"
+  },
+  "SiteFooter": {
+    "tagline": "One intelligent workspace for creating almost anything.",
+    "columns": {
+      "product": "Product",
+      "company": "Company",
+      "resources": "Resources",
+      "legal": "Legal"
+    },
+    "links": {
+      "aiChat": "AI Chat",
+      "aiEditor": "AI Editor",
+      "templates": "Templates",
+      "presentations": "Presentations",
+      "image": "Image",
+      "audio": "Audio",
+      "video": "Video",
+      "about": "About",
+      "contact": "Contact",
+      "careers": "Careers",
+      "documentation": "Documentation",
+      "helpCenter": "Help Center",
+      "blog": "Blog",
+      "privacy": "Privacy",
+      "terms": "Terms"
+    },
+    "copyright": "© {year} ORICO Creative Systems.",
+    "socialX": "X",
+    "socialLinkedIn": "LinkedIn",
+    "socialInstagram": "Instagram"
+  },
+  "AuthShell": {
+    "tagline": "Write · Design · Present · Generate",
+    "backToHome": "Back to home",
+    "emailVerification": "Email Verification",
+    "copyright": "© {year} ORICO"
   }
 }
