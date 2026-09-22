@@ -993,7 +993,7 @@
 }
 .template-social    .template-art i { background: color-mix(in oklab, var(--brand) 14%, var(--color-muted)); }
 .template-business  .template-art i { background: color-mix(in oklab, var(--color-ink) 12%, var(--color-muted)); }
-.template-education .template-art i { background: color-mix(in oklab, oklch(0.75 0.12 220) 10%, var(--color-muted)); }
+.template-education .template-art i { background: color-mix(in oklab, var(--color-brand) 8%, var(--color-muted)); }
 .template-marketing .template-art i { background: color-mix(in oklab, var(--color-brand) 20%, var(--color-muted)); }
 .template-writing   .template-art i { background: color-mix(in oklab, var(--color-sand) 60%, var(--color-muted)); }
 .template-presentation .template-art i { background: color-mix(in oklab, var(--color-ink) 8%, var(--color-muted)); }

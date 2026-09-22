@@ -46,7 +46,7 @@ export function Header() {
         user?.image ?? user?.avatar ?? "";
 
     const getAvatarColor = (user?: SessionUserLike | null) =>
-        user?.avatar_color || "hsl(var(--primary))";
+        user?.avatar_color || "var(--color-brand)";
 
     const handleSignOut = () => {
         signOut({ callbackUrl: "/auth/login" });
@@ -91,7 +91,7 @@ export function Header() {
                                     <AvatarFallback
                                         style={{
                                             backgroundColor: getAvatarColor(session.user),
-                                            color: "hsl(var(--primary-foreground))",
+                                            color: "var(--color-brand-foreground)",
                                         }}
                                     >
                                         {session?.user?.name ? (
@@ -125,7 +125,7 @@ export function Header() {
                                                 <AvatarFallback
                                                     style={{
                                                         backgroundColor: getAvatarColor(session.user),
-                                                        color: "hsl(var(--primary-foreground))",
+                                                        color: "var(--color-brand-foreground)",
                                                     }}
                                                 >
                                                     {session?.user?.name ? (

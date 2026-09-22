@@ -8,7 +8,6 @@ import {
     Users,
     BarChart3,
     Settings,
-    Sparkles,
     BotMessageSquare,
 } from "lucide-react";
 import {
@@ -43,9 +42,16 @@ export function AppSidebar() {
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" render={<Link href="/dashboard" />}>
-                            <div className="flex aspect-square size-8 items-center justify-center rounded-xl bg-[image:var(--gradient-primary)]">
-                                <Sparkles className="size-4 text-white" />
-                            </div>
+                            {/* Brand grid logo — matches site-header Brand component */}
+                            <span
+                                className="grid aspect-square size-8 shrink-0 grid-cols-2 gap-0.5 border border-foreground p-1"
+                                aria-hidden="true"
+                            >
+                                <span className="bg-foreground" />
+                                <span className="border border-foreground" />
+                                <span className="border border-foreground" />
+                                <span className="bg-brand" />
+                            </span>
                             <div className="grid flex-1 text-start text-sm leading-tight">
                                 <span className="truncate font-semibold">ORICO</span>
                                 <span className="truncate text-xs text-muted-foreground">
@@ -78,11 +84,11 @@ export function AppSidebar() {
             </SidebarContent>
 
             <SidebarFooter>
-                <div className="mb-2 rounded-xl border border-[color:var(--border-strong)] p-3 group-data-[collapsible=icon]:hidden">
+                <div className="mb-2 rounded-xl border border-border-strong p-3 group-data-[collapsible=icon]:hidden">
                     <p className="text-xs font-medium">{t("professionalPlan")}</p>
                     <p className="mt-1 text-[11px] text-muted-foreground">{t("credits")}</p>
-                    <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-[color:var(--muted)]">
-                        <div className="h-full rounded-full bg-[image:var(--gradient-primary)]" style={{ width: "84%" }} />
+                    <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-muted">
+                        <div className="h-full rounded-full bg-brand" style={{ width: "84%" }} />
                     </div>
                 </div>
                 <SidebarMenu>

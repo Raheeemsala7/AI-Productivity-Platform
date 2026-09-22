@@ -21,7 +21,7 @@ export default async function ChatAppSidebar() {
 
     const getInitials = (name: string) => name.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2);
       const getAvatarUrl = (user?: SessionUserLike | null) => user?.image ?? user?.avatar ?? "";
-      const getAvatarColor = (user?: SessionUserLike | null) => user?.avatar_color || "hsl(var(--primary))";
+      const getAvatarColor = (user?: SessionUserLike | null) => user?.avatar_color || "var(--color-brand)";
     return (
         <Sidebar collapsible="icon" variant="sidebar" className="group border-none shadow-none">
             <SidebarHeader>
@@ -71,7 +71,7 @@ export default async function ChatAppSidebar() {
                                         <AvatarFallback
                                             style={{
                                                 backgroundColor: getAvatarColor(session.user),
-                                                color: "hsl(var(--primary-foreground))",
+                                                color: "var(--color-brand-foreground)",
                                             }}
                                         >
                                             {session.user.name ? getInitials(session.user.name) : <User className="size-3.5" />}
@@ -101,7 +101,7 @@ export default async function ChatAppSidebar() {
                                     <AvatarFallback
                                         style={{
                                             backgroundColor: getAvatarColor(session.user),
-                                            color: "hsl(var(--primary-foreground))",
+                                            color: "var(--color-brand-foreground)",
                                         }}
                                     >
                                         {session.user.name ? getInitials(session.user.name) : <User className="size-4" />}
