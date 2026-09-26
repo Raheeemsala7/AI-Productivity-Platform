@@ -164,7 +164,7 @@ export function UserSidebar({
                         isActive={isActive}
                         className="h-10 gap-3 p-3 text-base"
                       >
-                        <Link href={item.url}>
+                        <Link href={item.url} className="flex items-center gap-3">
                           {item.icon && <item.icon className="size-4.5" />}
                           <span>{item.title}</span>
                         </Link>

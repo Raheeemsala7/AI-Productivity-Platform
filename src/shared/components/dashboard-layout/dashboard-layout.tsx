@@ -15,7 +15,7 @@ export const DashboardLayout = ({ children, sidebar, header }: Props) => {
       <div className="flex flex-1 flex-col overflow-hidden">
         <div className="flex flex-1 flex-col overflow-hidden  bg-background ring ring-foreground/10">
           {header}
-          <div className="flex-1 overflow-y-auto">
+          <div className="flex-1 overflow-y-auto p-4">
             {children}
           </div>
         </div>
