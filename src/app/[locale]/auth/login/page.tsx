@@ -30,26 +30,18 @@ export default async function LoginPage() {
         <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-brand">
           {t("welcomeBack")}
         </p>
-        <h1 className="font-display text-4xl font-semibold tracking-normal text-foreground sm:text-5xl">
+        <h3 className="font-display text-4xl font-semibold tracking-normal text-foreground sm:text-5xl">
           {t("signInTitle")}
-        </h1>
-        <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+        </h3>
+        <p className="mt-2 mb-4 text-sm leading-relaxed text-muted-foreground ">
           {t("signInSubtitle")}
         </p>
 
-        <div className="mt-9">
+        <div>
           <LoginForm />
         </div>
 
-        <p className="mt-8 text-center text-sm text-muted-foreground">
-          {t("newToOrico")}{" "}
-          <Link
-            href="/auth/register"
-            className="font-medium text-foreground transition-colors hover:text-brand"
-          >
-            {t("createAccount")}
-          </Link>
-        </p>
+
       </div>
     </AuthShell>
   );

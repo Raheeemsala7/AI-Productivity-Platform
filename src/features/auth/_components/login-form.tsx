@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Field, FieldError, FieldLabel } from '@/shared/components/ui/field';
 import { useState, useTransition } from 'react';
 import { Link } from '@/i18n/navigation';
-import { signIn } from 'next-auth/react';
+import { signIn, getSession } from 'next-auth/react';
 import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
 import { AuthDivider } from './auth-divider';
@@ -34,7 +34,7 @@ export default function LoginForm() {
                 password: data.password,
                 remember: data.remember,
                 redirect: false,
-                callbackUrl:"/dashboard"
+                // callbackUrl:"/dashboard"
             })
 
             if (res?.error === "Invalid credentials") {
@@ -42,7 +42,17 @@ export default function LoginForm() {
                 return
             }
             toast.success(t("loginSuccess"))
-            window.location.href = "/dashboard"
+            
+            const session = await getSession()
+            const role = session?.user?.role
+            
+            if (role === "admin") {
+                window.location.href = "/admin"
+            } else if (role === "superadmin") {
+                window.location.href = "/super-admin"
+            } else {
+                window.location.href = "/dashboard"
+            }
         })
     };
 
@@ -155,7 +165,7 @@ export default function LoginForm() {
                 </button>
             </form>
 
-            <p className="mt-6 text-center text-sm text-muted-foreground">
+            <p className="mt-3 text-center text-sm text-muted-foreground">
                 {t("newToOrico")}{" "}
                 <Link
                     href="/auth/register"

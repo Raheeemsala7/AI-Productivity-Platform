@@ -55,7 +55,7 @@ export async function AuthShell({
       </section>
 
       {/* ── Right panel ── */}
-      <section className="flex min-h-screen flex-col px-5 py-6 sm:px-10 lg:px-16 xl:px-24">
+      <section className="flex min-h-screen flex-col px-5 py-4 sm:px-10 lg:px-16 xl:px-24">
         <div className="flex items-center justify-between lg:hidden">
           <Brand />
           <span className="text-xs uppercase tracking-[0.16em] text-muted-foreground">

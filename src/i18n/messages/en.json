@@ -65,7 +65,13 @@
     "signUpWithGoogle": "Sign up with Google",
     "orContinueWithEmail": "or continue with email",
     "protectedWorkspace": "Protected workspace · Arabic & English support",
-    "registerError": "Something error"
+    "registerError": "Something error",
+    "login": {
+      "statement": "Create continuously",
+      "statementAccent": "from where you left off.",
+      "note": "Your workspace to write, design, present, and create — exactly where you left it.",
+      "mobileLead": "Create without limits."
+    }
   },
   "VerifyEmail": {
     "verifying": "Verifying your email",

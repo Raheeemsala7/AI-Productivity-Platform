@@ -6,6 +6,7 @@ export type User = {
     slogan: string;
     avatar: string | null;
     avatar_color: string;
+    role: "user" | "admin" | "superadmin"
 };
 
 
@@ -33,6 +34,7 @@ export interface GoogleLoginUser {
     slogan: string;
     created_at: string;
     updated_at: string;
+    role: "user" | "admin" | "superadmin";
 }
 
 export type GoogleLoginResponse =
