@@ -1,9 +1,4 @@
-import { ChatManager } from '@/features/admin/chat/components/chat-manager';
+import MockPage from "@/shared/components/dashboard/mock-page"
 
-export const metadata = {
-  title: 'Admin - Chat',
-};
-
-export default function ChatPage() {
-  return <ChatManager />;
-}
+export const metadata = { title: "Admin - Chat" }
+export default function Page() { return <MockPage title="Chat Support" /> }

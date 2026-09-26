@@ -1,9 +1,9 @@
-import { DashboardOverview } from "@/features/admin/components/dashboard-overview";
+import OverviewPage from "@/features/admin/components/overview-chunks/overview-page"
 
 export const metadata = {
   title: 'Admin Dashboard Overview',
 };
 
 export default function AdminPage() {
-  return <DashboardOverview />;
+  return <OverviewPage />;
 }

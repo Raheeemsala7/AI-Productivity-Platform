@@ -1,29 +1,28 @@
-import React from 'react'
-import { SidebarTrigger } from '../ui/sidebar'
-import { getTranslations } from 'next-intl/server';
-import { ThemeToggle } from '../theme-toggle';
-import { LocaleSwitcher } from '../locale-switcher';
+"use client"
+import { SidebarInset, SidebarTrigger } from "@/shared/components/ui/sidebar"
+import { AnimatedThemeToggler } from "@/shared/components/ui/animated-theme-toggler"
+import { ChangeLanguage } from "./change-language"
 
-export default async function HeaderSidebar({ name }: { name: string }) {
-    // Transation
-    const t = await getTranslations("Dashboard");
-    return (
-        <header className="flex h-16 items-center justify-between border-b px-3 md:px-6 py-2">
-            <div className="flex items-center gap-2 md:gap-4">
-                <SidebarTrigger />
-                <div className="min-w-0 flex-1">
-                    <h6 className="text-lg md:text-2xl font-semibold tracking-tight">{t("welcome", {
-                        name: name.split(" ")[0]
-                    })}</h6>
-                    <p className="mt-1 text-xs md:text-sm text-muted-foreground">
-                        {t("subtitle")}
-                    </p>
-                </div>
-            </div>
-            <div className='flex items-center gap-2'>
-                <ThemeToggle />
-                <LocaleSwitcher compact />
-            </div>
-        </header>
-    )
+export default function HeaderSidebar({ name, title = "Dashboard" }: { name: string, title?: string }) {
+  return (
+    <SidebarInset className="w-full">
+      <header className="flex h-17 shrink-0 items-center justify-between gap-2 border-b bg-card">
+        <div className="flex h-full">
+          <SidebarTrigger className="h-full w-15" />
+
+          <div className="flex h-full flex-col justify-center">
+            <p className="hidden font-bold md:block">
+              {title}
+            </p>
+            <p className="text-lg font-bold md:hidden">{title}</p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-4 px-3 md:gap-5">
+          <ChangeLanguage />
+          <AnimatedThemeToggler />
+        </div>
+      </header>
+    </SidebarInset>
+  )
 }

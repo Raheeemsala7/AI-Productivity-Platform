@@ -1,9 +1,9 @@
-import { PlansList } from '@/features/admin/plans/components/plans-list';
+import PlansPage from "@/features/admin/components/plans-chunks/plans-page"
 
 export const metadata = {
-  title: 'Admin - Plans',
+  title: "Admin - Plans",
 };
 
-export default function PlansPage() {
-  return <PlansList />;
+export default function Page() {
+  return <PlansPage />;
 }

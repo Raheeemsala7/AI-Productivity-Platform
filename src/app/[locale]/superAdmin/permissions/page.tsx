@@ -1,9 +1,9 @@
-import { PermissionsManager } from '@/features/super-admin/permissions/components/permissions-manager';
+import RolesPage from "@/features/super-admin/components/roles-chunks/roles-page"
 
 export const metadata = {
-  title: 'Super Admin - Permissions',
+  title: "Super Admin - Permissions",
 };
 
-export default function PermissionsPage() {
-  return <PermissionsManager />;
+export default function Page() {
+  return <RolesPage />;
 }

@@ -1,9 +1,4 @@
-import { ProvidersList } from '@/features/admin/providers/components/providers-list';
+import MockPage from "@/shared/components/dashboard/mock-page"
 
-export const metadata = {
-  title: 'Admin - Providers',
-};
-
-export default function ProvidersPage() {
-  return <ProvidersList />;
-}
+export const metadata = { title: "Admin - Providers" }
+export default function Page() { return <MockPage title="Providers Management" /> }

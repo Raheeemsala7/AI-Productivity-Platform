@@ -1,9 +1,9 @@
-import { UsersList } from '@/features/admin/users/components/users-list';
+import UsersPage from "@/features/admin/components/users-chunks/users-page"
 
 export const metadata = {
-  title: 'Admin - Users',
+  title: "Admin - Users",
 };
 
-export default function UsersPage() {
-  return <UsersList />;
+export default function Page() {
+  return <UsersPage />;
 }

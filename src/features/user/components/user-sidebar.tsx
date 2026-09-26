@@ -1,5 +1,5 @@
 "use client"
-import { useMemo } from "react"
+import { useMemo, useState } from "react"
 import {
   Sidebar,
   SidebarContent,
@@ -14,6 +14,15 @@ import {
   SidebarRail,
 } from "@/shared/components/ui/sidebar"
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/shared/components/ui/dialog"
+import { useTranslations, useLocale } from "next-intl"
+import {
   LayoutDashboard,
   CreditCard,
   BarChart3,
@@ -21,16 +30,25 @@ import {
   MessageSquare,
   Settings,
   User,
+  LogOut,
 } from "lucide-react"
-import { Link, usePathname } from "@/i18n/navigation"
-import SignOutButton from "@/shared/components/dashboard/sign-out-button"
-import { useTranslations } from "next-intl"
+import { Link, usePathname, useRouter } from "@/i18n/navigation"
+import { Button } from "@/shared/components/ui/button"
+import { SpaceAvatar } from "@/shared/components/ui/space-avatar"
+import { Sheet, SheetContent, SheetTrigger } from "@/shared/components/ui/sheet"
+import { signOut, useSession } from "next-auth/react"
 
 export function UserSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname()
   const t = useTranslations("Dashboard")
+  const router = useRouter()
+  const { data: session } = useSession()
+  const [logoutOpen, setLogoutOpen] = useState(false)
+
+  const locale = useLocale()
+  const dir = locale === "ar" ? "rtl" : "ltr"
   
   const data = [
     {
@@ -86,26 +104,25 @@ export function UserSidebar({
           url: "/dashboard/settings",
           icon: Settings,
         },
+        {
+          title: "Logout",
+          url: "#",
+          icon: LogOut,
+        }
       ],
     },
   ]
 
   return (
-    <Sidebar {...props}>
+    <Sidebar side={dir === "rtl" ? "right" : "left"} {...props}>
       <SidebarHeader className="h-17 bg-background p-2">
         <Link href={"/dashboard"}>
           <div className="flex h-full items-center gap-2">
-            <span
-                className="grid aspect-square size-8 shrink-0 grid-cols-2 gap-0.5 border border-foreground p-1"
-                aria-hidden="true"
-            >
-                <span className="bg-foreground" />
-                <span className="border border-foreground" />
-                <span className="border border-foreground" />
-                <span className="bg-brand" />
-            </span>
+            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold">
+               OU
+            </div>
             <div className="flex flex-col">
-              <p className="font-bold">ORICO</p>
+              <p className="font-bold">ORICO User</p>
               <span className="text-sm text-muted-foreground">
                 Workspace
               </span>
@@ -124,11 +141,26 @@ export function UserSidebar({
                 {group.items.map((item) => {
                   const isActive =
                     pathname === item.url ||
-                    pathname?.startsWith(`${item.url}/`)
+                    (item.url !== "/dashboard" && pathname?.startsWith(`${item.url}/`))
+
+                  if (item.title === "Logout") {
+                    return (
+                      <SidebarMenuItem key={item.title}>
+                        <SidebarMenuButton
+                          className="h-10 gap-3 p-3 text-base"
+                          onClick={() => setLogoutOpen(true)}
+                        >
+                          {item.icon && <item.icon className="size-4.5" />}
+                          <span>{item.title}</span>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    )
+                  }
 
                   return (
                     <SidebarMenuItem key={item.title}>
                       <SidebarMenuButton
+                        asChild
                         isActive={isActive}
                         className="h-10 gap-3 p-3 text-base"
                       >
@@ -147,21 +179,61 @@ export function UserSidebar({
       </SidebarContent>
 
       <SidebarFooter className="bg-background">
-          <div className="mb-2 rounded-xl border border-border-strong p-3 group-data-[collapsible=icon]:hidden">
-              <p className="text-xs font-medium">{t("professionalPlan") || "Professional Plan"}</p>
-              <p className="mt-1 text-[11px] text-muted-foreground">{t("credits") || "Credits Used"}</p>
-              <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-muted">
-                  <div className="h-full rounded-full bg-brand" style={{ width: "84%" }} />
+        <Sheet>
+          <SheetTrigger asChild>
+            <div className="flex cursor-pointer items-center gap-2 rounded-lg bg-card p-2">
+              <SpaceAvatar
+                name={session?.user?.name || "User"}
+                size="xs"
+              />
+              <div>
+                <p className="truncate font-medium">{session?.user?.name || "User"}</p>
+                <p className="truncate text-xs">
+                  {session?.user?.email || "user@example.com"}
+                </p>
               </div>
-          </div>
-          <SidebarMenu>
-              <SidebarMenuItem>
-                  <SignOutButton />
-              </SidebarMenuItem>
-          </SidebarMenu>
+            </div>
+          </SheetTrigger>
+          <SheetContent>
+             <div className="p-4">
+                 <h2 className="text-lg font-bold">Profile</h2>
+                 <p className="text-muted-foreground">This is a mocked profile panel.</p>
+             </div>
+          </SheetContent>
+        </Sheet>
       </SidebarFooter>
 
       <SidebarRail />
+
+      <Dialog open={logoutOpen} onOpenChange={setLogoutOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Are you sure you want to log out?</DialogTitle>
+            <DialogDescription>
+              You will be signed out of your account.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button
+              onClick={() => setLogoutOpen(false)}
+              variant="outline"
+              className="flex-1"
+            >
+              Cancel
+            </Button>
+            <Button
+              className="flex-1"
+              variant="destructive"
+              onClick={async () => {
+                await signOut({ redirect: false })
+                router.push("/auth/login")
+              }}
+            >
+              Logout
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </Sidebar>
   )
 }

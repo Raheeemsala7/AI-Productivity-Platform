@@ -1,9 +1,4 @@
-import { ToolsList } from '@/features/admin/tools/components/tools-list';
+import MockPage from "@/shared/components/dashboard/mock-page"
 
-export const metadata = {
-  title: 'Admin - Tools',
-};
-
-export default function ToolsPage() {
-  return <ToolsList />;
-}
+export const metadata = { title: "Admin - Tools" }
+export default function Page() { return <MockPage title="Tools Management" /> }

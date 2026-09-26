@@ -1,9 +1,4 @@
-import { AdminsList } from '@/features/super-admin/admins/components/admins-list';
+import MockPage from "@/shared/components/dashboard/mock-page"
 
-export const metadata = {
-  title: 'Super Admin - Admins',
-};
-
-export default function AdminsPage() {
-  return <AdminsList />;
-}
+export const metadata = { title: "Super Admin - Admins" }
+export default function Page() { return <MockPage title="Super Admin - Admins Management" /> }

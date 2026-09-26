@@ -1,9 +1,9 @@
-import { SubscriptionsList } from '@/features/admin/subscriptions/components/subscriptions-list';
+import SubscriptionsPage from "@/features/admin/components/subscriptions-chunks/subscriptions-page"
 
 export const metadata = {
-  title: 'Admin - Subscriptions',
+  title: "Admin - Subscriptions",
 };
 
-export default function SubscriptionsPage() {
-  return <SubscriptionsList />;
+export default function Page() {
+  return <SubscriptionsPage />;
 }
