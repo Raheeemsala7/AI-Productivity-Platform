@@ -197,7 +197,7 @@ export function AdminSidebar({
                   return (
                     <SidebarMenuItem key={item.title}>
                       <SidebarMenuButton
-                        asChild
+                        
                         isActive={isActive}
                         className="h-10 gap-3 p-3 text-base"
                       >
@@ -217,7 +217,7 @@ export function AdminSidebar({
 
       <SidebarFooter className="bg-background">
         <Sheet>
-          <SheetTrigger asChild>
+          <SheetTrigger >
             <div className="flex cursor-pointer items-center gap-2 rounded-lg bg-card p-2">
               <SpaceAvatar
                 name={session?.user?.name || "Admin"}

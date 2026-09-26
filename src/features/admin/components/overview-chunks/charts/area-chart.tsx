@@ -162,7 +162,7 @@ function ChartAreaInteractive() {
             {t("showingTotalVisitorsLast3Months")}
           </CardDescription>
         </div>
-        <Select value={timeRange} onValueChange={setTimeRange}>
+        <Select value={timeRange} onValueChange={(v) => setTimeRange(v as string)}>
           <SelectTrigger
             className="hidden w-[160px] rounded-lg sm:ml-auto sm:flex"
             aria-label={t("selectValue")}
