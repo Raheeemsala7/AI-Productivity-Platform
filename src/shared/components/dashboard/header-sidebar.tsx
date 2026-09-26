@@ -5,7 +5,6 @@ import { ChangeLanguage } from "./change-language"
 
 export default function HeaderSidebar({ name, title = "Dashboard" }: { name: string, title?: string }) {
   return (
-    <SidebarInset className="w-full">
       <header className="flex h-17 shrink-0 items-center justify-between gap-2 border-b bg-card">
         <div className="flex h-full">
           <SidebarTrigger className="h-full w-15" />
@@ -23,6 +22,5 @@ export default function HeaderSidebar({ name, title = "Dashboard" }: { name: str
           <AnimatedThemeToggler />
         </div>
       </header>
-    </SidebarInset>
   )
 }

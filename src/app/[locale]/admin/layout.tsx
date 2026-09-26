@@ -4,6 +4,7 @@ import HeaderSidebar from '@/shared/components/dashboard/header-sidebar';
 import { DashboardLayout } from '@/shared/components/dashboard-layout/dashboard-layout';
 import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
+import { SidebarInset } from '@/shared/components/ui/sidebar';
 
 export default async function AdminMainLayout({ children }: { children: React.ReactNode }) {
     // Session
@@ -14,11 +15,13 @@ export default async function AdminMainLayout({ children }: { children: React.Re
     }
 
     return (
-        <DashboardLayout 
-            sidebar={<AdminSidebar />} 
+        <DashboardLayout
+            sidebar={<AdminSidebar />}
             header={<HeaderSidebar name={session.user.name} />}
         >
-            {children}
+            <SidebarInset>
+                {children}
+            </SidebarInset>
         </DashboardLayout>
     )
 }
