@@ -1,6 +1,5 @@
 "use client"
 
-import * as React from "react"
 import { Label, Pie, PieChart, Sector } from "recharts"
 import type {
   PieSectorDataItem,
@@ -29,6 +28,7 @@ import {
   SelectValue,
 } from "@/shared/components/ui/select"
 import { useTranslations } from "next-intl"
+import { memo, useCallback, useMemo, useState } from "react"
 
 export const description = "An interactive pie chart"
 
@@ -75,15 +75,15 @@ const chartConfig = {
 function ChartPieInteractive() {
   const t = useTranslations()
   const id = "pie-interactive"
-  const [activeMonth, setActiveMonth] = React.useState(desktopData[0].month)
+  const [activeMonth, setActiveMonth] = useState(desktopData[0].month)
 
-  const activeIndex = React.useMemo(
+  const activeIndex = useMemo(
     () => desktopData.findIndex((item) => item.month === activeMonth),
     [activeMonth]
   )
-  const months = React.useMemo(() => desktopData.map((item) => item.month), [])
+  const months = useMemo(() => desktopData.map((item) => item.month), [])
 
-  const renderPieShape = React.useCallback(
+  const renderPieShape = useCallback(
     ({ index, outerRadius = 0, ...props }: PieSectorShapeProps) => {
       if (index === activeIndex) {
         return (
@@ -111,7 +111,7 @@ function ChartPieInteractive() {
           <CardTitle>{t("pieChartInteractive")}</CardTitle>
           <CardDescription>{t("januaryJune2024")}</CardDescription>
         </div>
-        <Select value={activeMonth} onValueChange={setActiveMonth}>
+        <Select value={activeMonth} onValueChange={(val) => val && setActiveMonth(val)}>
           <SelectTrigger
             className="ml-auto h-7 w-[130px] rounded-lg pl-2.5"
             aria-label={t("selectValue")}
@@ -202,4 +202,4 @@ function ChartPieInteractive() {
     </Card>
   )
 }
-export default React.memo(ChartPieInteractive)
+export default memo(ChartPieInteractive)
