@@ -1,7 +1,9 @@
-import React from 'react'
+import { DashboardOverview } from "@/features/admin/components/dashboard-overview";
 
-export default function page() {
-  return (
-    <div>page</div>
-  )
+export const metadata = {
+  title: 'Admin Dashboard Overview',
+};
+
+export default function AdminPage() {
+  return <DashboardOverview />;
 }

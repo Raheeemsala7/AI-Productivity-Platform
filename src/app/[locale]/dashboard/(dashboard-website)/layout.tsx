@@ -1,12 +1,12 @@
 import { authOptions } from '@/auth';
-import { AppSidebar } from '@/shared/components/dashboard/app-sidebar';
+import { UserSidebar } from '@/features/user/components/user-sidebar';
 import HeaderSidebar from '@/shared/components/dashboard/header-sidebar';
-import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/shared/components/ui/sidebar';
+import { DashboardLayout } from '@/shared/components/dashboard-layout/dashboard-layout';
 import { getServerSession } from 'next-auth';
 import { getTranslations } from 'next-intl/server';
 import { redirect } from 'next/navigation';
 
-export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
+export default async function DashboardMainLayout({ children }: { children: React.ReactNode }) {
     // Transation
     const t = await getTranslations("Dashboard");
     // Session
@@ -16,14 +16,12 @@ export default async function DashboardLayout({ children }: { children: React.Re
         return redirect("/auth/login")
     }
 
-
     return (
-        <SidebarProvider className='mx-auto px-4 py-6 '>
-            <AppSidebar />
-            <SidebarInset className='rounded-2xl'>
-                <HeaderSidebar name={session.user.name} />
-                <main className=" p-4 md:p-6">{children}</main>
-            </SidebarInset>
-        </SidebarProvider>
+        <DashboardLayout 
+            sidebar={<UserSidebar />} 
+            header={<HeaderSidebar name={session.user.name} />}
+        >
+            {children}
+        </DashboardLayout>
     )
 }
