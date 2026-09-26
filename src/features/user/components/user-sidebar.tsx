@@ -147,7 +147,7 @@ export function UserSidebar({
                     return (
                       <SidebarMenuItem key={item.title}>
                         <SidebarMenuButton
-                          className="h-10 gap-3 p-3 text-base"
+                          className="h-10 gap-3 p-3 text-base cursor-pointer"
                           onClick={() => setLogoutOpen(true)}
                         >
                           {item.icon && <item.icon className="size-4.5" />}
