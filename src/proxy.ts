@@ -5,7 +5,7 @@ import { routing } from "./i18n/routing";
 
 const handleI18nRouting = createMiddleware(routing);
 
-const protectedPaths = ["/admin", "/dashboard", "/profile", "/account"];
+const protectedPaths = ["/admin", "/super-admin", "/dashboard", "/profile", "/account"];
 const authRoutes = ["/auth/login", "/auth/register"];
 
 function getLocaleFromPathname(pathname: string) {
@@ -60,6 +60,22 @@ export default async function proxy(req: NextRequest) {
     url.pathname = `/${locale}/auth/login`;
     url.searchParams.set("redirect", pathnameWithoutLocale);
     return NextResponse.redirect(url);
+  }
+
+  if (token) {
+    const role = (token as any).user?.role;
+    const isAdminRoute = pathnameWithoutLocale.startsWith("/admin");
+    const isSuperAdminRoute = pathnameWithoutLocale.startsWith("/super-admin");
+
+    if (isAdminRoute && role !== "admin" && role !== "superadmin") {
+      url.pathname = `/${locale}/dashboard`;
+      return NextResponse.redirect(url);
+    }
+
+    if (isSuperAdminRoute && role !== "superadmin") {
+      url.pathname = `/${locale}/dashboard`;
+      return NextResponse.redirect(url);
+    }
   }
 
   return response;
