@@ -67,15 +67,15 @@ export default async function proxy(req: NextRequest) {
     const isAdminRoute = pathnameWithoutLocale.startsWith("/admin");
     const isSuperAdminRoute = pathnameWithoutLocale.startsWith("/super-admin");
 
-    if (isAdminRoute && role !== "admin" && role !== "superadmin") {
-      url.pathname = `/${locale}/dashboard`;
-      return NextResponse.redirect(url);
-    }
+    // if (isAdminRoute && role !== "admin" && role !== "superadmin") {
+    //   url.pathname = `/${locale}/dashboard`;
+    //   return NextResponse.redirect(url);
+    // }
 
-    if (isSuperAdminRoute && role !== "superadmin") {
-      url.pathname = `/${locale}/dashboard`;
-      return NextResponse.redirect(url);
-    }
+    // if (isSuperAdminRoute && role !== "superadmin") {
+    //   url.pathname = `/${locale}/dashboard`;
+    //   return NextResponse.redirect(url);
+    // }
   }
 
   return response;

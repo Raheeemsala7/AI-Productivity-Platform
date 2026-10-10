@@ -64,7 +64,7 @@ export function LandingPage() {
         {/* ── PRODUCT ── */}
         <section
           id="product"
-          className="border-y border-border bg-bone px-5 py-24 md:px-10 md:py-36"
+          className="border-y border-border bg-secondary px-5 py-24 md:px-10 md:py-36"
         >
           <div className="mx-auto max-w-[1400px]">
             <p className="eyebrow" data-reveal>
@@ -118,7 +118,7 @@ export function LandingPage() {
         {/* ── TOOLS ── */}
         <section
           id="tools"
-          className="bg-ink px-5 py-24 text-[var(--color-paper)] md:px-10 md:py-36"
+          className="bg-ink px-5 py-24 text-paper md:px-10 md:py-36"
         >
           <div className="mx-auto max-w-[1400px]">
             <div
@@ -127,13 +127,13 @@ export function LandingPage() {
             >
               <div>
                 <p className="eyebrow text-brand">{t("tools.eyebrow")}</p>
-                <h2 className="section-title max-w-4xl text-[var(--color-paper)]">
+                <h2 className="section-title max-w-4xl text-paper">
                   {t("tools.title")}
                   <br />
                   <em>{t("tools.titleEm")}</em>
                 </h2>
               </div>
-              <p className="max-w-sm text-sm leading-relaxed text-[var(--color-paper)]/55">
+              <p className="max-w-sm text-sm leading-relaxed text-paper/55">
                 {t("tools.subtitle")}
               </p>
             </div>
@@ -164,7 +164,7 @@ export function LandingPage() {
         {/* ── WORKSPACE ── */}
         <section
           id="workspace"
-          className="border-y border-border bg-bone px-5 py-24 md:px-10 md:py-36"
+          className="border-y border-border bg-secondary px-5 py-24 md:px-10 md:py-36"
         >
           <div className="mx-auto max-w-[1400px]">
             <div className="text-center" data-reveal>
@@ -229,7 +229,7 @@ export function LandingPage() {
         </section>
 
         {/* ── CTA ── */}
-        <section className="bg-ink px-5 py-28 text-[var(--color-paper)] md:px-10 md:py-40">
+        <section className="bg-ink px-5 py-28 text-paper md:px-10 md:py-40">
           <div className="mx-auto flex max-w-[1400px] flex-col items-start justify-between gap-12 md:flex-row md:items-end">
             <h2
               className="font-display text-[clamp(3.6rem,9vw,9rem)] font-semibold leading-[.86] tracking-normal"
@@ -486,7 +486,7 @@ function WorkspacePreview() {
   return (
     <div className="workspace-scene mt-16" data-reveal>
       <div className="workspace-sidebar">
-        <div className="font-display font-semibold text-base text-[var(--color-paper)]">
+        <div className="font-display font-semibold text-base text-paper">
           {t("brandName")}
         </div>
         <div>
@@ -557,7 +557,7 @@ function PricingCards() {
           key={plan.key}
           className={`relative p-7 md:p-10 ${
             plan.featured
-              ? "bg-ink text-[var(--color-paper)]"
+              ? "bg-ink text-paper"
               : "border-b border-border last:border-0 lg:border-b-0 lg:border-r"
           }`}
         >
