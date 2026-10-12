@@ -1,9 +1,20 @@
+export interface ActiveSubscriptionPlan {
+  id: number;
+  user_id: number;
+  plan_id: number;
+  ends_at: string;
+  plan: {
+      id: number;
+      name: string;
+  }
+}
 export interface SubscriptionPlan {
   id: number;
   name: string;
-  price?: number;
-  slug?: string;
-  [key: string]: any;
+  frequency: string;
+  type: string;
+  credits: number;
+  stripe_price_id: string;        
 }
 
 export interface UserAdmin {
@@ -16,7 +27,7 @@ export interface UserAdmin {
   avatar_color: string;
   slogan: string | null;
   role?: string;
-  active_subscription?: SubscriptionPlan | null;
+  active_subscription?: ActiveSubscriptionPlan | null;
 }
 
 export interface ShowUserData {

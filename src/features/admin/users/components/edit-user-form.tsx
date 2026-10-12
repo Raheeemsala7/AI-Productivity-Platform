@@ -245,7 +245,7 @@ export function EditUserForm({ user, currentPlan, plans = [] }: EditUserFormProp
                     <option value="">{t("noSubscription") || "No Plan"}</option>
                     {plans.map((plan) => (
                       <option key={plan.id} value={String(plan.id)}>
-                        {plan.name} {plan.price ? `(${plan.price}$)` : ""}
+                        {plan.name}
                       </option>
                     ))}
                   </select>

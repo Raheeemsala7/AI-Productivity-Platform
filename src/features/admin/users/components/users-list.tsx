@@ -95,7 +95,7 @@ export async function UsersList({ users, pagination, plans = [] }: UsersListProp
                       </TableCell>
                       <TableCell>
                         {user.active_subscription ? (
-                          <Badge variant="outline">{user.active_subscription.name}</Badge>
+                          <Badge variant="outline">{user.active_subscription.plan.name}</Badge>
                         ) : (
                           <span className="text-sm text-muted-foreground">{t("noSubscription")}</span>
                         )}
