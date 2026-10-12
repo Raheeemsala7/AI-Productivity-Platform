@@ -1,100 +1,178 @@
-"use client"
-import React from 'react';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/shared/components/ui/table"
-import { Badge } from "@/shared/components/ui/badge"
-import { Button } from "@/shared/components/ui/button"
-import { Plus, MoreHorizontal, Check, Edit2 } from 'lucide-react';
-import { Card, CardContent } from '@/shared/components/ui/card';
+import { Badge } from "@/shared/components/ui/badge";
+import { Card, CardContent } from "@/shared/components/ui/card";
+import { Check, Coins, Sparkles, Layers, ShieldCheck, ShieldAlert } from "lucide-react";
+import { getTranslations } from "next-intl/server";
+import { Plan } from "../types/plan";
+import { CreatePlanDialog } from "./create-plan-dialog";
+import { EditPlanDialog } from "./edit-plan-dialog";
+import { DeletePlanButton } from "./delete-plan-button";
 
-const plansData = [
-    {
-        id: "PLN-1",
-        name: "Free",
-        price: "$0",
-        billing: "Forever",
-        status: "active",
-        features: ["100 Credits", "Basic Support", "1 User"],
-        popular: false
-    },
-    {
-        id: "PLN-2",
-        name: "Professional",
-        price: "$39",
-        billing: "Monthly",
-        status: "active",
-        features: ["1000 Credits", "Priority Support", "5 Users", "Advanced Tools"],
-        popular: true
-    },
-    {
-        id: "PLN-3",
-        name: "Enterprise",
-        price: "$299",
-        billing: "Monthly",
-        status: "active",
-        features: ["Unlimited Credits", "24/7 Support", "Unlimited Users", "Custom Integrations", "Dedicated Account Manager"],
-        popular: false
-    },
-];
+interface PlansListProps {
+  plans: Plan[];
+}
 
-export function PlansList() {
+export async function PlansList({ plans }: PlansListProps) {
+  const t = await getTranslations("AdminPlans");
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 p-4 pb-20">
+      {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-            <h2 className="text-3xl font-bold tracking-tight">Plans & Pricing</h2>
-            <p className="text-muted-foreground">
-            Configure the subscription plans available for your platform.
-            </p>
+          <h2 className="text-3xl font-bold tracking-tight">{t("title") || "Plans & Pricing"}</h2>
+          <p className="text-muted-foreground">
+            {t("description") || "Configure subscription plans, pricing tiers, credits, and AI feature access."}
+          </p>
         </div>
         <div className="flex gap-2">
-            <Button><Plus className="mr-2 h-4 w-4" /> Create Plan</Button>
+          <CreatePlanDialog />
         </div>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {plansData.map((plan) => (
-            <Card key={plan.id} className={`relative flex flex-col ${plan.popular ? 'border-brand shadow-md' : ''}`}>
-                {plan.popular && (
-                    <div className="absolute top-0 right-4 transform -translate-y-1/2">
-                        <Badge className="bg-brand text-brand-foreground hover:bg-brand/90">Most Popular</Badge>
-                    </div>
+
+      {/* Plans Grid */}
+      {plans && plans.length > 0 ? (
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 items-stretch">
+          {plans.map((plan) => {
+            const isFeatured = Boolean(plan.is_featured);
+            const isActive = Boolean(plan.active);
+
+            return (
+              <Card
+                key={plan.id}
+                className={`relative flex flex-col transition-all duration-200 hover:shadow-md ${
+                  isFeatured
+                    ? "border-primary shadow-sm ring-1 ring-primary/20 bg-primary/[0.02]"
+                    : "border-border/60"
+                }`}
+              >
+                {isFeatured && (
+                  <div className="absolute top-3 right-6 rtl:right-auto rtl:left-6 z-10">
+                    <Badge className="bg-primary text-primary-foreground shadow-xs gap-1 font-semibold text-xs py-0.5 px-3">
+                      <Sparkles className="h-3 w-3" />
+                      {t("popularBadge") || "Most Popular"}
+                    </Badge>
+                  </div>
                 )}
-                <CardContent className="p-6 flex-1 flex flex-col">
-                    <div className="flex items-center justify-between mb-4">
-                        <h3 className="text-2xl font-bold">{plan.name}</h3>
-                        <Button variant="ghost" size="icon"><Edit2 className="h-4 w-4" /></Button>
-                    </div>
-                    <div className="mb-6">
-                        <span className="text-4xl font-extrabold">{plan.price}</span>
-                        <span className="text-muted-foreground ml-1">/{plan.billing.toLowerCase()}</span>
-                    </div>
-                    
-                    <div className="flex-1">
-                        <ul className="space-y-3">
-                            {plan.features.map((feature, idx) => (
-                                <li key={idx} className="flex items-start gap-2 text-sm">
-                                    <Check className="h-4 w-4 text-brand shrink-0 mt-0.5" />
-                                    <span>{feature}</span>
-                                </li>
-                            ))}
-                        </ul>
+
+                <CardContent className="p-6 flex-1 flex flex-col justify-between mt-4">
+                  <div>
+                    {/* Header: Name & Actions */}
+                    <div className="flex items-start justify-between gap-2 mb-3">
+                      <div>
+                        <h3 className="text-2xl font-bold tracking-tight">{plan.name}</h3>
+                        {plan.name_ar && plan.name_ar !== plan.name && (
+                          <p className="text-xs text-muted-foreground mt-0.5" dir="rtl">
+                            {plan.name_ar}
+                          </p>
+                        )}
+                      </div>
+
+                      <div className="flex items-center gap-1 shrink-0">
+                        <EditPlanDialog plan={plan} />
+                        <DeletePlanButton planId={plan.id} planName={plan.name} />
+                      </div>
                     </div>
 
-                    <div className="mt-8 pt-4 border-t flex items-center justify-between">
-                        <div className="text-sm font-medium">Status:</div>
-                        <Badge variant={plan.status === 'active' ? 'default' : 'secondary'}>{plan.status}</Badge>
+                    {/* Description */}
+                    <p className="text-sm text-muted-foreground mb-5 line-clamp-2 min-h-[40px]">
+                      {plan.description || t("noDescription") || "No description provided."}
+                    </p>
+
+                    {/* Price & Billing */}
+                    <div className="mb-6 pb-4 border-b border-border/60">
+                      <div className="flex items-baseline gap-1">
+                        <span className="text-4xl font-extrabold tracking-tight">
+                          ${plan.price}
+                        </span>
+                        <span className="text-sm text-muted-foreground font-medium">
+                          /{plan.frequency || "month"}
+                        </span>
+                      </div>
+
+                      <div className="flex flex-wrap items-center gap-2 mt-3">
+                        <Badge variant="secondary" className="gap-1 font-medium text-xs">
+                          <Coins className="h-3.5 w-3.5 text-amber-500" />
+                          <span>{Number(plan.credits || 0).toLocaleString()} {t("credits") || "Credits"}</span>
+                        </Badge>
+
+                        {Number(plan.trial_days) > 0 && (
+                          <Badge variant="outline" className="text-xs">
+                            {plan.trial_days} {t("trialDays") || "Trial Days"}
+                          </Badge>
+                        )}
+
+                        <Badge
+                          variant={isActive ? "default" : "secondary"}
+                          className={`text-xs gap-1 ${
+                            isActive
+                              ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20 border-emerald-500/20"
+                              : "bg-muted text-muted-foreground"
+                          }`}
+                        >
+                          {isActive ? (
+                            <>
+                              <ShieldCheck className="h-3 w-3" />
+                              {t("statusActive") || "Active"}
+                            </>
+                          ) : (
+                            <>
+                              <ShieldAlert className="h-3 w-3" />
+                              {t("statusInactive") || "Inactive"}
+                            </>
+                          )}
+                        </Badge>
+                      </div>
                     </div>
+
+                    {/* Features list */}
+                    <div className="space-y-2.5">
+                      <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                        {t("includedFeatures") || "What's included"}
+                      </p>
+                      <ul className="space-y-2">
+                        {plan.features && plan.features.length > 0 ? (
+                          plan.features.map((feature, idx) => (
+                            <li key={idx} className="flex items-start gap-2.5 text-sm">
+                              <Check className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
+                              <span className="text-foreground/90">{feature}</span>
+                            </li>
+                          ))
+                        ) : (
+                          <li className="text-xs text-muted-foreground italic">
+                            {t("noFeatures") || "No features listed"}
+                          </li>
+                        )}
+                      </ul>
+                    </div>
+                  </div>
+
+                  {/* Footer status info */}
+                  <div className="mt-8 pt-4 border-t border-border/40 text-xs text-muted-foreground flex items-center justify-between">
+                    <span>{plan.type || "Subscription"}</span>
+                    {plan.stripe_price_id && (
+                      <span className="font-mono text-[10px] truncate max-w-[140px]" title={plan.stripe_price_id}>
+                        {plan.stripe_price_id}
+                      </span>
+                    )}
+                  </div>
                 </CardContent>
-            </Card>
-        ))}
-      </div>
+              </Card>
+            );
+          })}
+        </div>
+      ) : (
+        <Card className="p-12 text-center flex flex-col items-center justify-center">
+          <div className="p-4 rounded-full bg-muted/50 mb-3">
+            <Layers className="h-8 w-8 text-muted-foreground" />
+          </div>
+          <h3 className="text-lg font-semibold mb-1">{t("noPlansFound") || "No plans found"}</h3>
+          <p className="text-sm text-muted-foreground max-w-sm mb-4">
+            {t("noPlansFoundDesc") || "You haven't created any subscription plans yet. Click the button below to add your first plan."}
+          </p>
+          <CreatePlanDialog />
+        </Card>
+      )}
     </div>
   );
 }
