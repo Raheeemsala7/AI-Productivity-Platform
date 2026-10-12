@@ -1478,5 +1478,45 @@
     "role": "الدور",
     "roleUser": "مستخدم",
     "roleAdmin": "مسؤول"
+  },
+  "AdminCoupons": {
+    "title": "كوبونات الخصم",
+    "description": "إدارة كوبونات الخصم، وتتبع استخدامها، وإنشاء أكواد ترويجية جديدة.",
+    "createCoupon": "إضافة كوبون",
+    "createCouponTitle": "إنشاء كوبون جديد",
+    "createCouponSubtitle": "حدد كود الخصم والنسبة المئوية والحد الأقصى للاستخدام.",
+    "createBtn": "إنشاء الكوبون",
+    "createSuccess": "تم إنشاء الكوبون بنجاح",
+    "editCouponTitle": "تعديل الكوبون",
+    "editCouponSubtitle": "تحديث بيانات الكوبون ونسبة الخصم وحدود الاستخدام.",
+    "updateSuccess": "تم تحديث الكوبون بنجاح",
+    "edit": "تعديل",
+    "delete": "حذف",
+    "confirmDelete": "تأكيد الحذف",
+    "cancel": "إلغاء",
+    "deleteDialogTitle": "حذف الكوبون",
+    "deleteDialogDesc": "هل أنت متأكد من رغبتك في حذف هذا الكوبون؟ لا يمكن التراجع عن هذا الإجراء.",
+    "deleteSuccess": "تم حذف الكوبون بنجاح",
+    "saveChanges": "حفظ التعديلات",
+    "saving": "جاري الحفظ...",
+    "searchPlaceholder": "البحث عن الكوبونات بالكود أو الاسم...",
+    "noCouponsFound": "لم يتم العثور على أي كوبونات",
+    "name": "اسم الكوبون",
+    "code": "كود الكوبون",
+    "discount": "نسبة الخصم (%)",
+    "limit": "حد الاستخدام",
+    "table": {
+      "code": "الكوبون",
+      "discount": "الخصم",
+      "usage": "الاستخدام",
+      "creator": "أنشئ بواسطة",
+      "created": "تاريخ الإنشاء",
+      "actions": "الإجراءات"
+    },
+    "pagination": {
+      "previous": "السابق",
+      "next": "التالي",
+      "showing": "عرض {from}-{to} من أصل {total} كوبون"
+    }
   }
 }

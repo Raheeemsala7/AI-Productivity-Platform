@@ -273,7 +273,7 @@ export function CreateUserDialog({ plans = [] }: CreateUserDialogProps) {
                     <option value="">{t("noSubscription") || "No Plan"}</option>
                     {plans.map((plan) => (
                       <option key={plan.id} value={plan.id}>
-                        {plan.name} {plan.price ? `(${plan.price}$)` : ""}
+                        {plan.name}
                       </option>
                     ))}
                   </select>
