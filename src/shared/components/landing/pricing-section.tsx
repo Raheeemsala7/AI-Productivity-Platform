@@ -8,9 +8,16 @@ const PLAN_KEYS = ["starter", "pro", "business"] as const;
 
 interface PricingSectionProps {
   plans?: Plan[];
+  variant?: "landing" | "dashboard";
+  className?: string;
 }
 
-export async function PricingSection({ plans = [] }: PricingSectionProps) {
+export async function PricingSection({
+  plans = [],
+  variant = "landing",
+  className,
+}: PricingSectionProps) {
+  const isDashboard = variant === "dashboard";
   const t = await getTranslations("Landing.pricing");
 
   const displayPlans =
@@ -46,29 +53,55 @@ export async function PricingSection({ plans = [] }: PricingSectionProps) {
   return (
     <section
       id="pricing"
-      className="bg-coral-soft px-5 py-24 md:px-10 md:py-32"
+      className={cn(
+        isDashboard
+          ? "w-full px-4 py-8 md:px-8 md:py-12 bg-background text-foreground"
+          : "bg-coral-soft px-5 py-24 md:px-10 md:py-32",
+        className
+      )}
     >
-      <div className="mx-auto max-w-[1400px]">
+      <div className={cn("mx-auto", isDashboard ? "max-w-7xl" : "max-w-[1400px]")}>
         {/* Header */}
-        <div
-          className="flex flex-col justify-between gap-6 md:flex-row md:items-end"
-          data-reveal
-        >
-          <div>
-            <p className="eyebrow">{t("eyebrow")}</p>
-            <h2 className="section-title">
-              {t("title")}
-              <br />
-              <em>{t("titleAccent")}</em>
-            </h2>
+        {isDashboard ? (
+          <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end border-b border-border/60 pb-8">
+            <div>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-brand/10 text-brand mb-3 border border-brand/20">
+                <Sparkles className="size-3.5" />
+                <span>{t("eyebrow")}</span>
+              </div>
+              <h1 className="font-display text-3xl md:text-5xl font-bold tracking-tight text-foreground">
+                {t("title")}{" "}
+                <em className="text-brand font-serif font-normal not-italic">{t("titleAccent")}</em>
+              </h1>
+              <p className="mt-2.5 max-w-2xl text-sm md:text-base text-muted-foreground leading-relaxed">
+                {t("subtitle")}
+              </p>
+            </div>
           </div>
-          <p className="max-w-sm text-sm text-muted-foreground">
-            {t("subtitle")}
-          </p>
-        </div>
+        ) : (
+          <div
+            className="flex flex-col justify-between gap-6 md:flex-row md:items-end"
+            data-reveal
+          >
+            <div>
+              <p className="eyebrow">{t("eyebrow")}</p>
+              <h2 className="section-title">
+                {t("title")}
+                <br />
+                <em>{t("titleAccent")}</em>
+              </h2>
+            </div>
+            <p className="max-w-sm text-sm text-muted-foreground">
+              {t("subtitle")}
+            </p>
+          </div>
+        )}
 
         {/* Pricing Cards */}
-        <div className="mt-16 space-y-12" data-reveal>
+        <div
+          className={cn(isDashboard ? "mt-10 space-y-12" : "mt-16 space-y-12")}
+          {...(!isDashboard ? { "data-reveal": true } : {})}
+        >
           <div
             className={cn(
               "grid gap-8 items-stretch",
@@ -86,7 +119,7 @@ export async function PricingSection({ plans = [] }: PricingSectionProps) {
                   "relative rounded-3xl p-8 md:p-10 flex flex-col justify-between transition-all duration-300",
                   plan.featured
                     ? "bg-ink text-paper shadow-2xl lg:-translate-y-3 hover:-translate-y-4 border-2 border-brand ring-4 ring-brand/10"
-                    : "bg-background text-foreground border border-border shadow-sm hover:shadow-xl hover:border-brand/40 hover:-translate-y-1"
+                    : "bg-card text-card-foreground border border-border shadow-sm hover:shadow-xl hover:border-brand/40 hover:-translate-y-1"
                 )}
               >
                 {/* Featured Badge */}
