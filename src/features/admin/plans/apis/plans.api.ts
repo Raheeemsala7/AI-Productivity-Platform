@@ -28,6 +28,8 @@ export async function getAllPlansApi({
     const res = await fetch(`${process.env.API_URL}/plans?lang=${locale ?? "ar"}`, {
       method: "GET",
       headers,
+      next: { revalidate: 120, tags: ["plans"] },
+      signal: AbortSignal.timeout(8000),
     });
 
     const data: ApiResponse<{ data: Plan[] }>= await res.json();
