@@ -49,10 +49,10 @@ export async function UsersList({ users, pagination, plans = [] }: UsersListProp
       </div>
 
       <Card>
-        <CardHeader className="py-4">
+        <CardHeader className="py-2">
           <UsersSearch />
         </CardHeader>
-        <CardContent className="p-0">
+        <CardContent className="px-4">
           <Table>
             <TableHeader>
               <TableRow>
