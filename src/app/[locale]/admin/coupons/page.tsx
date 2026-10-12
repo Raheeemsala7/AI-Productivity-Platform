@@ -1,4 +1,10 @@
-import MockPage from "@/shared/components/dashboard/mock-page"
+import { CouponsList } from "@/features/admin/coupons/components/coupons-list"
 
 export const metadata = { title: "Admin - Coupons" }
-export default function Page() { return <MockPage title="Coupons Management" /> }
+export default function Page() { 
+
+
+    return (
+        <CouponsList />
+    )
+}
