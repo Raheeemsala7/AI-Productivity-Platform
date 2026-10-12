@@ -1568,5 +1568,59 @@
     "redirecting": "Redirecting to payment gateway...",
     "invalidCoupon": "Invalid or expired coupon",
     "securePayment": "Encrypted & secure checkout via Stripe"
+  },
+  "Sidebar": {
+    "admin": {
+      "brand": "ORICO Admin",
+      "tagline": "Management"
+    },
+    "user": {
+      "brand": "ORICO User",
+      "tagline": "Workspace"
+    },
+    "superAdmin": {
+      "brand": "ORICO Super",
+      "tagline": "Root Access"
+    },
+    "groups": {
+      "overview": "Overview",
+      "management": "Management",
+      "resources": "Resources",
+      "communication": "Communication",
+      "system": "System",
+      "usageAndBilling": "Usage & Billing",
+      "account": "Account",
+      "administration": "Administration"
+    },
+    "items": {
+      "dashboard": "Dashboard",
+      "superDashboard": "Super Dashboard",
+      "statistics": "Statistics",
+      "users": "Users",
+      "subscriptions": "Subscriptions",
+      "plans": "Plans",
+      "coupons": "Coupons",
+      "templates": "Templates",
+      "tools": "Tools",
+      "providers": "Providers",
+      "chat": "Chat",
+      "settings": "Settings",
+      "mySubscription": "My Subscription",
+      "myUsage": "My Usage",
+      "profile": "Profile",
+      "admins": "Admins",
+      "permissions": "Permissions",
+      "logout": "Logout"
+    },
+    "logoutDialog": {
+      "title": "Are you sure you want to log out?",
+      "description": "You will be signed out of your account.",
+      "cancel": "Cancel",
+      "confirm": "Logout"
+    },
+    "profileSheet": {
+      "title": "Profile",
+      "description": "User profile details."
+    }
   }
 }

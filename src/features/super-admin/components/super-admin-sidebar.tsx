@@ -21,7 +21,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/shared/components/ui/dialog"
-import { useLocale } from "next-intl"
+import { useTranslations, useLocale } from "next-intl"
 import {
   ShieldUser,
   KeyRound,
@@ -38,6 +38,7 @@ export function SuperAdminSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname()
+  const t = useTranslations("Sidebar")
   const router = useRouter()
   const { data: session } = useSession()
   const [logoutOpen, setLogoutOpen] = useState(false)
@@ -47,37 +48,38 @@ export function SuperAdminSidebar({
   
   const data = [
     {
-      title: "Overview",
+      title: t("groups.overview"),
       items: [
         {
-          title: "Super Dashboard",
+          title: t("items.superDashboard"),
           url: "/super-admin",
           icon: LayoutDashboard,
         },
       ],
     },
     {
-      title: "Administration",
+      title: t("groups.administration"),
       items: [
         {
-          title: "Admins",
+          title: t("items.admins"),
           url: "/super-admin/admins",
           icon: ShieldUser,
         },
         {
-          title: "Permissions",
+          title: t("items.permissions"),
           url: "/super-admin/permissions",
           icon: KeyRound,
         },
       ],
     },
     {
-      title: "System",
+      title: t("groups.system"),
       items: [
         {
-          title: "Logout",
+          title: t("items.logout"),
           url: "#",
           icon: LogOut,
+          isLogout: true,
         }
       ],
     },
@@ -92,9 +94,9 @@ export function SuperAdminSidebar({
                SA
             </div>
             <div className="flex flex-col">
-              <p className="font-bold">ORICO Super</p>
+              <p className="font-bold">{t("superAdmin.brand")}</p>
               <span className="text-sm text-muted-foreground">
-                Root Access
+                {t("superAdmin.tagline")}
               </span>
             </div>
           </div>
@@ -113,11 +115,11 @@ export function SuperAdminSidebar({
                     pathname === item.url ||
                     (item.url !== "/super-admin" && pathname?.startsWith(`${item.url}/`))
 
-                  if (item.title === "Logout") {
+                  if ("isLogout" in item && item.isLogout) {
                     return (
                       <SidebarMenuItem key={item.title}>
                         <SidebarMenuButton
-                          className="h-10 gap-3 p-3 text-base"
+                          className="h-10 gap-3 p-3 text-base cursor-pointer"
                           onClick={() => setLogoutOpen(true)}
                         >
                           {item.icon && <item.icon className="size-4.5" />}
@@ -130,7 +132,6 @@ export function SuperAdminSidebar({
                   return (
                     <SidebarMenuItem key={item.title}>
                       <SidebarMenuButton
-                        
                         isActive={isActive}
                         className="h-10 gap-3 p-3 text-base"
                       >
@@ -150,7 +151,7 @@ export function SuperAdminSidebar({
 
       <SidebarFooter className="bg-background">
         <Sheet>
-          <SheetTrigger >
+          <SheetTrigger>
             <div className="flex cursor-pointer items-center gap-2 rounded-lg bg-card p-2">
               <SpaceAvatar
                 name={session?.user?.name || "Super Admin"}
@@ -166,8 +167,8 @@ export function SuperAdminSidebar({
           </SheetTrigger>
           <SheetContent>
              <div className="p-4">
-                 <h2 className="text-lg font-bold">Profile</h2>
-                 <p className="text-muted-foreground">This is a mocked profile panel.</p>
+                 <h2 className="text-lg font-bold">{t("profileSheet.title")}</h2>
+                 <p className="text-muted-foreground">{t("profileSheet.description")}</p>
              </div>
           </SheetContent>
         </Sheet>
@@ -178,9 +179,9 @@ export function SuperAdminSidebar({
       <Dialog open={logoutOpen} onOpenChange={setLogoutOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Are you sure you want to log out?</DialogTitle>
+            <DialogTitle>{t("logoutDialog.title")}</DialogTitle>
             <DialogDescription>
-              You will be signed out of your account.
+              {t("logoutDialog.description")}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -189,7 +190,7 @@ export function SuperAdminSidebar({
               variant="outline"
               className="flex-1"
             >
-              Cancel
+              {t("logoutDialog.cancel")}
             </Button>
             <Button
               className="flex-1"
@@ -199,7 +200,7 @@ export function SuperAdminSidebar({
                 router.push("/auth/login")
               }}
             >
-              Logout
+              {t("logoutDialog.confirm")}
             </Button>
           </DialogFooter>
         </DialogContent>

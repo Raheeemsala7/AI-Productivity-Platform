@@ -53,7 +53,7 @@ import { signOut, useSession } from "next-auth/react"
 export function AdminSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
-  const t = useTranslations("Dashboard")
+  const t = useTranslations("Sidebar")
   const pathname = usePathname()
   const router = useRouter()
   const { data: session } = useSession()
@@ -64,87 +64,88 @@ export function AdminSidebar({
   
   const data = [
     {
-      title: "Overview",
+      title: t("groups.overview"),
       items: [
         {
-          title: "Dashboard",
+          title: t("items.dashboard"),
           url: "/admin",
           icon: LayoutDashboard,
         },
         {
-          title: "Statistics",
+          title: t("items.statistics"),
           url: "/admin/statistics",
           icon: ChartNoAxesCombined,
         },
       ],
     },
     {
-      title: "Management",
+      title: t("groups.management"),
       items: [
         {
-          title: "Users",
+          title: t("items.users"),
           url: "/admin/users",
           icon: Users,
         },
         {
-          title: "Subscriptions",
+          title: t("items.subscriptions"),
           url: "/admin/subscriptions",
           icon: BadgeCheck,
         },
         {
-          title: "Plans",
+          title: t("items.plans"),
           url: "/admin/plans",
           icon: CreditCard,
         },
         {
-          title: "Coupons",
+          title: t("items.coupons"),
           url: "/admin/coupons",
           icon: Receipt,
         },
       ],
     },
     {
-      title: "Resources",
+      title: t("groups.resources"),
       items: [
         {
-          title: "Templates",
+          title: t("items.templates"),
           url: "/admin/templates",
           icon: FolderKanban,
         },
         {
-          title: "Tools",
+          title: t("items.tools"),
           url: "/admin/tools",
           icon: Bug,
         },
         {
-          title: "Providers",
+          title: t("items.providers"),
           url: "/admin/providers",
           icon: Building,
         },
       ],
     },
     {
-      title: "Communication",
+      title: t("groups.communication"),
       items: [
         {
-          title: "Chat",
+          title: t("items.chat"),
           url: "/admin/chat",
           icon: MessageSquare,
         },
       ],
     },
     {
-      title: "System",
+      title: t("groups.system"),
       items: [
         {
-          title: "Settings",
+          title: t("items.settings"),
           url: "/admin/settings",
           icon: Settings,
         },
         {
-          title: "Logout",
+          title: t("items.logout"),
           url: "#",
           icon: LogOut,
+          isLogout: true,
         }
       ],
     },
@@ -159,9 +160,9 @@ export function AdminSidebar({
                OA
             </div>
             <div className="flex flex-col">
-              <p className="font-bold">ORICO Admin</p>
+              <p className="font-bold">{t("admin.brand")}</p>
               <span className="text-sm text-muted-foreground">
-                Management
+                {t("admin.tagline")}
               </span>
             </div>
           </div>
@@ -180,11 +181,11 @@ export function AdminSidebar({
                     pathname === item.url ||
                     (item.url !== "/admin" && pathname?.startsWith(`${item.url}/`))
 
-                  if (item.title === "Logout") {
+                  if ("isLogout" in item && item.isLogout) {
                     return (
                       <SidebarMenuItem key={item.title}>
                         <SidebarMenuButton
-                          className="h-10 gap-3 p-3 text-base"
+                          className="h-10 gap-3 p-3 text-base cursor-pointer"
                           onClick={() => setLogoutOpen(true)}
                         >
                           {item.icon && <item.icon className="size-4.5" />}
@@ -197,7 +198,6 @@ export function AdminSidebar({
                   return (
                     <SidebarMenuItem key={item.title}>
                       <SidebarMenuButton
-                        
                         isActive={isActive}
                         className="h-10 gap-3 p-3 text-base"
                       >
@@ -217,7 +217,7 @@ export function AdminSidebar({
 
       <SidebarFooter className="bg-background">
         <Sheet>
-          <SheetTrigger >
+          <SheetTrigger>
             <div className="flex cursor-pointer items-center gap-2 rounded-lg bg-card p-2">
               <SpaceAvatar
                 name={session?.user?.name || "Admin"}
@@ -233,8 +233,8 @@ export function AdminSidebar({
           </SheetTrigger>
           <SheetContent>
              <div className="p-4">
-                 <h2 className="text-lg font-bold">Profile</h2>
-                 <p className="text-muted-foreground">This is a mocked profile panel.</p>
+                 <h2 className="text-lg font-bold">{t("profileSheet.title")}</h2>
+                 <p className="text-muted-foreground">{t("profileSheet.description")}</p>
              </div>
           </SheetContent>
         </Sheet>
@@ -245,9 +245,9 @@ export function AdminSidebar({
       <Dialog open={logoutOpen} onOpenChange={setLogoutOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Are you sure you want to log out?</DialogTitle>
+            <DialogTitle>{t("logoutDialog.title")}</DialogTitle>
             <DialogDescription>
-              You will be signed out of your account.
+              {t("logoutDialog.description")}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -256,7 +256,7 @@ export function AdminSidebar({
               variant="outline"
               className="flex-1"
             >
-              Cancel
+              {t("logoutDialog.cancel")}
             </Button>
             <Button
               className="flex-1"
@@ -266,7 +266,7 @@ export function AdminSidebar({
                 router.push("/auth/login")
               }}
             >
-              Logout
+              {t("logoutDialog.confirm")}
             </Button>
           </DialogFooter>
         </DialogContent>

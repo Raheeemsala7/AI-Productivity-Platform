@@ -5,7 +5,7 @@ import { Menu, X, ChevronDown, LayoutDashboard, LogOut } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { Brand, ArrowLink } from "./brand";
 import { ThemeToggle } from "./theme-toggle";
-import { LocaleSwitcher } from "./locale-switcher";
+import { LanguageToggle } from "./language-toggle";
 import { useTranslations } from "next-intl";
 import { useSession, signOut } from "next-auth/react";
 import { cn } from "@/shared/lib/utils";
@@ -86,7 +86,7 @@ export function SiteHeader() {
 
         {/* Desktop actions */}
         <div className="hidden items-center gap-2 md:flex">
-          <LocaleSwitcher className="text-sm" />
+          <LanguageToggle />
           <ThemeToggle />
 
           {isAuthenticated ? (
@@ -181,6 +181,14 @@ export function SiteHeader() {
                 {t(key as "product" | "solutions" | "resources" | "pricing")}
               </a>
             ))}
+            <div className="flex items-center justify-between py-4 border-b border-border">
+              <span className="text-sm text-muted-foreground">{t("language")}</span>
+              <LanguageToggle />
+            </div>
+            <div className="flex items-center justify-between py-4 border-b border-border">
+              <span className="text-sm text-muted-foreground">{t("theme")}</span>
+              <ThemeToggle />
+            </div>
             <Link
               href="/auth/register"
               className="mt-4 inline-flex items-center justify-center rounded-lg bg-brand py-2.5 text-sm font-medium text-brand-foreground"

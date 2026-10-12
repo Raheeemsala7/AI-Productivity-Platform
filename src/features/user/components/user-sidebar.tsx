@@ -42,7 +42,7 @@ export function UserSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname()
-  const t = useTranslations("Dashboard")
+  const t = useTranslations("Sidebar")
   const router = useRouter()
   const { data: session } = useSession()
   const [logoutOpen, setLogoutOpen] = useState(false)
@@ -52,62 +52,63 @@ export function UserSidebar({
   
   const data = [
     {
-      title: "Overview",
+      title: t("groups.overview"),
       items: [
         {
-          title: "Dashboard",
+          title: t("items.dashboard"),
           url: "/dashboard",
           icon: LayoutDashboard,
         },
       ],
     },
     {
-      title: "Usage & Billing",
+      title: t("groups.usageAndBilling"),
       items: [
         {
-          title: "My Subscription",
+          title: t("items.mySubscription"),
           url: "/dashboard/subscription",
           icon: CreditCard,
         },
         {
-          title: "My Usage",
+          title: t("items.myUsage"),
           url: "/dashboard/usage",
           icon: BarChart3,
         },
       ],
     },
     {
-      title: "Resources",
+      title: t("groups.resources"),
       items: [
         {
-          title: "Templates",
+          title: t("items.templates"),
           url: "/dashboard/templates",
           icon: FolderKanban,
         },
         {
-          title: "Chat",
+          title: t("items.chat"),
           url: "/dashboard/chat",
           icon: MessageSquare,
         },
       ],
     },
     {
-      title: "Account",
+      title: t("groups.account"),
       items: [
         {
-          title: "Profile",
+          title: t("items.profile"),
           url: "/dashboard/profile",
           icon: User,
         },
         {
-          title: "Settings",
+          title: t("items.settings"),
           url: "/dashboard/settings",
           icon: Settings,
         },
         {
-          title: "Logout",
+          title: t("items.logout"),
           url: "#",
           icon: LogOut,
+          isLogout: true,
         }
       ],
     },
@@ -122,9 +123,9 @@ export function UserSidebar({
                OU
             </div>
             <div className="flex flex-col">
-              <p className="font-bold">ORICO User</p>
+              <p className="font-bold">{t("user.brand")}</p>
               <span className="text-sm text-muted-foreground">
-                Workspace
+                {t("user.tagline")}
               </span>
             </div>
           </div>
@@ -143,7 +144,7 @@ export function UserSidebar({
                     pathname === item.url ||
                     (item.url !== "/dashboard" && pathname?.startsWith(`${item.url}/`))
 
-                  if (item.title === "Logout") {
+                  if ("isLogout" in item && item.isLogout) {
                     return (
                       <SidebarMenuItem key={item.title}>
                         <SidebarMenuButton
@@ -160,7 +161,6 @@ export function UserSidebar({
                   return (
                     <SidebarMenuItem key={item.title}>
                       <SidebarMenuButton
-                        
                         isActive={isActive}
                         className="h-10 gap-3 p-3 text-base"
                       >
@@ -180,7 +180,7 @@ export function UserSidebar({
 
       <SidebarFooter className="bg-background">
         <Sheet>
-          <SheetTrigger >
+          <SheetTrigger>
             <div className="flex cursor-pointer items-center gap-2 rounded-lg bg-card p-2">
               <SpaceAvatar
                 name={session?.user?.name || "User"}
@@ -196,8 +196,8 @@ export function UserSidebar({
           </SheetTrigger>
           <SheetContent>
              <div className="p-4">
-                 <h2 className="text-lg font-bold">Profile</h2>
-                 <p className="text-muted-foreground">This is a mocked profile panel.</p>
+                 <h2 className="text-lg font-bold">{t("profileSheet.title")}</h2>
+                 <p className="text-muted-foreground">{t("profileSheet.description")}</p>
              </div>
           </SheetContent>
         </Sheet>
@@ -208,9 +208,9 @@ export function UserSidebar({
       <Dialog open={logoutOpen} onOpenChange={setLogoutOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Are you sure you want to log out?</DialogTitle>
+            <DialogTitle>{t("logoutDialog.title")}</DialogTitle>
             <DialogDescription>
-              You will be signed out of your account.
+              {t("logoutDialog.description")}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -219,7 +219,7 @@ export function UserSidebar({
               variant="outline"
               className="flex-1"
             >
-              Cancel
+              {t("logoutDialog.cancel")}
             </Button>
             <Button
               className="flex-1"
@@ -229,7 +229,7 @@ export function UserSidebar({
                 router.push("/auth/login")
               }}
             >
-              Logout
+              {t("logoutDialog.confirm")}
             </Button>
           </DialogFooter>
         </DialogContent>

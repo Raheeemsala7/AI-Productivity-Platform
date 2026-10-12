@@ -1597,5 +1597,59 @@
     "redirecting": "جاري التحويل إلى بوابة الدفع...",
     "invalidCoupon": "كود الخصم غير صالح أو منتهي",
     "securePayment": "دفع آمن ومشفّر 256-bit عبر بوابة Stripe"
+  },
+  "Sidebar": {
+    "admin": {
+      "brand": "أوريكو للأدمن",
+      "tagline": "لوحة الإدارة"
+    },
+    "user": {
+      "brand": "أوريكو",
+      "tagline": "مساحة العمل"
+    },
+    "superAdmin": {
+      "brand": "أوريكو سوبر",
+      "tagline": "صلاحيات الجذر"
+    },
+    "groups": {
+      "overview": "نظرة عامة",
+      "management": "الإدارة",
+      "resources": "الموارد",
+      "communication": "التواصل",
+      "system": "النظام",
+      "usageAndBilling": "الاستهلاك والفوترة",
+      "account": "الحساب",
+      "administration": "الإدارة العليا"
+    },
+    "items": {
+      "dashboard": "لوحة التحكم",
+      "superDashboard": "لوحة تحكم السوبر",
+      "statistics": "الإحصائيات",
+      "users": "المستخدمين",
+      "subscriptions": "الاشتراكات",
+      "plans": "الخطط والأسعار",
+      "coupons": "كوبونات الخصم",
+      "templates": "القوالب",
+      "tools": "الأدوات",
+      "providers": "مزودو الخدمة",
+      "chat": "المحادثة",
+      "settings": "الإعدادات",
+      "mySubscription": "اشتراكي",
+      "myUsage": "استهلاكي",
+      "profile": "الملف الشخصي",
+      "admins": "المديرون",
+      "permissions": "الصلاحيات",
+      "logout": "تسجيل الخروج"
+    },
+    "logoutDialog": {
+      "title": "هل أنت متأكد من تسجيل الخروج؟",
+      "description": "سيتم تسجيل خروجك من حسابك الحالي.",
+      "cancel": "إلغاء",
+      "confirm": "تسجيل الخروج"
+    },
+    "profileSheet": {
+      "title": "الملف الشخصي",
+      "description": "معلومات وبيانات الملف الشخصي."
+    }
   }
 }
