@@ -23,15 +23,32 @@ declare type ActionResult<T> =
     | { success: true; data: T }
     | { success: false; message: string };
 
-    
+
+// declare interface IPagination<T> {
+//     data: T[];
+//     metadata: {
+//         current_page: number
+//         last_page: number
+//         next_page: null
+//         per_page: number
+//         prev_page: null
+//         total: number
+//     };
+// }
+
+
+declare interface IMetadata {
+    current_page: number
+    last_page: number
+    next_page: null
+    per_page: number
+    prev_page: null
+    total: number
+};
+
 declare interface IPagination<T> {
     data: T[];
-    metadata: {
-        page: number;
-        limit: number;
-        total: number;
-        totalPages: number;
-    };
+    metadata: IMetadata;
 }
 
 export interface ITimeStamp {
@@ -40,7 +57,7 @@ export interface ITimeStamp {
 }
 
 export interface IResponseMessage {
-    message:string
+    message: string
 }
 
 

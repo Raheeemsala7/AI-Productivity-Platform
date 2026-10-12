@@ -1,0 +1,13 @@
+
+
+export interface UserAdmin {
+    id: number
+    name: string
+    email: string
+    credits: number | null
+    status: number
+    avatar: string | null
+    avatar_color: string
+    slogan: string | null
+    active_subscription: string | null
+}

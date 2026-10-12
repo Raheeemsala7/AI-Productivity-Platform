@@ -1,5 +1,4 @@
-"use client"
-import React from 'react';
+
 import {
   Table,
   TableBody,
@@ -12,45 +11,19 @@ import { Badge } from "@/shared/components/ui/badge"
 import { Button } from "@/shared/components/ui/button"
 import { Search, SlidersHorizontal, MoreHorizontal, ShieldUser, Plus } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import { UserAdmin } from '../types/user';
+import { IMetadata } from '@/shared/types/api';
 
-const usersData = [
-    {
-        id: "USR-001",
-        name: "Alice Smith",
-        email: "alice@example.com",
-        status: "active",
-        subscription: "Professional",
-        lastActive: "2 hours ago"
-    },
-    {
-        id: "USR-002",
-        name: "Bob Jones",
-        email: "bob@example.com",
-        status: "inactive",
-        subscription: "Free",
-        lastActive: "2 days ago"
-    },
-    {
-        id: "USR-003",
-        name: "Charlie Brown",
-        email: "charlie@example.com",
-        status: "active",
-        subscription: "Enterprise",
-        lastActive: "5 mins ago"
-    },
-    {
-        id: "USR-004",
-        name: "Diana Prince",
-        email: "diana@example.com",
-        status: "active",
-        subscription: "Professional",
-        lastActive: "1 day ago"
-    }
-];
+interface UsersListProps {
+  users: UserAdmin[]
+  pagination: IMetadata
+}
+export async function UsersList({ users, pagination }: UsersListProps) {
 
-export function UsersList() {
+
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 p-4 pb-20">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
             <h2 className="text-3xl font-bold tracking-tight">Users</h2>
@@ -83,7 +56,7 @@ export function UsersList() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {usersData.map((user) => (
+              {users.map((user) => (
                 <TableRow key={user.id}>
                   <TableCell>
                       <div className="flex items-center gap-3">
