@@ -1549,5 +1549,24 @@
       "one_time": "One-time",
       "lifetime": "Lifetime"
     }
+  },
+  "Checkout": {
+    "title": "Confirm Subscription",
+    "subtitle": "Review plan details and enter a coupon code if you have one.",
+    "couponLabel": "Coupon Code",
+    "couponPlaceholder": "e.g. SAVED20",
+    "enterCoupon": "Please enter a coupon code",
+    "apply": "Apply",
+    "couponApplied": "Coupon {code} applied (-{discount}%)",
+    "removeCoupon": "Remove",
+    "subtotal": "Plan Price",
+    "discount": "Discount",
+    "total": "Total Due",
+    "cancel": "Cancel",
+    "proceed": "Proceed to Checkout",
+    "processing": "Redirecting...",
+    "redirecting": "Redirecting to payment gateway...",
+    "invalidCoupon": "Invalid or expired coupon",
+    "securePayment": "Encrypted & secure checkout via Stripe"
   }
 }

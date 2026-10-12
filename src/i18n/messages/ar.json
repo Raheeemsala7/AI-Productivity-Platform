@@ -1578,5 +1578,24 @@
       "one_time": "دفعة واحدة",
       "lifetime": "مدى الحياة"
     }
+  },
+  "Checkout": {
+    "title": "تأكيد الاشتراك",
+    "subtitle": "راجع تفاصيل الباقة ويمكنك استخدام كود الخصم قبل المتابعة.",
+    "couponLabel": "كود الخصم الترويجي",
+    "couponPlaceholder": "مثال: SAVED20",
+    "enterCoupon": "يرجى إدخال كود الخصم",
+    "apply": "تطبيق",
+    "couponApplied": "تم تطبيق الكوبون {code} (خصم {discount}%)",
+    "removeCoupon": "إزالة",
+    "subtotal": "سعر الباقة",
+    "discount": "الخصم",
+    "total": "المبلغ الإجمالي",
+    "cancel": "إلغاء",
+    "proceed": "إتمام العملية والدفع",
+    "processing": "جاري التحويل...",
+    "redirecting": "جاري التحويل إلى بوابة الدفع...",
+    "invalidCoupon": "كود الخصم غير صالح أو منتهي",
+    "securePayment": "دفع آمن ومشفّر 256-bit عبر بوابة Stripe"
   }
 }

@@ -1,11 +1,17 @@
 "use client";
 
-import { Link } from "@/i18n/navigation";
+import { useState } from "react";
+import { useSession } from "next-auth/react";
+import { Link, useRouter } from "@/i18n/navigation";
 import { ArrowLink } from "@/shared/components/brand";
 import { useReveal } from "@/shared/hooks/use-reveal";
 import { useTranslations } from "next-intl";
 import { cn } from "@/shared/lib/utils";
 import { Plan } from "@/features/admin/plans/types/plan";
+import {
+  CheckoutDialog,
+  CheckoutPlanItem,
+} from "@/features/checkout/components/checkout-dialog";
 import {
   ArrowRight,
   ChevronRight,
@@ -545,6 +551,20 @@ const PLAN_KEYS = ["starter", "pro", "business"] as const;
 
 function PricingCards({ plans = [] }: { plans?: Plan[] }) {
   const t = useTranslations("Landing.pricing");
+  const { data: session, status } = useSession();
+  const router = useRouter();
+  const [selectedPlan, setSelectedPlan] = useState<CheckoutPlanItem | null>(null);
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+
+  const handlePlanSelect = (item: CheckoutPlanItem) => {
+    if (status !== "authenticated" || !session) {
+      router.push("/auth/register");
+      return;
+    }
+
+    setSelectedPlan(item);
+    setIsCheckoutOpen(true);
+  };
 
   const displayPlans =
     plans && plans.length > 0
@@ -706,10 +726,21 @@ function PricingCards({ plans = [] }: { plans?: Plan[] }) {
 
             {/* CTA Button */}
             <div className="mt-10 pt-4">
-              <Link
-                href="/auth/register"
+              <button
+                type="button"
+                onClick={() =>
+                  handlePlanSelect({
+                    id: plan.key,
+                    name: plan.name,
+                    price: plan.price,
+                    frequency: plan.frequency,
+                    credits: plan.credits,
+                    copy: plan.copy,
+                    features: plan.features,
+                  })
+                }
                 className={cn(
-                  "w-full py-3.5 px-6 rounded-2xl font-semibold text-sm flex items-center justify-center gap-2 group transition-all duration-200 shadow-sm",
+                  "w-full py-3.5 px-6 rounded-2xl font-semibold text-sm flex items-center justify-center gap-2 group transition-all duration-200 shadow-sm cursor-pointer",
                   plan.featured
                     ? "bg-brand text-brand-foreground hover:bg-brand/90 hover:shadow-brand/25 hover:shadow-lg"
                     : "bg-card border-2 border-border-strong hover:border-brand hover:bg-brand/5 hover:text-brand"
@@ -717,7 +748,7 @@ function PricingCards({ plans = [] }: { plans?: Plan[] }) {
               >
                 <span>{t("choosePlan", { plan: plan.name.split(" /")[0] })}</span>
                 <ArrowRight className="size-4 transition-transform group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1" />
-              </Link>
+              </button>
             </div>
           </article>
         ))}
@@ -738,6 +769,13 @@ function PricingCards({ plans = [] }: { plans?: Plan[] }) {
           <span>{t("reassurance3") || "Commercial license included"}</span>
         </div>
       </div>
+
+      {/* Checkout Dialog */}
+      <CheckoutDialog
+        plan={selectedPlan}
+        open={isCheckoutOpen}
+        onOpenChange={setIsCheckoutOpen}
+      />
     </div>
   );
 }
