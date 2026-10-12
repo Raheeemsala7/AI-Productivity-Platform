@@ -21,7 +21,9 @@ export default async function Page({ searchParams }: PageProps) {
 
 
     const res = await getAllUsersApi({ search, page, per_page });
-    if (!res.success) {
+    if (!res.status
+        
+    ) {
         return <div>Something went wrong</div>
     }
     const usersData = res.payload.data

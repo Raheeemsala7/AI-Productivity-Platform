@@ -2,7 +2,7 @@ import { HEADERS } from "@/shared/constant/api.constant";
 import { RESPONSES } from "@/shared/constant/api.responses";
 import { getNextAuthToken } from "@/shared/lib/utils/auth.util";
 import { getErrorMessage } from "@/shared/lib/utils/get-error-message";
-import { ApiResponse, IApiResponse, IPagination } from "@/shared/types/api";
+import {  IApiResponse, IPagination } from "@/shared/types/api";
 import { UserAdmin } from "../types/user";
 
 
@@ -11,7 +11,7 @@ export async function getAllUsersApi({ search, page, per_page }: { search?: stri
     const token = await getNextAuthToken()
 
     if (!token?.token) {
-        return RESPONSES.unauthorizedS
+        return RESPONSES.unauthorized
     }
 
 
@@ -30,15 +30,16 @@ export async function getAllUsersApi({ search, page, per_page }: { search?: stri
         },
     })
 
-    const data: ApiResponse<IPagination<UserAdmin>> = await res.json()
+    const data: IApiResponse<IPagination<UserAdmin>> = await res.json()
     console.log(data);
 
-    if (!data.success) {
+    if (!data.status) {
         return {
-            success: false as const,
+            status: false as const,
             message: getErrorMessage(data.message, "Something went wrong")
         }
     }
     return data
 
 }
+

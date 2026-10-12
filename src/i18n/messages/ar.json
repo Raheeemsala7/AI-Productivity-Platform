@@ -1424,5 +1424,25 @@
   "tablet": "جهاز لوحي",
   "hindi": "الهندية",
   "urdu": "الأردية",
-  "chinese": "الصينية"
+  "chinese": "الصينية",
+  "AdminUsers": {
+    "title": "المستخدمين",
+    "description": "إدارة مستخدمي المنصة، وعرض اشتراكاتهم وحالاتهم.",
+    "filters": "تصفية",
+    "addUser": "إضافة مستخدم",
+    "searchPlaceholder": "البحث عن المستخدمين بالاسم أو البريد...",
+    "table": {
+      "user": "المستخدم",
+      "status": "الحالة",
+      "subscription": "الاشتراك",
+      "credits": "الرصيد",
+      "actions": "الإجراءات"
+    },
+    "status": {
+      "active": "نشط",
+      "inactive": "غير نشط"
+    },
+    "noSubscription": "بدون اشتراك",
+    "noUsersFound": "لم يتم العثور على مستخدمين"
+  }
 }

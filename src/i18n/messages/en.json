@@ -1395,5 +1395,25 @@
   "tablet": "Tablet",
   "hindi": "Hindi",
   "urdu": "Urdu",
-  "chinese": "Chinese"
+  "chinese": "Chinese",
+  "AdminUsers": {
+    "title": "Users",
+    "description": "Manage platform users, view their subscriptions and statuses.",
+    "filters": "Filters",
+    "addUser": "Add User",
+    "searchPlaceholder": "Search users by name or email...",
+    "table": {
+      "user": "User",
+      "status": "Status",
+      "subscription": "Subscription",
+      "credits": "Credits",
+      "actions": "Actions"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "noSubscription": "No subscription",
+    "noUsersFound": "No users found"
+  }
 }
