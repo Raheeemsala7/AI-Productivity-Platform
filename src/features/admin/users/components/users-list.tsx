@@ -15,18 +15,20 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/shared/components/ui/avat
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/shared/lib/utils";
-import { UserAdmin } from '../types/user';
+import { SubscriptionPlan, UserAdmin } from '../types/user';
 import { IMetadata } from '@/shared/types/api';
 import { UsersSearch } from "./users-search";
 import { UsersPagination } from "./users-pagination";
 import { DeleteUserButton } from "./delete-user-button";
+import { CreateUserDialog } from "./create-user-dialog";
 
 interface UsersListProps {
   users: UserAdmin[]
   pagination: IMetadata
+  plans?: SubscriptionPlan[]
 }
 
-export async function UsersList({ users, pagination }: UsersListProps) {
+export async function UsersList({ users, pagination, plans = [] }: UsersListProps) {
   const t = await getTranslations("AdminUsers");
 
   return (
@@ -42,9 +44,7 @@ export async function UsersList({ users, pagination }: UsersListProps) {
           <Button variant="outline">
             <SlidersHorizontal className="mr-2 h-4 w-4" /> {t("filters")}
           </Button>
-          <Button>
-            <Plus className="mr-2 h-4 w-4" /> {t("addUser")}
-          </Button>
+          <CreateUserDialog plans={plans} />
         </div>
       </div>
 

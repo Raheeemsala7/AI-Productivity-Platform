@@ -1439,6 +1439,15 @@
     "sloganPlaceholder": "Enter slogan or bio",
     "saveChanges": "Save Changes",
     "saving": "Saving...",
-    "updateSuccess": "User updated successfully"
+    "updateSuccess": "User updated successfully",
+    "createUserTitle": "Create New User",
+    "createUserSubtitle": "Fill in the details below to create a new user and assign a plan.",
+    "createUserSuccess": "User created successfully",
+    "createUserBtn": "Create User",
+    "password": "Password",
+    "passwordConfirmation": "Confirm Password",
+    "role": "Role",
+    "roleUser": "User",
+    "roleAdmin": "Admin"
   }
 }

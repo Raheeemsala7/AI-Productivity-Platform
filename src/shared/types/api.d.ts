@@ -88,3 +88,13 @@ declare type IErrorResponse = {
 }
 
 declare type ApiResponse<T> = ISuccessResponse<T> | IErrorResponse
+
+declare type ISuccessResponseData<T> = {
+    success: true
+    code: number;
+    message?: string
+    data: T
+}
+
+
+declare type ApiResponsePayload<T> = ISuccessResponseData<T> | IErrorResponse

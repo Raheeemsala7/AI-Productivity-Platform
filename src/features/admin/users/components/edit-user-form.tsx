@@ -8,32 +8,38 @@ import { Button, buttonVariants } from "@/shared/components/ui/button";
 import { Field, FieldError, FieldLabel } from "@/shared/components/ui/field";
 import { Input } from "@/shared/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/components/ui/card";
-import { User, Mail, Coins, ShieldCheck, FileText, ArrowLeft, Loader2 } from "lucide-react";
+import { User, Mail, Coins, ShieldCheck, FileText, ArrowLeft, Loader2, Crown, Shield } from "lucide-react";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/shared/lib/utils";
 import { updateUserSchema, UpdateUserFormType } from "../schema/user.schema";
 import { updateUserAction } from "../apis/users.action";
-import { UserAdmin } from "../types/user";
+import { SubscriptionPlan, UserAdmin } from "../types/user";
 
 interface EditUserFormProps {
   user: UserAdmin;
+  currentPlan?: string | null;
+  plans?: SubscriptionPlan[];
 }
 
-export function EditUserForm({ user }: EditUserFormProps) {
+export function EditUserForm({ user, currentPlan, plans = [] }: EditUserFormProps) {
   const router = useRouter();
   const t = useTranslations("AdminUsers");
   const [isPending, startTransition] = useTransition();
 
+  console.log(user);
+
+
   const form = useForm<UpdateUserFormType>({
     resolver: zodResolver(updateUserSchema),
     defaultValues: {
-      name: user.name || "",
-      email: user.email || "",
-      status: user.status ?? 1,
-      credits: user.credits ?? 0,
-      slogan: user.slogan || "",
+      name: user?.name || "",
+      email: user?.email || "",
+      status: user?.status ?? 1,
+      credits: user?.credits ?? 0,
+      role: user?.role || "user",
+      subscription: currentPlan,
     },
   });
 
@@ -42,7 +48,7 @@ export function EditUserForm({ user }: EditUserFormProps) {
       try {
         const res = await updateUserAction(user.id, values);
 
-        if (!res.status) {
+        if (!res.success) {
           toast.error(res.message || "Failed to update user");
           return;
         }
@@ -75,7 +81,7 @@ export function EditUserForm({ user }: EditUserFormProps) {
           </Link>
         </div>
         <CardDescription>
-          {t("editUserSubtitle") || "Update user account information and settings."}
+          {t("editUserSubtitle") || "Update user account information, settings, and subscription plan."}
         </CardDescription>
       </CardHeader>
 
@@ -162,6 +168,37 @@ export function EditUserForm({ user }: EditUserFormProps) {
               )}
             />
 
+            {/* Role Field */}
+            <Controller
+              name="role"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field>
+                  <FieldLabel className="flex items-center gap-1.5 font-medium">
+                    <Shield className="h-4 w-4 text-primary" />
+                    <span>{t("role") || "Role"}</span>
+                  </FieldLabel>
+                  <select
+                    value={field.value || "user"}
+                    onChange={(e) => field.onChange(e.target.value)}
+                    disabled={isPending}
+                    className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    <option value="user">{t("roleUser") || "User"}</option>
+                    <option value="admin">{t("roleAdmin") || "Admin"}</option>
+                  </select>
+                  {fieldState.invalid && (
+                    <FieldError
+                      className="text-red-500 text-xs"
+                      errors={[fieldState.error]}
+                    />
+                  )}
+                </Field>
+              )}
+            />
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {/* Credits Field */}
             <Controller
               name="credits"
@@ -188,33 +225,41 @@ export function EditUserForm({ user }: EditUserFormProps) {
                 </Field>
               )}
             />
+
+            {/* Subscription Plan Field */}
+            <Controller
+              name="subscription"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field>
+                  <FieldLabel className="flex items-center gap-1.5 font-medium">
+                    <Crown className="h-4 w-4 text-primary" />
+                    <span>{t("table.subscription") || "Plan"}</span>
+                  </FieldLabel>
+                  <select
+                    value={field.value ? String(field.value) : ""}
+                    onChange={(e) => field.onChange(e.target.value)}
+                    disabled={isPending}
+                    className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    <option value="">{t("noSubscription") || "No Plan"}</option>
+                    {plans.map((plan) => (
+                      <option key={plan.id} value={String(plan.id)}>
+                        {plan.name} {plan.price ? `(${plan.price}$)` : ""}
+                      </option>
+                    ))}
+                  </select>
+                  {fieldState.invalid && (
+                    <FieldError
+                      className="text-red-500 text-xs"
+                      errors={[fieldState.error]}
+                    />
+                  )}
+                </Field>
+              )}
+            />
           </div>
 
-          {/* Slogan Field */}
-          <Controller
-            name="slogan"
-            control={form.control}
-            render={({ field, fieldState }) => (
-              <Field>
-                <FieldLabel className="flex items-center gap-1.5 font-medium">
-                  <FileText className="h-4 w-4 text-primary" />
-                  <span>{t("slogan") || "Slogan / Bio"}</span>
-                </FieldLabel>
-                <Input
-                  placeholder={t("sloganPlaceholder") || "Enter user slogan or bio"}
-                  disabled={isPending}
-                  value={field.value || ""}
-                  onChange={(e) => field.onChange(e.target.value)}
-                />
-                {fieldState.invalid && (
-                  <FieldError
-                    className="text-red-500 text-xs"
-                    errors={[fieldState.error]}
-                  />
-                )}
-              </Field>
-            )}
-          />
 
           {/* Buttons */}
           <div className="flex items-center justify-end gap-3 pt-4 border-t">

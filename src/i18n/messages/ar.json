@@ -1468,6 +1468,15 @@
     "sloganPlaceholder": "أدخل نبذة مختصرة",
     "saveChanges": "حفظ التعديلات",
     "saving": "جاري الحفظ...",
-    "updateSuccess": "تم تحديث بيانات المستخدم بنجاح"
+    "updateSuccess": "تم تحديث بيانات المستخدم بنجاح",
+    "createUserTitle": "إضافة مستخدم جديد",
+    "createUserSubtitle": "املأ البيانات أدناه لإنشاء حساب مستخدم جديد وتحديد الخطة له.",
+    "createUserSuccess": "تم إنشاء المستخدم بنجاح",
+    "createUserBtn": "إضافة المستخدم",
+    "password": "كلمة المرور",
+    "passwordConfirmation": "تأكيد كلمة المرور",
+    "role": "الدور",
+    "roleUser": "مستخدم",
+    "roleAdmin": "مسؤول"
   }
 }

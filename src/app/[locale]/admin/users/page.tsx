@@ -1,9 +1,8 @@
-import { getAllUsersApi } from "@/features/admin/users/apis/users.api"
+import { getAllUsersApi, getCreateUserDataApi, extractPlans } from "@/features/admin/users/apis/users.api"
 import { UsersList } from "@/features/admin/users/components/users-list"
 import { IMetadata } from "@/shared/types/api";
 
 export const metadata = { title: "Admin - Users" }
-
 
 interface PageProps {
     searchParams: Promise<{
@@ -12,16 +11,20 @@ interface PageProps {
         per_page?: string;
     }>;
 }
+
 export default async function Page({ searchParams }: PageProps) {
     // SearchParams
     const query = await searchParams;
-    // Varibales
+    // Variables
     const search = query.search;
     const page = query.page ? Number(query.page) : undefined;
     const per_page = query.per_page ? Number(query.per_page) : undefined;
 
+    const [res, createDataRes] = await Promise.all([
+        getAllUsersApi({ search, page, per_page }),
+        getCreateUserDataApi(),
+    ]);
 
-    const res = await getAllUsersApi({ search, page, per_page });
     if (!res.status) {
         return <div>Something went wrong</div>
     }
@@ -39,5 +42,7 @@ export default async function Page({ searchParams }: PageProps) {
             prev_page: payload.prev_page ?? null,
         };
 
-    return <UsersList users={usersData} pagination={pagination} />
+    const plans = extractPlans(createDataRes);
+
+    return <UsersList users={usersData} pagination={pagination} plans={plans} />
 }

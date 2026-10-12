@@ -33,7 +33,7 @@ export function DeleteUserButton({ userId, userName }: DeleteUserButtonProps) {
     startTransition(async () => {
       try {
         const res = await deleteUserAction(userId);
-        if (res.status) {
+        if (res.success) {
           toast.success(t("deleteSuccess") || "User deleted successfully");
           setOpen(false);
           router.refresh();
