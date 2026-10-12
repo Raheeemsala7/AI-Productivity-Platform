@@ -1443,6 +1443,12 @@
       "inactive": "غير نشط"
     },
     "noSubscription": "بدون اشتراك",
-    "noUsersFound": "لم يتم العثور على مستخدمين"
+    "noUsersFound": "لم يتم العثور على مستخدمين",
+    "pagination": {
+      "previous": "السابق",
+      "next": "التالي",
+      "pageOf": "صفحة {current} من {total}",
+      "showing": "عرض {from}-{to} من أصل {total} مستخدم"
+    }
   }
 }

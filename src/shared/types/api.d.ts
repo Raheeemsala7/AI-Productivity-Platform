@@ -40,9 +40,9 @@ declare type ActionResult<T> =
 declare interface IMetadata {
     current_page: number
     last_page: number
-    next_page: null
+    next_page: number | null
     per_page: number
-    prev_page: null
+    prev_page: number | null
     total: number
 };
 

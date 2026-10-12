@@ -1414,6 +1414,12 @@
       "inactive": "Inactive"
     },
     "noSubscription": "No subscription",
-    "noUsersFound": "No users found"
+    "noUsersFound": "No users found",
+    "pagination": {
+      "previous": "Previous",
+      "next": "Next",
+      "pageOf": "Page {current} of {total}",
+      "showing": "Showing {from}-{to} of {total} users"
+    }
   }
 }

@@ -9,12 +9,14 @@ import {
 } from "@/shared/components/ui/table"
 import { Badge } from "@/shared/components/ui/badge"
 import { Button } from "@/shared/components/ui/button"
-import { Search, SlidersHorizontal, MoreHorizontal, ShieldUser, Plus, Coins } from 'lucide-react';
+import { SlidersHorizontal, MoreHorizontal, ShieldUser, Plus, Coins } from 'lucide-react';
 import { Card, CardContent, CardHeader } from '@/shared/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/components/ui/avatar";
 import { getTranslations } from "next-intl/server";
 import { UserAdmin } from '../types/user';
 import { IMetadata } from '@/shared/types/api';
+import { UsersSearch } from "./users-search";
+import { UsersPagination } from "./users-pagination";
 
 interface UsersListProps {
   users: UserAdmin[]
@@ -23,6 +25,9 @@ interface UsersListProps {
 
 export async function UsersList({ users, pagination }: UsersListProps) {
   const t = await getTranslations("AdminUsers");
+
+  console.log(pagination);
+  
 
   return (
     <div className="space-y-6 p-4 pb-20">
@@ -45,14 +50,7 @@ export async function UsersList({ users, pagination }: UsersListProps) {
 
       <Card>
         <CardHeader className="py-4">
-          <div className="flex items-center gap-2 max-w-sm border rounded-md px-3 py-2">
-            <Search className="h-4 w-4 text-muted-foreground" />
-            <input
-              type="text"
-              placeholder={t("searchPlaceholder")}
-              className="flex-1 bg-transparent border-none outline-none text-sm placeholder:text-muted-foreground"
-            />
-          </div>
+          <UsersSearch />
         </CardHeader>
         <CardContent className="p-0">
           <Table>
@@ -126,6 +124,7 @@ export async function UsersList({ users, pagination }: UsersListProps) {
             </TableBody>
           </Table>
         </CardContent>
+        {pagination && <UsersPagination pagination={pagination} />}
       </Card>
     </div>
   );
