@@ -531,6 +531,11 @@
       "mostPopular": "Most popular",
       "perMonth": "/ month",
       "choosePlan": "Choose {plan}",
+      "featuresLabel": "What's included",
+      "creditsLabel": "{credits} credits / month",
+      "reassurance1": "Cancel anytime, no commitments",
+      "reassurance2": "Instant AI credits activation",
+      "reassurance3": "Commercial license included",
       "plans": {
         "starter": {
           "name": "Free / Starter",

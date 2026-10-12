@@ -12,23 +12,22 @@ export async function getAllPlansApi({
 } = {}) {
   const token = await getNextAuthToken();
 
-  if (!token?.token) {
-    return RESPONSES.unauthorizedS;
+  const headers: Record<string, string> = {
+    ...HEADERS.JsonBody,
+  };
+
+  if (token?.token) {
+    headers["Authorization"] = `Bearer ${token.token}`;
   }
 
-  const query = new URLSearchParams();
   if (locale) {
-    query.append("locale", locale);
-    query.append("lang", locale);
+    headers["Accept-Language"] = locale;
   }
 
   try {
     const res = await fetch(`${process.env.API_URL}/plans?lang=${locale ?? "ar"}`, {
       method: "GET",
-      headers: {
-        ...HEADERS.JsonBody,
-        Authorization: `Bearer ${token.token}`,
-      }
+      headers,
     });
 
     const data: ApiResponse<{ data: Plan[] }>= await res.json();

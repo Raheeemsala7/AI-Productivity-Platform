@@ -1,10 +1,11 @@
 import { Badge } from "@/shared/components/ui/badge";
 import { Card, CardContent } from "@/shared/components/ui/card";
-import { Check, Coins, Sparkles, Layers, ShieldCheck, ShieldAlert } from "lucide-react";
+import { Check, Coins, Sparkles, Layers, ShieldCheck, ShieldAlert, Plus, Edit2 } from "lucide-react";
 import { getTranslations } from "next-intl/server";
+import { Link } from "@/i18n/navigation";
+import { buttonVariants } from "@/shared/components/ui/button";
+import { cn } from "@/shared/lib/utils";
 import { Plan } from "../types/plan";
-import { CreatePlanDialog } from "./create-plan-dialog";
-import { EditPlanDialog } from "./edit-plan-dialog";
 import { DeletePlanButton } from "./delete-plan-button";
 
 interface PlansListProps {
@@ -25,7 +26,13 @@ export async function PlansList({ plans }: PlansListProps) {
           </p>
         </div>
         <div className="flex gap-2">
-          <CreatePlanDialog />
+          <Link
+            href="/admin/plans/create"
+            className={cn(buttonVariants(), "gap-2")}
+          >
+            <Plus className="h-4 w-4" />
+            <span>{t("createPlan") || "Create Plan"}</span>
+          </Link>
         </div>
       </div>
 
@@ -69,7 +76,16 @@ export async function PlansList({ plans }: PlansListProps) {
                       </div>
 
                       <div className="flex items-center gap-1 shrink-0">
-                        <EditPlanDialog plan={plan} />
+                        <Link
+                          href={`/admin/plans/${plan.id}/edit`}
+                          className={cn(
+                            buttonVariants({ variant: "ghost", size: "icon" }),
+                            "h-8 w-8 text-muted-foreground hover:text-foreground"
+                          )}
+                          title={t("edit") || "Edit"}
+                        >
+                          <Edit2 className="h-4 w-4" />
+                        </Link>
                         <DeletePlanButton planId={plan.id} planName={plan.name} />
                       </div>
                     </div>
@@ -170,7 +186,13 @@ export async function PlansList({ plans }: PlansListProps) {
           <p className="text-sm text-muted-foreground max-w-sm mb-4">
             {t("noPlansFoundDesc") || "You haven't created any subscription plans yet. Click the button below to add your first plan."}
           </p>
-          <CreatePlanDialog />
+          <Link
+            href="/admin/plans/create"
+            className={cn(buttonVariants(), "gap-2")}
+          >
+            <Plus className="h-4 w-4" />
+            <span>{t("createPlan") || "Create Plan"}</span>
+          </Link>
         </Card>
       )}
     </div>

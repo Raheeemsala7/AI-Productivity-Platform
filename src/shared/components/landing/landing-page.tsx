@@ -4,6 +4,8 @@ import { Link } from "@/i18n/navigation";
 import { ArrowLink } from "@/shared/components/brand";
 import { useReveal } from "@/shared/hooks/use-reveal";
 import { useTranslations } from "next-intl";
+import { cn } from "@/shared/lib/utils";
+import { Plan } from "@/features/admin/plans/types/plan";
 import {
   ArrowRight,
   ChevronRight,
@@ -11,9 +13,18 @@ import {
   Paperclip,
   Play,
   Send,
+  Check,
+  Sparkles,
+  Coins,
+  ShieldCheck,
+  Zap,
 } from "lucide-react";
 
-export function LandingPage() {
+interface LandingPageProps {
+  plans?: Plan[];
+}
+
+export function LandingPage({ plans = [] }: LandingPageProps) {
   useReveal();
   const t = useTranslations("Landing");
 
@@ -224,7 +235,7 @@ export function LandingPage() {
                 {t("pricing.subtitle")}
               </p>
             </div>
-            <PricingCards />
+            <PricingCards plans={plans} />
           </div>
         </section>
 
@@ -532,70 +543,201 @@ function WorkspacePreview() {
 /* ─── Pricing ───────────────────────────────────────────── */
 const PLAN_KEYS = ["starter", "pro", "business"] as const;
 
-function PricingCards() {
+function PricingCards({ plans = [] }: { plans?: Plan[] }) {
   const t = useTranslations("Landing.pricing");
-  const plans = PLAN_KEYS.map((key) => ({
-    key,
-    name: t(`plans.${key}.name`),
-    price: t(`plans.${key}.price`),
-    copy: t(`plans.${key}.copy`),
-    features: [
-      t(`plans.${key}.f1`),
-      t(`plans.${key}.f2`),
-      t(`plans.${key}.f3`),
-    ],
-    featured: key === "pro",
-  }));
+
+  const displayPlans =
+    plans && plans.length > 0
+      ? plans.map((p) => ({
+          key: String(p.id),
+          name: p.name,
+          price:
+            typeof p.price === "number" || !String(p.price).startsWith("$")
+              ? `$${p.price}`
+              : String(p.price),
+          copy: p.description,
+          frequency: p.frequency,
+          credits: p.credits ? Number(p.credits) : undefined,
+          features: Array.isArray(p.features) ? p.features : [],
+          featured: Boolean(p.is_featured),
+        }))
+      : PLAN_KEYS.map((key) => ({
+          key,
+          name: t(`plans.${key}.name`),
+          price: t(`plans.${key}.price`),
+          copy: t(`plans.${key}.copy`),
+          frequency: undefined as string | undefined,
+          credits: key === "starter" ? 200 : key === "pro" ? 2500 : 15000,
+          features: [
+            t(`plans.${key}.f1`),
+            t(`plans.${key}.f2`),
+            t(`plans.${key}.f3`),
+          ],
+          featured: key === "pro",
+        }));
 
   return (
-    <div
-      className="mt-16 grid border border-border bg-background lg:grid-cols-3"
-      data-reveal
-    >
-      {plans.map((plan) => (
-        <article
-          key={plan.key}
-          className={`relative p-7 md:p-10 ${
-            plan.featured
-              ? "bg-ink text-paper"
-              : "border-b border-border last:border-0 lg:border-b-0 lg:border-r"
-          }`}
-        >
-          {plan.featured && (
-            <span className="absolute end-5 top-5 bg-brand px-2 py-1 text-[.6rem] font-semibold uppercase text-brand-foreground">
-              {t("mostPopular")}
-            </span>
-          )}
-          <p className="text-xs uppercase tracking-[.16em] opacity-60">
-            {plan.name}
-          </p>
-          <div className="mt-10 flex items-end gap-2">
-            <strong className="font-display text-5xl font-semibold">
-              {plan.price}
-            </strong>
-            <span className="mb-1 text-xs opacity-60">{t("perMonth")}</span>
-          </div>
-          <p className="mt-4 text-sm opacity-65">{plan.copy}</p>
-          <ul className="my-9 space-y-3 text-sm">
-            {plan.features.map((f) => (
-              <li key={f} className="flex gap-2">
-                <span className="text-brand">—</span>
-                {f}
-              </li>
-            ))}
-          </ul>
-          <Link
-            href="/auth/register"
-            className={`block w-full rounded-none py-3 text-center text-sm font-medium transition-opacity hover:opacity-90 ${
+    <div className="mt-16 space-y-12" data-reveal>
+      <div
+        className={cn(
+          "grid gap-8 items-stretch",
+          displayPlans.length === 2
+            ? "md:grid-cols-2 max-w-4xl mx-auto"
+            : displayPlans.length >= 4
+            ? "md:grid-cols-2 lg:grid-cols-4"
+            : "lg:grid-cols-3"
+        )}
+      >
+        {displayPlans.map((plan) => (
+          <article
+            key={plan.key}
+            className={cn(
+              "relative rounded-3xl p-8 md:p-10 flex flex-col justify-between transition-all duration-300",
               plan.featured
-                ? "bg-brand text-brand-foreground"
-                : "border border-border hover:border-brand hover:text-brand"
-            }`}
+                ? "bg-ink text-paper shadow-2xl lg:-translate-y-3 hover:-translate-y-4 border-2 border-brand ring-4 ring-brand/10"
+                : "bg-background text-foreground border border-border shadow-sm hover:shadow-xl hover:border-brand/40 hover:-translate-y-1"
+            )}
           >
-            {t("choosePlan", { plan: plan.name.split(" /")[0] })}
-          </Link>
-        </article>
-      ))}
+            {/* Featured Badge */}
+            {plan.featured && (
+              <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 rtl:left-auto rtl:right-1/2 rtl:translate-x-1/2 z-10">
+                <span className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full text-[0.7rem] font-bold uppercase tracking-wider bg-brand text-brand-foreground shadow-md">
+                  <Sparkles className="size-3.5" />
+                  {t("mostPopular")}
+                </span>
+              </div>
+            )}
+
+            <div>
+              {/* Header */}
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <h3 className="font-display text-2xl md:text-3xl font-bold tracking-tight">
+                    {plan.name}
+                  </h3>
+                  <p
+                    className={cn(
+                      "mt-2 text-sm leading-relaxed min-h-[40px]",
+                      plan.featured ? "text-paper/70" : "text-muted-foreground"
+                    )}
+                  >
+                    {plan.copy}
+                  </p>
+                </div>
+              </div>
+
+              {/* Price */}
+              <div className="mt-6 flex items-baseline gap-1.5">
+                <strong className="font-display text-5xl md:text-6xl font-extrabold tracking-tight">
+                  {plan.price}
+                </strong>
+                <span
+                  className={cn(
+                    "text-xs uppercase tracking-wider font-semibold",
+                    plan.featured ? "text-paper/60" : "text-muted-foreground"
+                  )}
+                >
+                  {plan.frequency ? `/${plan.frequency}` : t("perMonth")}
+                </span>
+              </div>
+
+              {/* Credits Pill */}
+              {Boolean(plan.credits && plan.credits > 0) && (
+                <div className="mt-4">
+                  <span
+                    className={cn(
+                      "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold",
+                      plan.featured
+                        ? "bg-brand/20 text-brand border border-brand/30"
+                        : "bg-brand/10 text-brand border border-brand/20"
+                    )}
+                  >
+                    <Coins className="size-3.5 text-brand shrink-0" />
+                    <span>
+                      {Number(plan.credits).toLocaleString()}{" "}
+                      {t("creditsLabel", { credits: "" }).trim() || "credits / month"}
+                    </span>
+                  </span>
+                </div>
+              )}
+
+              {/* Divider */}
+              <div
+                className={cn(
+                  "my-8 border-t",
+                  plan.featured ? "border-paper/10" : "border-border/60"
+                )}
+              />
+
+              {/* Features List */}
+              <p
+                className={cn(
+                  "text-xs font-bold uppercase tracking-wider mb-4",
+                  plan.featured ? "text-paper/60" : "text-muted-foreground"
+                )}
+              >
+                {t("featuresLabel") || "What's included"}
+              </p>
+              <ul className="space-y-3.5 text-sm">
+                {plan.features.map((f, i) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <div
+                      className={cn(
+                        "size-5 rounded-full flex items-center justify-center shrink-0 mt-0.5",
+                        plan.featured
+                          ? "bg-brand/25 text-brand"
+                          : "bg-brand/10 text-brand"
+                      )}
+                    >
+                      <Check className="size-3 stroke-[2.5]" />
+                    </div>
+                    <span
+                      className={cn(
+                        "leading-snug",
+                        plan.featured ? "text-paper/90" : "text-foreground/90"
+                      )}
+                    >
+                      {f}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* CTA Button */}
+            <div className="mt-10 pt-4">
+              <Link
+                href="/auth/register"
+                className={cn(
+                  "w-full py-3.5 px-6 rounded-2xl font-semibold text-sm flex items-center justify-center gap-2 group transition-all duration-200 shadow-sm",
+                  plan.featured
+                    ? "bg-brand text-brand-foreground hover:bg-brand/90 hover:shadow-brand/25 hover:shadow-lg"
+                    : "bg-card border-2 border-border-strong hover:border-brand hover:bg-brand/5 hover:text-brand"
+                )}
+              >
+                <span>{t("choosePlan", { plan: plan.name.split(" /")[0] })}</span>
+                <ArrowRight className="size-4 transition-transform group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1" />
+              </Link>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      {/* Trust & Reassurance Badges */}
+      <div className="pt-8 border-t border-border/40 flex flex-wrap items-center justify-center gap-6 sm:gap-12 text-xs font-medium text-muted-foreground">
+        <div className="flex items-center gap-2">
+          <ShieldCheck className="size-4 text-brand shrink-0" />
+          <span>{t("reassurance1") || "Cancel anytime, no commitments"}</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <Zap className="size-4 text-brand shrink-0" />
+          <span>{t("reassurance2") || "Instant AI credits activation"}</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <Sparkles className="size-4 text-brand shrink-0" />
+          <span>{t("reassurance3") || "Commercial license included"}</span>
+        </div>
+      </div>
     </div>
   );
 }
