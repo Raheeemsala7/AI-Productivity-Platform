@@ -43,3 +43,28 @@ export async function getAllUsersApi({ search, page, per_page }: { search?: stri
 
 }
 
+export async function getUserByIdApi(id: string | number) {
+    const token = await getNextAuthToken();
+
+    if (!token?.token) {
+        return RESPONSES.unauthorized;
+    }
+
+    const res = await fetch(`${process.env.API_URL}/admin/users/${id}`, {
+        method: "GET",
+        headers: {
+            ...HEADERS.JsonBody,
+            Authorization: `Bearer ${token.token}`,
+        },
+    });
+
+    const data: IApiResponse<UserAdmin> = await res.json();
+
+    if (!data.status) {
+        return {
+            status: false as const,
+            message: getErrorMessage(data.message, "Something went wrong"),
+        };
+    }
+    return data;
+}

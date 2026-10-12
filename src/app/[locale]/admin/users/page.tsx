@@ -1,5 +1,6 @@
 import { getAllUsersApi } from "@/features/admin/users/apis/users.api"
 import { UsersList } from "@/features/admin/users/components/users-list"
+import { IMetadata } from "@/shared/types/api";
 
 export const metadata = { title: "Admin - Users" }
 
@@ -24,11 +25,19 @@ export default async function Page({ searchParams }: PageProps) {
     if (!res.status) {
         return <div>Something went wrong</div>
     }
-    const usersData = res.payload.data
+    const usersData = res.payload.data;
+    const payload = res.payload as any;
 
-    console.log(res.payload.metadata);
-    
+    const pagination: IMetadata = payload.metadata ||
+        payload.meta ||
+        payload.pagination || {
+            current_page: payload.current_page ?? page ?? 1,
+            last_page: payload.last_page ?? 1,
+            per_page: payload.per_page ?? per_page ?? 10,
+            total: payload.total ?? (Array.isArray(usersData) ? usersData.length : 0),
+            next_page: payload.next_page ?? null,
+            prev_page: payload.prev_page ?? null,
+        };
 
-    return <UsersList users={usersData} pagination={res.payload.metadata} />
-
+    return <UsersList users={usersData} pagination={pagination} />
 }

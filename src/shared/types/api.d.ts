@@ -48,7 +48,15 @@ declare interface IMetadata {
 
 declare interface IPagination<T> {
     data: T[];
-    metadata: IMetadata;
+    metadata?: IMetadata;
+    meta?: IMetadata;
+    pagination?: IMetadata;
+    current_page?: number;
+    last_page?: number;
+    next_page?: number | null;
+    per_page?: number;
+    prev_page?: number | null;
+    total?: number;
 }
 
 export interface ITimeStamp {

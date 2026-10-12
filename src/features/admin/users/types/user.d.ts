@@ -1,5 +1,9 @@
 
 
+export interface SubscriptionPlan {
+  id: number;
+  name: string;
+}
 export interface UserAdmin {
     id: number
     name: string
@@ -9,5 +13,5 @@ export interface UserAdmin {
     avatar: string | null
     avatar_color: string
     slogan: string | null
-    active_subscription: string | null
+    active_subscription: SubscriptionPlan
 }

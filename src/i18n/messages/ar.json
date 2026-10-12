@@ -1449,6 +1449,25 @@
       "next": "التالي",
       "pageOf": "صفحة {current} من {total}",
       "showing": "عرض {from}-{to} من أصل {total} مستخدم"
-    }
+    },
+    "edit": "تعديل",
+    "delete": "حذف",
+    "confirmDelete": "تأكيد الحذف",
+    "cancel": "إلغاء",
+    "deleteDialogTitle": "حذف المستخدم",
+    "deleteDialogDesc": "هل أنت متأكد من رغبتك في حذف هذا المستخدم؟ لا يمكن التراجع عن هذا الإجراء.",
+    "deleteSuccess": "تم حذف المستخدم بنجاح",
+    "editUserTitle": "تعديل بيانات المستخدم",
+    "editUserSubtitle": "تحديث معلومات وإعدادات حساب المستخدم.",
+    "back": "رجوع",
+    "name": "الاسم",
+    "namePlaceholder": "أدخل الاسم بالكامل",
+    "email": "البريد الإلكتروني",
+    "emailPlaceholder": "user@example.com",
+    "slogan": "الشعار / نبذة",
+    "sloganPlaceholder": "أدخل نبذة مختصرة",
+    "saveChanges": "حفظ التعديلات",
+    "saving": "جاري الحفظ...",
+    "updateSuccess": "تم تحديث بيانات المستخدم بنجاح"
   }
 }

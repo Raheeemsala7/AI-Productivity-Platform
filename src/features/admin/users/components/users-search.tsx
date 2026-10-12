@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { useRouter, usePathname } from "@/i18n/navigation";
 import { Search, Loader2, X } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { useDebouncedCallback } from "use-debounce";
 
 export function UsersSearch() {
   const t = useTranslations("AdminUsers");
@@ -21,32 +22,32 @@ export function UsersSearch() {
     setValue(currentSearch);
   }, [currentSearch]);
 
-  // Debounced URL update
-  useEffect(() => {
-    // If the value is the same as currentSearch in the URL, do nothing
-    if (value === currentSearch) return;
+  // Debounced URL update using use-debounce
+  const debouncedSearch = useDebouncedCallback((term: string) => {
+    startTransition(() => {
+      const params = new URLSearchParams(searchParams.toString());
+      if (term.trim()) {
+        params.set("search", term.trim());
+      } else {
+        params.delete("search");
+      }
+      // Always reset to page 1 on new search
+      params.delete("page");
 
-    const timer = setTimeout(() => {
-      startTransition(() => {
-        const params = new URLSearchParams(searchParams.toString());
-        if (value.trim()) {
-          params.set("search", value.trim());
-        } else {
-          params.delete("search");
-        }
-        // Always reset to page 1 on new search
-        params.delete("page");
+      const query = params.toString();
+      router.replace(query ? `${pathname}?${query}` : pathname);
+    });
+  }, 400);
 
-        const query = params.toString();
-        router.replace(query ? `${pathname}?${query}` : pathname);
-      });
-    }, 400);
-
-    return () => clearTimeout(timer);
-  }, [value, currentSearch, pathname, router, searchParams]);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const nextVal = e.target.value;
+    setValue(nextVal);
+    debouncedSearch(nextVal);
+  };
 
   const handleClear = () => {
     setValue("");
+    debouncedSearch.cancel();
     startTransition(() => {
       const params = new URLSearchParams(searchParams.toString());
       params.delete("search");
@@ -66,7 +67,7 @@ export function UsersSearch() {
       <input
         type="text"
         value={value}
-        onChange={(e) => setValue(e.target.value)}
+        onChange={handleChange}
         placeholder={t("searchPlaceholder")}
         className="flex-1 bg-transparent border-none outline-none text-sm px-2 placeholder:text-muted-foreground"
       />

@@ -8,15 +8,18 @@ import {
   TableRow,
 } from "@/shared/components/ui/table"
 import { Badge } from "@/shared/components/ui/badge"
-import { Button } from "@/shared/components/ui/button"
-import { SlidersHorizontal, MoreHorizontal, ShieldUser, Plus, Coins } from 'lucide-react';
+import { Button, buttonVariants } from "@/shared/components/ui/button"
+import { SlidersHorizontal, ShieldUser, Plus, Coins, Pencil } from 'lucide-react';
 import { Card, CardContent, CardHeader } from '@/shared/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/components/ui/avatar";
 import { getTranslations } from "next-intl/server";
+import { Link } from "@/i18n/navigation";
+import { cn } from "@/shared/lib/utils";
 import { UserAdmin } from '../types/user';
 import { IMetadata } from '@/shared/types/api';
 import { UsersSearch } from "./users-search";
 import { UsersPagination } from "./users-pagination";
+import { DeleteUserButton } from "./delete-user-button";
 
 interface UsersListProps {
   users: UserAdmin[]
@@ -25,9 +28,6 @@ interface UsersListProps {
 
 export async function UsersList({ users, pagination }: UsersListProps) {
   const t = await getTranslations("AdminUsers");
-
-  console.log(pagination);
-  
 
   return (
     <div className="space-y-6 p-4 pb-20">
@@ -95,7 +95,7 @@ export async function UsersList({ users, pagination }: UsersListProps) {
                       </TableCell>
                       <TableCell>
                         {user.active_subscription ? (
-                          <Badge variant="outline">{user.active_subscription}</Badge>
+                          <Badge variant="outline">{user.active_subscription.name}</Badge>
                         ) : (
                           <span className="text-sm text-muted-foreground">{t("noSubscription")}</span>
                         )}
@@ -107,9 +107,19 @@ export async function UsersList({ users, pagination }: UsersListProps) {
                         </div>
                       </TableCell>
                       <TableCell className="text-right">
-                        <Button variant="ghost" size="icon" aria-label={t("table.actions")}>
-                          <MoreHorizontal className="h-4 w-4" />
-                        </Button>
+                        <div className="flex items-center justify-end gap-1">
+                          <Link
+                            href={`/admin/users/${user.id}/edit`}
+                            className={cn(
+                              buttonVariants({ variant: "ghost", size: "icon-sm" }),
+                              "h-8 w-8 text-muted-foreground hover:text-foreground"
+                            )}
+                            title={t("edit") || "Edit"}
+                          >
+                            <Pencil className="h-4 w-4" />
+                          </Link>
+                          <DeleteUserButton userId={user.id} userName={user.name} />
+                        </div>
                       </TableCell>
                     </TableRow>
                   );
