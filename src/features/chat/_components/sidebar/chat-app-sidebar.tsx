@@ -121,7 +121,7 @@ export default async function ChatAppSidebar() {
 
                     <Link
                         href="/dashboard"
-                        className="flex items-center gap-2 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
+                        className="flex w-full items-center gap-2 rounded-lg py-1 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
                     >
                         <ArrowLeft className="size-4 rtl:rotate-180" />
                         {t("backToDashboard")}

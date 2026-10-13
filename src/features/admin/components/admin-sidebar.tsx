@@ -154,7 +154,7 @@ export function AdminSidebar({
   return (
     <Sidebar side={dir === "rtl" ? "right" : "left"} {...props}>
       <SidebarHeader className="h-17 bg-background p-2">
-        <Link href={"/admin"}>
+        <Link href={"/admin"} className="block w-full">
           <div className="flex h-full items-center gap-2">
             <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold">
                OA
@@ -199,12 +199,11 @@ export function AdminSidebar({
                     <SidebarMenuItem key={item.title}>
                       <SidebarMenuButton
                         isActive={isActive}
-                        className="h-10 gap-3 p-3 text-base"
+                        className="h-10 gap-3 p-3 text-base cursor-pointer"
+                        render={<Link href={item.url} />}
                       >
-                        <Link href={item.url} className="flex items-center gap-3">
-                          {item.icon && <item.icon className="size-4.5" />}
-                          <span>{item.title}</span>
-                        </Link>
+                        {item.icon && <item.icon className="size-4.5" />}
+                        <span>{item.title}</span>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
                   )
