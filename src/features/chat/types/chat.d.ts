@@ -44,6 +44,12 @@ export type SendMessageRequest = {
   /** Raw voice message file sent to the Server Action */
   audio?: File | null;
 };
+export type SendFileMessageRequest = {
+  message?: string;
+  conversation_id?: string;
+  /** Raw files sent to the Server Action for validation + encoding */
+  files: File[];
+};
 
 export type responseSendMessage = {
   conversation_id: string;

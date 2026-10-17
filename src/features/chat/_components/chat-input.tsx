@@ -12,7 +12,7 @@ import {
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
-import { sendMessageMutation } from "../hooks/use-chat-history";
+import { sendFileMessageMutation, sendMessageMutation } from "../hooks/use-chat-history";
 import { useChatStore } from "../store/chat.store";
 import { useForm } from "react-hook-form";
 import { ChatInputForm, MessageAudio, StagedAttachment, Message } from "../types/chat";
@@ -52,11 +52,13 @@ const FILE_ACCEPT = SUPPORTED_ATTACHMENT_EXTENSIONS.map(
 ).join(",");
 
 export default function ChatInput() {
+  // Translation
   const t = useTranslations("Chat");
-
+  // Hooks
   const router = useRouter();
   const queryClient = useQueryClient();
 
+  // Store Actions
   const setConversationId = useChatStore((state) => state.setConversationId);
   const setPendingNewChat = useChatStore((state) => state.setPendingNewChat);
   const pendingSuggestion = useChatStore((state) => state.pendingSuggestion);
@@ -64,8 +66,11 @@ export default function ChatInput() {
     (state) => state.setPendingSuggestion,
   );
 
-  const { mutateAsync, isPending } = sendMessageMutation();
+  // Mutations 
+  const { mutateAsync : mutateMessageAsync, isPending : isPendingMessage } = sendMessageMutation();
+  const { mutateAsync: mutateFileAsync, isPending: isPendingFile } = sendFileMessageMutation();
 
+  // Form
   const form = useForm<ChatInputForm>({
     resolver: zodResolver(chatInputSchema),
     defaultValues: {
@@ -73,11 +78,13 @@ export default function ChatInput() {
     },
   });
 
+  // State
   const [attachments, setAttachments] = useState<StagedAttachment[]>([]);
   const [audio, setAudio] = useState<MessageAudio | null>(null);
   const [audioFile, setAudioFile] = useState<File | null>(null);
   const [isRecording, setIsRecording] = useState(false);
 
+  // Refs
   const imageInputRef = useRef<HTMLInputElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const mediaUrlsRef = useRef<string[]>([]);
@@ -173,11 +180,13 @@ export default function ChatInput() {
     async (data: ChatInputForm) => {
       const value = data.message?.trim();
       const hasMedia = attachments.length > 0 || audioFile != null;
-      if (isPending || isRecording) return;
+      if (isPendingFile || isPendingMessage || isRecording) return;
       if (!value && !hasMedia) return;
+      console.log("Click");
+      
 
       const currentConvId = useChatStore.getState().conversationId;
-      
+
       const userMessage: Message = {
         id: crypto.randomUUID(),
         role: "user",
@@ -186,13 +195,13 @@ export default function ChatInput() {
         attachments:
           attachments.length > 0
             ? attachments.map((a) => ({
-                id: a.id,
-                kind: a.kind,
-                name: a.file.name,
-                type: a.file.type,
-                size: a.file.size,
-                url: a.previewUrl,
-              }))
+              id: a.id,
+              kind: a.kind,
+              name: a.file.name,
+              type: a.file.type,
+              size: a.file.size,
+              url: a.previewUrl,
+            }))
             : undefined,
         audio: audio ? { url: audio.url, duration: audio.duration } : null,
       };
@@ -210,10 +219,7 @@ export default function ChatInput() {
           ['conversation', currentConvId],
           (old = []) => [...old, userMessage, thinkingMessage]
         );
-      } else {
-        // Handle new chat scenario later or we can still put it in query cache with a fake ID temporarily
       }
-
       form.reset();
       setAttachments([]);
       setAudio(null);
@@ -223,14 +229,25 @@ export default function ChatInput() {
         if (!currentConvId) {
           setPendingNewChat(true);
         }
-        const result = await mutateAsync({
-          message: value,
-          ...(currentConvId && {
-            conversation_id: currentConvId,
-          }),
-          files: attachments.map((a) => a.file),
-          audio: audioFile,
-        });
+        let result: any;
+        if (attachments.length > 0) {
+          result = await mutateFileAsync({
+            message: value,
+            ...(currentConvId && {
+              conversation_id: currentConvId,
+            }),
+            files: attachments.map((a) => a.file),
+          });
+        } else {
+          console.log("ELSE");
+          
+          result = await mutateMessageAsync({
+            message: value,
+            ...(currentConvId && {
+              conversation_id: currentConvId,
+            }),
+          });
+        }
 
         if (currentConvId) {
           queryClient.setQueryData<Message[]>(
@@ -249,13 +266,12 @@ export default function ChatInput() {
       }
     },
     [
-      isPending,
-      isRecording,
       attachments,
       audio,
       audioFile,
       form,
-      mutateAsync,
+      mutateMessageAsync,
+      mutateFileAsync,
       router,
       setConversationId,
       setPendingNewChat,
@@ -298,7 +314,7 @@ export default function ChatInput() {
               <AttachmentPreview
                 attachments={attachments}
                 audio={audio}
-                uploading={isPending}
+                uploading={isPendingFile}
                 onRemoveAttachment={removeAttachment}
                 onRemoveAudio={removeAudio}
               />
@@ -362,7 +378,7 @@ export default function ChatInput() {
               <textarea
                 rows={1}
                 placeholder={t("inputPlaceholder")}
-                disabled={isPending}
+                disabled={isPendingMessage || isPendingFile || isRecording}
                 className="field-sizing-content max-h-32 min-h-7 min-w-0 flex-1 resize-none bg-transparent py-1 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
                 onKeyDown={(event) => {
                   if (event.key === "Enter" && !event.shiftKey) {
@@ -377,12 +393,12 @@ export default function ChatInput() {
                 <button
                   type="button"
                   aria-label={t("recordVoice")}
-                  disabled={isPending}
+                  disabled={isPendingMessage || isPendingFile}
                   onClick={() => setIsRecording(true)}
                   className={cn(
                     "mb-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:cursor-not-allowed disabled:opacity-40 md:h-7 md:w-7",
                     audio &&
-                      "text-brand hover:bg-muted hover:text-brand",
+                    "text-brand hover:bg-muted hover:text-brand",
                   )}
                 >
                   <Mic size={16} />
@@ -391,8 +407,8 @@ export default function ChatInput() {
 
               <button
                 type="submit"
-                disabled={isPending || isRecording}
-                aria-label={isPending ? t("stop") : t("send")}
+                disabled={isPendingMessage || isPendingFile || isRecording}
+                aria-label={isPendingMessage || isPendingFile ? t("stop") : t("send")}
                 className={cn(
                   "mb-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-all",
                   "bg-[image:var(--gradient-primary)] text-white shadow-sm",
@@ -400,7 +416,7 @@ export default function ChatInput() {
                   "md:h-8 md:w-8",
                 )}
               >
-                {isPending ? (
+                {isPendingMessage || isPendingFile ? (
                   <Square size={13} fill="currentColor" />
                 ) : (
                   <ArrowUp size={16} />

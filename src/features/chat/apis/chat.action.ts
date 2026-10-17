@@ -2,8 +2,8 @@
 
 import { HEADERS } from "@/shared/constant/api.constant"
 import { getNextAuthToken } from "@/shared/lib/utils/auth.util"
-import { ApiResponse } from "@/shared/types/api"
-import { responseSendMessage, SendMessageRequest, Message } from "../types/chat"
+import { ApiResponse, ApiResponsePayload, IApiResponse } from "@/shared/types/api"
+import { responseSendMessage, SendMessageRequest, Message, SendFileMessageRequest } from "../types/chat"
 import { revalidateTag } from "next/cache"
 import {
   getFileExtension,
@@ -72,8 +72,6 @@ const validateAttachments = (files: File[]) => {
 export async function sendMessageAction({
   message,
   conversation_id,
-  files = [],
-  audio,
 }: SendMessageRequest): Promise<responseSendMessage> {
   const token = await getNextAuthToken()
 
@@ -81,36 +79,23 @@ export async function sendMessageAction({
     throw new Error("Unauthorized")
   }
 
-  validateAttachments(files)
 
-  const attachments = await Promise.all(files.map(encodeFile))
-
-  let audioPayload: EncodedAttachment | null = null
-  if (audio) {
-    if (!isSupportedAudio(audio)) {
-      throw new Error("Unsupported audio type.")
-    }
-    if (audio.size > MAX_ATTACHMENT_SIZE) {
-      throw new Error("Audio file is too large.")
-    }
-    audioPayload = await encodeFile(audio)
-  }
-
-  const res = await fetch(`${process.env.API_URL}/user/chat`, {
+const res = await fetch(`${process.env.API_URL}/user/chat`, {
     method: "POST",
     headers: {
-      ...HEADERS.JsonBody,
-      ...HEADERS.authorize(token.token)
+      ...HEADERS.authorize(token.token),
+      ...HEADERS.JsonBody
     },
     body: JSON.stringify({
       message,
-      conversation_id,
-      attachments,
-      audio: audioPayload,
+      conversation_id
     })
   })
 
+
   const data: ApiResponse<responseSendMessage> = await res.json()
+  console.log(data);
+  
 
   if (!data.success) {
     throw Error(data.message || "Failed Send message")
@@ -121,4 +106,46 @@ export async function sendMessageAction({
   }
 
   return data.payload
+}
+export async function sendFileMessageAction({
+  message,
+  conversation_id,
+  files = []
+}: SendFileMessageRequest): Promise<responseSendMessage> {
+  const token = await getNextAuthToken()
+  const formData = new FormData()
+
+  if (!token?.token) {
+    throw new Error("Unauthorized")
+  }
+
+  validateAttachments(files)
+
+  if (message) formData.append("message", message)
+  if (conversation_id) formData.append("conversation_id", conversation_id)
+  files.forEach((file) => {
+    formData.append("file", file)
+  })
+  const res = await fetch(`${process.env.API_URL}/user/file-analyze`, {
+    method: "POST",
+    headers: {
+      ...HEADERS.authorize(token.token),
+    },
+    body: formData
+  })
+
+  console.log(res);
+  const data: ApiResponsePayload<responseSendMessage> = await res.json()
+  console.log(data);
+  
+
+  if (!data.success) {
+    throw Error(data.message || "Failed Send message")
+  }
+
+  if (!conversation_id) {
+    revalidateTag("conversations", "default")
+  }
+
+  return data.data
 }

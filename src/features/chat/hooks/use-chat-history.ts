@@ -1,12 +1,18 @@
 "use client"
 
 import { useMutation } from "@tanstack/react-query"
-import { sendMessageAction } from "../apis/chat.action"
+import { sendFileMessageAction, sendMessageAction } from "../apis/chat.action"
 
 
 
 export function sendMessageMutation() {
   return useMutation({
-    mutationFn : sendMessageAction
+    mutationFn: sendMessageAction
+  })
+}
+
+export function sendFileMessageMutation() {
+  return useMutation({
+    mutationFn: sendFileMessageAction
   })
 }

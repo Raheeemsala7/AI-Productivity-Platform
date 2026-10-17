@@ -119,7 +119,11 @@ export async function updateUserAction(id: string | number, values: UpdateUserFo
       body: JSON.stringify(body),
     });
 
-    const data :ApiResponsePayload<ShowUserData> = await res.json();
+    console.log("Body :", body);
+
+    const data: ApiResponsePayload<ShowUserData> = await res.json();
+    console.log(data);
+
     if (!data.success) {
       return {
         success: false as const,
