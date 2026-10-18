@@ -94,8 +94,6 @@ const res = await fetch(`${process.env.API_URL}/user/chat`, {
 
 
   const data: ApiResponse<responseSendMessage> = await res.json()
-  console.log(data);
-  
 
   if (!data.success) {
     throw Error(data.message || "Failed Send message")
@@ -134,9 +132,7 @@ export async function sendFileMessageAction({
     body: formData
   })
 
-  console.log(res);
   const data: ApiResponsePayload<responseSendMessage> = await res.json()
-  console.log(data);
   
 
   if (!data.success) {

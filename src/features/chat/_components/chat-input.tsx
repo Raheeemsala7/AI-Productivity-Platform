@@ -15,7 +15,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { sendFileMessageMutation, sendMessageMutation } from "../hooks/use-chat-history";
 import { useChatStore } from "../store/chat.store";
 import { useForm } from "react-hook-form";
-import { ChatInputForm, MessageAudio, StagedAttachment, Message } from "../types/chat";
+import { ChatInputForm, MessageAudio, StagedAttachment, Message, responseSendMessage } from "../types/chat";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { chatInputSchema } from "../schema/chat.schema";
 import { useRouter } from "next/navigation";
@@ -67,7 +67,7 @@ export default function ChatInput() {
   );
 
   // Mutations 
-  const { mutateAsync : mutateMessageAsync, isPending : isPendingMessage } = sendMessageMutation();
+  const { mutateAsync: mutateMessageAsync, isPending: isPendingMessage } = sendMessageMutation();
   const { mutateAsync: mutateFileAsync, isPending: isPendingFile } = sendFileMessageMutation();
 
   // Form
@@ -182,15 +182,15 @@ export default function ChatInput() {
       const hasMedia = attachments.length > 0 || audioFile != null;
       if (isPendingFile || isPendingMessage || isRecording) return;
       if (!value && !hasMedia) return;
-      console.log("Click");
-      
 
       const currentConvId = useChatStore.getState().conversationId;
+      const isNewChat = !currentConvId || currentConvId.startsWith("temp-");
+      const activeConvId = isNewChat ? `temp-${crypto.randomUUID()}` : currentConvId;
 
       const userMessage: Message = {
         id: crypto.randomUUID(),
         role: "user",
-        text: value,
+        text: value || "",
         thinking: false,
         attachments:
           attachments.length > 0
@@ -214,55 +214,71 @@ export default function ChatInput() {
         thinking: true,
       };
 
-      if (currentConvId) {
-        queryClient.setQueryData<Message[]>(
-          ['conversation', currentConvId],
-          (old = []) => [...old, userMessage, thinkingMessage]
-        );
+      if (isNewChat) {
+        setPendingNewChat(true);
+        setConversationId(activeConvId);
       }
+
+      queryClient.setQueryData<Message[]>(
+        ['conversation', activeConvId],
+        (old = []) => [...old, userMessage, thinkingMessage]
+      );
+
+      const stagedFiles = attachments.map((a) => a.file);
       form.reset();
       setAttachments([]);
       setAudio(null);
       setAudioFile(null);
 
       try {
-        if (!currentConvId) {
-          setPendingNewChat(true);
-        }
-        let result: any;
-        if (attachments.length > 0) {
+        let result: responseSendMessage;
+        if (stagedFiles.length > 0) {
           result = await mutateFileAsync({
             message: value,
-            ...(currentConvId && {
+            ...(!isNewChat && {
               conversation_id: currentConvId,
             }),
-            files: attachments.map((a) => a.file),
+            files: stagedFiles,
           });
         } else {
-          console.log("ELSE");
-          
           result = await mutateMessageAsync({
-            message: value,
-            ...(currentConvId && {
+            message: value || "",
+            ...(!isNewChat && {
               conversation_id: currentConvId,
             }),
           });
         }
 
-        if (currentConvId) {
+        const realConvId = result.conversation_id;
+
+        if (isNewChat) {
+          queryClient.setQueryData<Message[]>(
+            ['conversation', realConvId],
+            [userMessage, { ...thinkingMessage, thinking: false, text: result.response }]
+          );
+          queryClient.removeQueries({ queryKey: ['conversation', activeConvId] });
+          setConversationId(realConvId);
+          setPendingNewChat(false);
+          router.refresh();
+        } else {
           queryClient.setQueryData<Message[]>(
             ['conversation', currentConvId],
             (old = []) => old.map(msg => msg.id === thinkingMessageId ? { ...msg, thinking: false, text: result.response } : msg)
           );
-        } else {
-          router.refresh();
-          queryClient.setQueryData<Message[]>(['conversation', result.conversation_id], [userMessage, { ...thinkingMessage, thinking: false, text: result.response }]);
         }
-        setConversationId(result.conversation_id);
       } catch (error) {
         console.error("SEND MESSAGE ERROR:", error);
         toast.error(t("sendFailed"));
         setPendingNewChat(false);
+        if (isNewChat) {
+          queryClient.removeQueries({ queryKey: ['conversation', activeConvId] });
+          setConversationId(null);
+        } else {
+          queryClient.setQueryData<Message[]>(
+            ['conversation', currentConvId],
+            (old = []) => old.filter(msg => msg.id !== thinkingMessageId)
+          );
+        }
       }
     },
     [
@@ -270,6 +286,9 @@ export default function ChatInput() {
       audio,
       audioFile,
       form,
+      isPendingFile,
+      isPendingMessage,
+      isRecording,
       mutateMessageAsync,
       mutateFileAsync,
       router,
@@ -413,7 +432,7 @@ export default function ChatInput() {
                   "mb-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-all",
                   "bg-[image:var(--gradient-primary)] text-white shadow-sm",
                   "hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-30",
-                  "md:h-8 md:w-8",
+                  "md:h-8 md:w-8"
                 )}
               >
                 {isPendingMessage || isPendingFile ? (

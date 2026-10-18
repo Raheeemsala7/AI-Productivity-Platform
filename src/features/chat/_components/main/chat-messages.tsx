@@ -20,7 +20,7 @@ export default function ChatMessages() {
     const { data: messages = [], isLoading, error } = useQuery<Message[]>({
         queryKey: ['conversation', conversationId],
         queryFn: async () => {
-            if (!conversationId) return [];
+            if (!conversationId || conversationId.startsWith("temp-")) return [];
             const res = await fetch(`/api/conversations/${conversationId}/messages`);
             if (!res.ok) {
                 const errorData = await res.json().catch(() => ({}));
@@ -28,7 +28,7 @@ export default function ChatMessages() {
             }
             return res.json();
         },
-        enabled: !!conversationId,
+        enabled: !!conversationId && !conversationId.startsWith("temp-"),
         staleTime: 1000 * 60 * 5, // 5 minutes
     });
 
@@ -38,7 +38,7 @@ export default function ChatMessages() {
         if (messages.length > 0) {
             bottomRef.current?.scrollIntoView({ behavior: "smooth" });
         }
-    }, [messages.length, messages[messages.length - 1]?.text]);
+    }, [messages.length, messages[messages.length - 1]?.text, messages[messages.length - 1]?.thinking]);
 
     return (
         <div className="flex-1 px-3 py-4 sm:px-4 sm:py-6 h-full flex flex-col overflow-y-auto custom-scrollbar">
