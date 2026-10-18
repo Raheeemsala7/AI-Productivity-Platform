@@ -426,7 +426,7 @@ export default function ChatInput() {
 
               <button
                 type="submit"
-                disabled={isPendingMessage || isPendingFile || isRecording}
+                disabled={!isPendingMessage || !isPendingFile && !isRecording}
                 aria-label={isPendingMessage || isPendingFile ? t("stop") : t("send")}
                 className={cn(
                   "mb-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-all",
