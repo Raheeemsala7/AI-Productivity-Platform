@@ -114,46 +114,22 @@ export default function ChatInput() {
         abortStreamRef.current = null;
       }
 
-      const totalSteps = Math.min(60, Math.max(15, Math.floor(fullText.length / 8)));
-      const stepDelay = 20;
-      const stepSize = Math.max(1, Math.ceil(fullText.length / totalSteps));
+      // Split into word tokens including trailing whitespace, or standalone newlines
+      const tokens = fullText.match(/\S+\s*|\n/g) || [fullText];
+      const totalTokens = tokens.length;
+      // Natural typing cadence: ~42ms per word for normal responses, slightly faster for very long text
+      const baseDelay = totalTokens > 150 ? 20 : totalTokens > 70 ? 30 : 42;
 
-      let currentIndex = 0;
+      let isCancelled = false;
+      let currentText = "";
 
       await new Promise<void>((resolve) => {
-        let aborted = false;
-
-        const interval = setInterval(() => {
-          if (aborted) {
-            clearInterval(interval);
-            resolve();
-            return;
-          }
-
-          currentIndex = Math.min(currentIndex + stepSize, fullText.length);
-          const currentText = fullText.slice(0, currentIndex);
-          const isDone = currentIndex >= fullText.length;
-
-          queryClient.setQueryData<Message[]>(
-            ['conversation', convId],
-            (old = []) => old.map(msg => msg.id === msgId ? {
-              ...msg,
-              thinking: false,
-              streaming: !isDone,
-              text: currentText,
-            } : msg)
-          );
-
-          if (isDone) {
-            clearInterval(interval);
-            abortStreamRef.current = null;
-            resolve();
-          }
-        }, stepDelay);
+        let timeoutId: ReturnType<typeof setTimeout> | null = null;
 
         abortStreamRef.current = () => {
-          aborted = true;
-          clearInterval(interval);
+          isCancelled = true;
+          if (timeoutId) clearTimeout(timeoutId);
+          abortStreamRef.current = null;
           queryClient.setQueryData<Message[]>(
             ['conversation', convId],
             (old = []) => old.map(msg => msg.id === msgId ? {
@@ -165,6 +141,61 @@ export default function ChatInput() {
           );
           resolve();
         };
+
+        let tokenIndex = 0;
+
+        const nextToken = () => {
+          if (isCancelled) return;
+
+          if (tokenIndex >= tokens.length) {
+            abortStreamRef.current = null;
+            queryClient.setQueryData<Message[]>(
+              ['conversation', convId],
+              (old = []) => old.map(msg => msg.id === msgId ? {
+                ...msg,
+                thinking: false,
+                streaming: false,
+                text: fullText,
+              } : msg)
+            );
+            resolve();
+            return;
+          }
+
+          currentText += tokens[tokenIndex];
+          const token = tokens[tokenIndex];
+          tokenIndex++;
+          const isLast = tokenIndex >= tokens.length;
+
+          queryClient.setQueryData<Message[]>(
+            ['conversation', convId],
+            (old = []) => old.map(msg => msg.id === msgId ? {
+              ...msg,
+              thinking: false,
+              streaming: !isLast,
+              text: currentText,
+            } : msg)
+          );
+
+          if (isLast) {
+            abortStreamRef.current = null;
+            resolve();
+            return;
+          }
+
+          // Realistic typing pause:
+          // Slightly longer pause after sentence-ending punctuation or newlines
+          let delay = baseDelay;
+          if (token.includes("\n")) {
+            delay = Math.round(baseDelay * 2.2);
+          } else if (/[.!؟،:;?]/.test(token)) {
+            delay = Math.round(baseDelay * 1.8);
+          }
+
+          timeoutId = setTimeout(nextToken, delay);
+        };
+
+        nextToken();
       });
 
       setIsStreaming(false);
@@ -393,11 +424,16 @@ export default function ChatInput() {
     }
   }, [pendingSuggestion, form, setPendingSuggestion, setConversationId, onSubmit]);
 
-  const showMedia = (attachments.length > 0 || audio != null) && !isRecording;
+  const messageValue = form.watch("message");
+  const hasText = Boolean(messageValue && messageValue.trim().length > 0);
+  const hasMedia = attachments.length > 0 || audioFile != null;
+  const isBusy = isPendingMessage || isPendingFile || isStreaming;
+  const canSend = (hasText || hasMedia) && !isBusy && !isRecording;
+  const showMedia = hasMedia && !isRecording;
 
   return (
     <div className="shrink-0 border-t border-border bg-background px-3 py-2.5 pb-[env(safe-area-inset-bottom)] backdrop-blur-sm sm:px-4 sm:py-3">
-      <div className="mx-auto w-full max-w-2xl">
+      <div className="mx-auto w-full max-w-3xl">
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className={cn(
@@ -411,7 +447,7 @@ export default function ChatInput() {
               <AttachmentPreview
                 attachments={attachments}
                 audio={audio}
-                uploading={isPendingFile}
+                uploading={isBusy}
                 onRemoveAttachment={removeAttachment}
                 onRemoveAudio={removeAudio}
               />
@@ -475,12 +511,14 @@ export default function ChatInput() {
               <textarea
                 rows={1}
                 placeholder={t("inputPlaceholder")}
-                disabled={isPendingMessage || isPendingFile || isRecording}
+                disabled={isBusy || isRecording}
                 className="field-sizing-content max-h-32 min-h-7 min-w-0 flex-1 resize-none bg-transparent py-1 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
                 onKeyDown={(event) => {
                   if (event.key === "Enter" && !event.shiftKey) {
                     event.preventDefault();
-                    form.handleSubmit(onSubmit)();
+                    if (canSend) {
+                      form.handleSubmit(onSubmit)();
+                    }
                   }
                 }}
                 {...form.register("message")}
@@ -490,7 +528,7 @@ export default function ChatInput() {
                 <button
                   type="button"
                   aria-label={t("recordVoice")}
-                  disabled={isPendingMessage || isPendingFile}
+                  disabled={isBusy}
                   onClick={() => setIsRecording(true)}
                   className={cn(
                     "mb-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:cursor-not-allowed disabled:opacity-40 md:h-7 md:w-7",
@@ -503,9 +541,10 @@ export default function ChatInput() {
               ) : null}
 
               <button
-                type="submit"
-                disabled={!isPendingMessage || !isPendingFile && !isRecording}
-                aria-label={isPendingMessage || isPendingFile ? t("stop") : t("send")}
+                type={isStreaming ? "button" : "submit"}
+                onClick={isStreaming ? () => abortStreamRef.current?.() : undefined}
+                disabled={!canSend && !isStreaming}
+                aria-label={isBusy ? t("stop") : t("send")}
                 className={cn(
                   "mb-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-all",
                   "bg-[image:var(--gradient-primary)] text-white shadow-sm",
@@ -513,7 +552,7 @@ export default function ChatInput() {
                   "md:h-8 md:w-8"
                 )}
               >
-                {isPendingMessage || isPendingFile ? (
+                {isBusy ? (
                   <Square size={13} fill="currentColor" />
                 ) : (
                   <ArrowUp size={16} />
