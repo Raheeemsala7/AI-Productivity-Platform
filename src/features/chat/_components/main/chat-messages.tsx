@@ -6,11 +6,12 @@ import { useChatStore } from '../../store/chat.store';
 import MessageBubble from '../message-bubble';
 import { Loader2, AlertCircle } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Message } from '../../types/chat';
 
 export default function ChatMessages() {
     const t = useTranslations("Chat");
+    const queryClient = useQueryClient();
 
     // States
     const conversationId = useChatStore((state) => state.conversationId);
@@ -30,6 +31,7 @@ export default function ChatMessages() {
         },
         enabled: !!conversationId && !conversationId.startsWith("temp-"),
         staleTime: 1000 * 60 * 5, // 5 minutes
+        refetchOnWindowFocus: false,
     });
 
     const containerRef = React.useRef<HTMLDivElement>(null);
@@ -45,7 +47,11 @@ export default function ChatMessages() {
     }, [messages.length, messages[messages.length - 1]?.text, messages[messages.length - 1]?.thinking]);
 
     return (
-        <div ref={containerRef} className="flex-1 px-3 py-4 sm:px-4 sm:py-6 h-full flex flex-col overflow-y-auto custom-scrollbar">
+        <div
+            ref={containerRef}
+            data-slot="chat-messages-container"
+            className="flex-1 px-3 py-4 sm:px-4 sm:py-6 h-full flex flex-col overflow-y-auto custom-scrollbar"
+        >
             {isLoading ? (
                 <div className="flex h-full flex-1 items-center justify-center flex-col gap-3 text-muted-foreground">
                     <Loader2 className="h-8 w-8 animate-spin text-brand" />
@@ -67,6 +73,16 @@ export default function ChatMessages() {
                             text={message.text}
                             isThinking={message.thinking}
                             isStreaming={message.streaming}
+                            onStreamingDone={() => {
+                                useChatStore.getState().setStatus("idle");
+                                const currentId = useChatStore.getState().conversationId;
+                                if (currentId) {
+                                    queryClient.setQueryData<Message[]>(
+                                        ['conversation', currentId],
+                                        (old = []) => old.map(m => m.id === message.id ? { ...m, streaming: false } : m)
+                                    );
+                                }
+                            }}
                             attachments={message.attachments}
                             audio={message.audio}
                         />

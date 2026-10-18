@@ -47,6 +47,7 @@ export default function HistorySidebarContent({
   };
 
   const handleSelect = async (conversation: Conversation) => {
+    useChatStore.getState().setStatus("idle");
     setConversationId(conversation.id);
     if (isMobile) {
       setOpenMobile(false);

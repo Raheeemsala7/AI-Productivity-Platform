@@ -1,17 +1,18 @@
 import { cn } from "@/shared/lib/utils";
 import { getTextDirection } from "@/shared/lib/text-direction";
-import Markdown from "@/shared/components/ui/markdown";
 import type { MessageRole, MessageAttachment, MessageAudio } from "../types/chat";
 import { formatFileSize, getDocumentIcon, getFileLabel } from "../constant/chat.attachment";
 import Shimmer from "./shimmer";
 import ThinkingDots from "./thinking-dots";
 import VoiceMessagePlayer from "./voice-message-player";
+import StreamingText from "./streaming-text";
 
 type MessageBubbleProps = {
   role: MessageRole;
   text: string;
   isThinking?: boolean;
   isStreaming?: boolean;
+  onStreamingDone?: () => void;
   attachments?: MessageAttachment[];
   audio?: MessageAudio | null;
 };
@@ -21,6 +22,7 @@ export default function MessageBubble({
   text = "",
   isThinking = false,
   isStreaming = false,
+  onStreamingDone,
   attachments,
   audio,
 }: MessageBubbleProps) {
@@ -102,12 +104,11 @@ export default function MessageBubble({
                 {text.replace(/\*\*(.*?)\*\*/g, "$1")}
               </p>
             ) : (
-              <div className="relative">
-                <Markdown content={text} />
-                {isStreaming && (
-                  <span className="inline-block h-3.5 w-1.5 ms-0.5 bg-brand animate-pulse align-middle rounded-sm" />
-                )}
-              </div>
+              <StreamingText
+                content={text}
+                isStreaming={isStreaming}
+                onDone={onStreamingDone}
+              />
             )}
           </div>
         ) : null}

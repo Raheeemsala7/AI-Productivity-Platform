@@ -83,13 +83,14 @@ export default function ChatInput() {
   const [audio, setAudio] = useState<MessageAudio | null>(null);
   const [audioFile, setAudioFile] = useState<File | null>(null);
   const [isRecording, setIsRecording] = useState(false);
-  const [isStreaming, setIsStreaming] = useState(false);
+
+  const status = useChatStore((state) => state.status);
+  const isStreaming = status === "streaming";
 
   // Refs
   const imageInputRef = useRef<HTMLInputElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const mediaUrlsRef = useRef<string[]>([]);
-  const abortStreamRef = useRef<(() => void) | null>(null);
 
   const trackUrl = (url: string) => {
     mediaUrlsRef.current.push(url);
@@ -99,109 +100,21 @@ export default function ChatInput() {
   useEffect(
     () => () => {
       mediaUrlsRef.current.forEach((url) => URL.revokeObjectURL(url));
-      abortStreamRef.current?.();
     },
     [],
   );
 
-  const streamTextResponse = useCallback(
-    async (convId: string, msgId: string, fullText: string) => {
-      if (!fullText) return;
-      setIsStreaming(true);
-
-      if (abortStreamRef.current) {
-        abortStreamRef.current();
-        abortStreamRef.current = null;
-      }
-
-      // Split into word tokens including trailing whitespace, or standalone newlines
-      const tokens = fullText.match(/\S+\s*|\n/g) || [fullText];
-      const totalTokens = tokens.length;
-      // Natural typing cadence: ~42ms per word for normal responses, slightly faster for very long text
-      const baseDelay = totalTokens > 150 ? 20 : totalTokens > 70 ? 30 : 42;
-
-      let isCancelled = false;
-      let currentText = "";
-
-      await new Promise<void>((resolve) => {
-        let timeoutId: ReturnType<typeof setTimeout> | null = null;
-
-        abortStreamRef.current = () => {
-          isCancelled = true;
-          if (timeoutId) clearTimeout(timeoutId);
-          abortStreamRef.current = null;
-          queryClient.setQueryData<Message[]>(
-            ['conversation', convId],
-            (old = []) => old.map(msg => msg.id === msgId ? {
-              ...msg,
-              thinking: false,
-              streaming: false,
-              text: fullText,
-            } : msg)
-          );
-          resolve();
-        };
-
-        let tokenIndex = 0;
-
-        const nextToken = () => {
-          if (isCancelled) return;
-
-          if (tokenIndex >= tokens.length) {
-            abortStreamRef.current = null;
-            queryClient.setQueryData<Message[]>(
-              ['conversation', convId],
-              (old = []) => old.map(msg => msg.id === msgId ? {
-                ...msg,
-                thinking: false,
-                streaming: false,
-                text: fullText,
-              } : msg)
-            );
-            resolve();
-            return;
-          }
-
-          currentText += tokens[tokenIndex];
-          const token = tokens[tokenIndex];
-          tokenIndex++;
-          const isLast = tokenIndex >= tokens.length;
-
-          queryClient.setQueryData<Message[]>(
-            ['conversation', convId],
-            (old = []) => old.map(msg => msg.id === msgId ? {
-              ...msg,
-              thinking: false,
-              streaming: !isLast,
-              text: currentText,
-            } : msg)
-          );
-
-          if (isLast) {
-            abortStreamRef.current = null;
-            resolve();
-            return;
-          }
-
-          // Realistic typing pause:
-          // Slightly longer pause after sentence-ending punctuation or newlines
-          let delay = baseDelay;
-          if (token.includes("\n")) {
-            delay = Math.round(baseDelay * 2.2);
-          } else if (/[.!؟،:;?]/.test(token)) {
-            delay = Math.round(baseDelay * 1.8);
-          }
-
-          timeoutId = setTimeout(nextToken, delay);
-        };
-
-        nextToken();
-      });
-
-      setIsStreaming(false);
-    },
-    [queryClient],
-  );
+  const handleStop = useCallback(() => {
+    useChatStore.getState().setStatus("idle");
+    const currentId = useChatStore.getState().conversationId;
+    if (currentId) {
+      queryClient.setQueryData<Message[]>(
+        ['conversation', currentId],
+        (old = []) =>
+          old.map((m) => (m.streaming ? { ...m, streaming: false } : m))
+      );
+    }
+  }, [queryClient]);
 
   const addFiles = (files: File[]) => {
     let skipped = 0;
@@ -331,6 +244,7 @@ export default function ChatInput() {
       setAttachments([]);
       setAudio(null);
       setAudioFile(null);
+      useChatStore.getState().setStatus("submitted");
 
       try {
         let result: responseSendMessage;
@@ -356,34 +270,50 @@ export default function ChatInput() {
         if (isNewChat) {
           queryClient.setQueryData<Message[]>(
             ['conversation', realConvId],
-            [userMessage, { ...thinkingMessage, thinking: false, streaming: true, text: "" }]
+            [
+              userMessage,
+              {
+                ...thinkingMessage,
+                thinking: false,
+                streaming: true,
+                text: result.response,
+              },
+            ]
           );
           queryClient.removeQueries({ queryKey: ['conversation', activeConvId] });
           setConversationId(realConvId);
           setPendingNewChat(false);
+          useChatStore.getState().setStatus("streaming");
           router.refresh();
-
-          await streamTextResponse(realConvId, thinkingMessageId, result.response);
         } else {
           queryClient.setQueryData<Message[]>(
             ['conversation', currentConvId],
-            (old = []) => old.map(msg => msg.id === thinkingMessageId ? { ...msg, thinking: false, streaming: true, text: "" } : msg)
+            (old = []) =>
+              old.map((msg) =>
+                msg.id === thinkingMessageId
+                  ? {
+                      ...msg,
+                      thinking: false,
+                      streaming: true,
+                      text: result.response,
+                    }
+                  : msg
+              )
           );
-
-          await streamTextResponse(currentConvId, thinkingMessageId, result.response);
+          useChatStore.getState().setStatus("streaming");
         }
       } catch (error) {
         console.error("SEND MESSAGE ERROR:", error);
         toast.error(t("sendFailed"));
         setPendingNewChat(false);
-        setIsStreaming(false);
+        useChatStore.getState().setStatus("idle");
         if (isNewChat) {
           queryClient.removeQueries({ queryKey: ['conversation', activeConvId] });
           setConversationId(null);
         } else {
           queryClient.setQueryData<Message[]>(
             ['conversation', currentConvId],
-            (old = []) => old.filter(msg => msg.id !== thinkingMessageId)
+            (old = []) => old.filter((msg) => msg.id !== thinkingMessageId)
           );
         }
       }
@@ -402,9 +332,8 @@ export default function ChatInput() {
       router,
       setConversationId,
       setPendingNewChat,
-      streamTextResponse,
       t,
-      queryClient
+      queryClient,
     ],
   );
 
@@ -542,7 +471,7 @@ export default function ChatInput() {
 
               <button
                 type={isStreaming ? "button" : "submit"}
-                onClick={isStreaming ? () => abortStreamRef.current?.() : undefined}
+                onClick={isStreaming ? handleStop : undefined}
                 disabled={!canSend && !isStreaming}
                 aria-label={isBusy ? t("stop") : t("send")}
                 className={cn(
