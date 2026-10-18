@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useQueryClient } from "@tanstack/react-query";
-import { Message } from "../../types/chat";
+import { Message } from "../../chat/types/chat";
 import { toast } from "sonner";
 import { cn } from "@/shared/lib/utils";
 import { SidebarTrigger } from "@/shared/components/ui/sidebar";

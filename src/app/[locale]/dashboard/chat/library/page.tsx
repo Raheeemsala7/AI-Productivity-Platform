@@ -1,4 +1,4 @@
-import ImagesLibraryView from "@/features/chat/_components/library/images-library-view";
+import ImagesLibraryView from "@/features/library/components/images-library-view";
 
 export default function LibraryPage() {
     return <ImagesLibraryView />;
