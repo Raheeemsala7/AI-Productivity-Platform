@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/shared/lib/utils";
-import { MessageSquarePlus } from "lucide-react";
+import { Images, MessageSquarePlus, Sparkles } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useChatStore } from "../../store/chat.store";
 import type { Conversation } from "../../types/chat";
@@ -13,6 +13,7 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
 } from "@/shared/components/ui/sidebar";
+import { Link } from "@/i18n/navigation";
 
 type HistorySidebarContentProps = {
   title?: string;
@@ -34,7 +35,7 @@ export default function HistorySidebarContent({
   const activeId = useChatStore((state) => state.conversationId);
   const resetChat = useChatStore((state) => state.resetChat);
   const setConversationId = useChatStore((state) => state.setConversationId);
-  
+
   const setPendingNewChat = useChatStore((state) => state.setPendingNewChat);
   const isPendingNewChat = useChatStore((state) => state.isPendingNewChat);
 
@@ -61,75 +62,101 @@ export default function HistorySidebarContent({
   }, [initialConversations, setPendingNewChat]);
 
   return (
-    <div className={cn("flex h-full min-h-0 flex-col", className)}>
-{/* Collapsed sidebar: icon-only New Conversation. Reuses the same
-          action/state as the expanded button below. */}
-      <div className="hidden group-data-[collapsible=icon]:block">
-        <SidebarMenu className="py-1">
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              size="lg"
-              aria-label={t("newConversation")}
-              tooltip={t("newConversation")}
+    <>
+      <div className={cn("flex h-full min-h-0 flex-col", className)}>
+        {/* Collapsed sidebar: icon-only New Conversation & Library */}
+        <div className="hidden group-data-[collapsible=icon]:block">
+          <SidebarMenu className="py-1">
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                size="lg"
+                aria-label={t("newConversation")}
+                tooltip={t("newConversation")}
+                onClick={handleNew}
+              >
+                <MessageSquarePlus />
+                <span>{t("newChat")}</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                size="lg"
+                aria-label={t("library")}
+                tooltip={t("library")}
+              >
+                <Images />
+                <span>{t("library")}</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </div>
+
+        {/* Expanded sidebar: full content. Hidden when collapsed. */}
+        <div className="flex min-h-0 flex-1 flex-col group-data-[collapsible=icon]:hidden">
+          {title && (
+            <div className="flex items-center justify-between border-b border-border px-4 py-3">
+              <p className="text-sm font-medium text-foreground">{title}</p>
+            </div>
+          )}
+
+          {/* Action Buttons: New Chat & Images Library */}
+          <div className="flex flex-col gap-2 border-b border-border p-3">
+            {/* New Chat Button */}
+            <button
+              type="button"
               onClick={handleNew}
+              className="group flex h-10 w-full items-center justify-between rounded-lg px-4 text-sm font-medium text-brand-foreground shadow-xs transition-all hover:border-brand/40 hover:bg-muted hover:text-brand active:scale-[0.98]"
             >
-              <MessageSquarePlus />
-              <span>{t("newChat")}</span>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </div>
-
-      {/* Expanded sidebar: full content. Hidden when collapsed. */}
-      <div className="flex min-h-0 flex-1 flex-col group-data-[collapsible=icon]:hidden">
-        {title && (
-          <div className="flex items-center justify-between border-b border-border px-4 py-3">
-            <p className="text-sm font-medium text-foreground">{title}</p>
-          </div>
-        )}
-
-        <div className="border-b border-border p-4">
-          <button
-            type="button"
-            onClick={handleNew}
-            className="btn-primary inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl text-sm font-medium active:scale-[0.98]"
-          >
-            <MessageSquarePlus size={16} />
-            {t("newChat")}
-          </button>
-        </div>
-
-        <div className="flex min-h-0 flex-1 flex-col">
-          <div className="px-4 pt-4">
-            <p className="text-[11px] font-medium uppercase tracking-widest text-muted-foreground">
-              {t("history")}
-            </p>
-          </div>
-
-          <div className="custom-scrollbar flex-1 space-y-4 overflow-y-auto p-3">
-            {isPendingNewChat && (
-              <div className="group flex items-center gap-2 rounded-xl border border-transparent px-3 py-2.5">
-                <div className="h-4 w-4 shrink-0 animate-pulse rounded bg-muted-foreground/20" />
-                <div className="h-4 w-3/4 animate-pulse rounded bg-muted-foreground/20" />
+              <div className="flex items-center gap-2.5">
+                <MessageSquarePlus size={16} className="shrink-0" />
+                <span>{t("newChat")}</span>
               </div>
-            )}
-            {conversations.length === 0 ? (
-              <p className="px-2 py-6 text-center text-sm leading-relaxed text-muted-foreground">
-                {t("noHistory")}
+            </button>
+
+            {/* Library Button */}
+            <Link
+              href="/dashboard/chat/library"
+              className="group flex h-10 w-full items-center gap-2.5 rounded-lg  px-4 text-sm font-medium text-foreground transition-all hover:border-brand/40 hover:bg-muted hover:text-brand active:scale-[0.98]"
+            >
+              <Images size={16} className="shrink-0 text-muted-foreground transition-colors group-hover:text-brand" />
+              <span>{t("library")}</span>
+            </Link>
+          </div>
+
+          <div className="flex min-h-0 flex-1 flex-col">
+            <div className="px-4 pt-4">
+              <p className="text-[11px] font-medium uppercase tracking-widest text-muted-foreground">
+                {t("history")}
               </p>
-            ) : (
-              conversations.map((conversation) => (
-                <ConversationItem
-                  key={conversation.id}
-                  conversation={conversation}
-                  activeId={activeId}
-                  handleSelect={handleSelect}
-                />
-              ))
-            )}
+            </div>
+
+            <div className="custom-scrollbar flex-1 space-y-4 overflow-y-auto p-3">
+              {isPendingNewChat && (
+                <div className="group flex items-center gap-2 rounded-xl border border-transparent px-3 py-2.5">
+                  <div className="h-4 w-4 shrink-0 animate-pulse rounded bg-muted-foreground/20" />
+                  <div className="h-4 w-3/4 animate-pulse rounded bg-muted-foreground/20" />
+                </div>
+              )}
+              {conversations.length === 0 ? (
+                <p className="px-2 py-6 text-center text-sm leading-relaxed text-muted-foreground">
+                  {t("noHistory")}
+                </p>
+              ) : (
+                conversations.map((conversation) => (
+                  <ConversationItem
+                    key={conversation.id}
+                    conversation={conversation}
+                    activeId={activeId}
+                    handleSelect={handleSelect}
+                  />
+                ))
+              )}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+
+
+    </>
   );
 }

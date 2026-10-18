@@ -434,7 +434,20 @@
     "errorOccurred": "An error occurred",
     "failedLoadConversations": "Failed to load conversations",
     "defaultUserName": "User",
-    "scrollToBottom": "Scroll to bottom"
+    "scrollToBottom": "Scroll to bottom",
+    "library": "Library",
+    "imagesLibrary": "Images Library",
+    "imagesLibraryDesc": "Browse and manage all chat images and attachments",
+    "uploadImage": "Upload Image",
+    "searchImages": "Search images...",
+    "allImages": "All Images",
+    "chatImages": "Chat Attachments",
+    "noImages": "No images found in library",
+    "noImagesDesc": "Upload a new image or attach images in chat to see them here.",
+    "useInChat": "Use in chat",
+    "download": "Download",
+    "preview": "Preview",
+    "close": "Close"
   },
   "LocaleSwitcher": {
     "en": "English",

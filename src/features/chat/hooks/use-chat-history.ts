@@ -22,7 +22,7 @@ export function sendFileMessageMutation() {
 
 
 export function getInfiniteConversations() {
-      // Search params
+    // Search params
     const searchParams = useSearchParams()
 
     // Variables
@@ -31,8 +31,7 @@ export function getInfiniteConversations() {
 
     return useInfiniteQuery({
         queryKey: ["conversations", page, limit],
-        queryFn: async ({ pageParam }) => {
-
+        queryFn: async ({ pageParam }: { pageParam: number }) => {
             const res = await fetch(`/api/conversations/?page=${pageParam}&limit=${limit}`)
 
             const data: ApiResponse<responseGetConversations> = await res.json()
@@ -44,11 +43,11 @@ export function getInfiniteConversations() {
             return data.payload
         },
         initialPageParam: 1,
-        getNextPageParam: (lastPage) => {
-            // if (lastPage.metadata.page === lastPage.metadata.totalPages) {
-            //     return undefined
-            // }
-            // return lastPage.metadata.page + 1
+        getNextPageParam: (lastPage, allPages): number | undefined => {
+            if (!lastPage?.conversations || lastPage.conversations.length < limit) {
+                return undefined
+            }
+            return allPages.length + 1
         }
     })
 }

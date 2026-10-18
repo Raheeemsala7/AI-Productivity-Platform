@@ -463,7 +463,20 @@
     "errorOccurred": "حدث خطأ",
     "failedLoadConversations": "فشل تحميل المحادثات",
     "defaultUserName": "مستخدم",
-    "scrollToBottom": "النزول للأسفل"
+    "scrollToBottom": "النزول للأسفل",
+    "library": "المكتبة",
+    "imagesLibrary": "مكتبة الصور",
+    "imagesLibraryDesc": "تصفح وأدر جميع الصور ومرفقات المحادثات",
+    "uploadImage": "رفع صورة",
+    "searchImages": "البحث في الصور...",
+    "allImages": "جميع الصور",
+    "chatImages": "مرفقات الشات",
+    "noImages": "لا توجد صور بعد في المكتبة",
+    "noImagesDesc": "قم برفع صورة جديدة أو إرفاق صور داخل المحادثة لتظهر هنا.",
+    "useInChat": "استخدام في المحادثة",
+    "download": "تحميل",
+    "preview": "معاينة",
+    "close": "إغلاق"
   },
   "LocaleSwitcher": {
     "en": "English",
