@@ -7,6 +7,12 @@ export type User = {
     avatar: string | null;
     avatar_color: string;
     role: "user" | "admin" | "superadmin"
+    credits: number;
+    plan: {
+        name: string;
+        credits: number;
+    };
+    ends_at: string;
 };
 
 
@@ -35,6 +41,12 @@ export interface GoogleLoginUser {
     created_at: string;
     updated_at: string;
     role: "user" | "admin" | "superadmin";
+    credits: number;
+    plan: {
+        name: string;
+        credits: number;
+    };
+    ends_at: string;
 }
 
 export type GoogleLoginResponse =
