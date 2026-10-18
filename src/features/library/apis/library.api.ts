@@ -36,7 +36,6 @@ export async function getAllFilesLibrary(): Promise<ApiResponse<{ files: Library
                 success: false,
                 code: 500,
                 message: data.message || "Failed to get files",
-                payload: { files: [] },
             };
         }
 
@@ -47,7 +46,6 @@ export async function getAllFilesLibrary(): Promise<ApiResponse<{ files: Library
             success: false,
             code: 500,
             message: "Failed to get files",
-            payload: { files: [] },
         };
     }
 }
