@@ -8,7 +8,9 @@ import {
   Loader2,
   MessageSquare,
   RefreshCw,
-  X,
+  RotateCw,
+  ZoomIn,
+  ZoomOut,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
@@ -43,6 +45,11 @@ export default function ImagesLibraryView({ files = [] }: ImagesLibraryViewProps
   const [selectedFile, setSelectedFile] = useState<LibraryFile | null>(null);
   const [fileData, setFileData] = useState<OneFileLibraryResult | null>(null);
   const [isLoadingPreview, setIsLoadingPreview] = useState(false);
+
+  // Image viewer zoom & rotation & dimensions
+  const [zoom, setZoom] = useState(1);
+  const [rotation, setRotation] = useState(0);
+  const [dimensions, setDimensions] = useState<{ w: number; h: number } | null>(null);
 
   // Filter ONLY supported files (images & PDFs)
   const supportedFiles = useMemo(() => {
@@ -82,6 +89,9 @@ export default function ImagesLibraryView({ files = [] }: ImagesLibraryViewProps
     setSelectedFile(file);
     setFileData(null);
     setIsLoadingPreview(true);
+    setZoom(1);
+    setRotation(0);
+    setDimensions(null);
 
     try {
       const res = await getOneFileLibrary(file.view_url || file.name);
@@ -97,6 +107,15 @@ export default function ImagesLibraryView({ files = [] }: ImagesLibraryViewProps
       setIsLoadingPreview(false);
     }
   };
+
+  // Zoom controls
+  const handleZoomIn = () => setZoom((prev) => Math.min(Number((prev + 0.25).toFixed(2)), 3));
+  const handleZoomOut = () => setZoom((prev) => Math.max(Number((prev - 0.25).toFixed(2)), 0.5));
+  const handleResetZoom = () => {
+    setZoom(1);
+    setRotation(0);
+  };
+  const handleRotate = () => setRotation((prev) => (prev + 90) % 360);
 
   // Download handler directly using dataUrl or Server Action
   const handleDownload = async (file: LibraryFile, e?: React.MouseEvent) => {
@@ -351,28 +370,35 @@ export default function ImagesLibraryView({ files = [] }: ImagesLibraryViewProps
             }
           }}
         >
-          <DialogContent className="max-w-4xl p-0 overflow-hidden bg-background border border-border rounded-3xl shadow-2xl">
+          <DialogContent className="w-[95vw] sm:max-w-4xl md:max-w-5xl lg:max-w-6xl p-0 gap-0 overflow-hidden bg-background border border-border/80 rounded-3xl shadow-2xl">
             {/* Modal Header */}
-            <DialogHeader className="flex flex-row items-center justify-between border-b border-border/80 px-4 py-3.5 sm:px-6 bg-muted/20">
+            <DialogHeader className="flex flex-row items-center justify-between border-b border-border/80 px-4 py-3 sm:px-6 bg-muted/20">
               <div className="flex items-center gap-2.5 min-w-0 pr-4">
                 <div
                   className={cn(
-                    "flex size-8 shrink-0 items-center justify-center rounded-lg border",
+                    "flex size-9 shrink-0 items-center justify-center rounded-xl border shadow-2xs",
                     selectedIsPdf
                       ? "bg-red-500/10 text-red-500 border-red-500/20"
                       : "bg-brand/10 text-brand border-brand/20"
                   )}
                 >
                   {selectedIsPdf ? (
-                    <FileText className="size-4" />
+                    <FileText className="size-4.5" />
                   ) : (
-                    <ImageIcon className="size-4" />
+                    <ImageIcon className="size-4.5" />
                   )}
                 </div>
                 <div className="min-w-0">
-                  <DialogTitle className="truncate text-xs sm:text-sm font-bold text-foreground text-start dir-ltr">
-                    {selectedFile.name}
-                  </DialogTitle>
+                  <div className="flex items-center gap-2">
+                    <DialogTitle className="truncate text-xs sm:text-sm font-bold text-foreground text-start dir-ltr">
+                      {selectedFile.name}
+                    </DialogTitle>
+                    {dimensions && !selectedIsPdf && (
+                      <span className="hidden sm:inline-block rounded-md bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground dir-ltr">
+                        {dimensions.w} × {dimensions.h} px
+                      </span>
+                    )}
+                  </div>
                   <p className="text-[11px] text-muted-foreground text-start">
                     {selectedIsPdf
                       ? t("pdfDocument") || "مستند PDF"
@@ -395,40 +421,87 @@ export default function ImagesLibraryView({ files = [] }: ImagesLibraryViewProps
             </DialogHeader>
 
             {/* Modal Body Preview */}
-            <div className="flex flex-col items-center justify-center p-3 sm:p-6 bg-muted/10 min-h-[360px] max-h-[75vh] overflow-auto custom-scrollbar">
+            <div className="relative flex flex-col items-center justify-center w-full h-[65vh] sm:h-[75vh] max-h-[820px] p-3 sm:p-6 bg-zinc-950/95 dark:bg-black/95 overflow-hidden select-none">
               {isLoadingPreview ? (
-                <div className="flex flex-col items-center justify-center min-h-[280px] gap-2">
+                <div className="flex flex-col items-center justify-center min-h-[280px] gap-2.5">
                   <Loader2 className="size-8 animate-spin text-brand" />
-                  <span className="text-xs text-muted-foreground">جاري تحميل المعاينة بأمان...</span>
+                  <span className="text-xs font-medium text-zinc-400">جاري تحميل المعاينة بأمان...</span>
                 </div>
               ) : fileData?.dataUrl ? (
                 selectedIsPdf ? (
-                  <div className="w-full flex flex-col items-center gap-3">
+                  <div className="size-full rounded-2xl overflow-hidden border border-zinc-800 bg-background shadow-md">
                     <iframe
                       src={fileData.dataUrl}
-                      className="w-full h-[60vh] rounded-2xl border border-border/60 bg-background shadow-xs"
+                      className="size-full"
                       title={selectedFile.name}
                     />
                   </div>
                 ) : (
-                  <div className="relative flex items-center justify-center max-w-full">
+                  <div className="relative flex items-center justify-center size-full overflow-hidden">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={fileData.dataUrl}
                       alt={selectedFile.name}
-                      className="max-h-[68vh] w-auto max-w-full rounded-2xl object-contain shadow-md"
+                      onLoad={(e) => {
+                        const img = e.currentTarget;
+                        setDimensions({ w: img.naturalWidth, h: img.naturalHeight });
+                      }}
+                      style={{
+                        transform: `scale(${zoom}) rotate(${rotation}deg)`,
+                        transition: "transform 0.2s cubic-bezier(0.2, 0, 0, 1)",
+                      }}
+                      className="max-h-full max-w-full w-auto h-auto object-contain rounded-xl shadow-2xl border border-white/10"
                     />
+
+                    {/* Floating Zoom & Rotate Toolbar for Images */}
+                    <div className="absolute bottom-3 sm:bottom-4 start-1/2 -translate-x-1/2 flex items-center gap-1 px-3 py-1.5 rounded-full bg-zinc-900/90 border border-zinc-700/60 shadow-xl backdrop-blur-md text-zinc-300">
+                      <button
+                        type="button"
+                        onClick={handleZoomOut}
+                        disabled={zoom <= 0.5}
+                        title="تصغير"
+                        className="p-1 rounded-full hover:bg-zinc-800 hover:text-white transition-colors disabled:opacity-30"
+                      >
+                        <ZoomOut className="size-3.5 sm:size-4" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleResetZoom}
+                        title="إعادة ضبط الحجم"
+                        className="px-2 py-0.5 text-[11px] sm:text-xs font-medium rounded-md hover:bg-zinc-800 hover:text-white transition-colors min-w-[42px] text-center"
+                      >
+                        {Math.round(zoom * 100)}%
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleZoomIn}
+                        disabled={zoom >= 3}
+                        title="تكبير"
+                        className="p-1 rounded-full hover:bg-zinc-800 hover:text-white transition-colors disabled:opacity-30"
+                      >
+                        <ZoomIn className="size-3.5 sm:size-4" />
+                      </button>
+                      <div className="w-px h-3.5 bg-zinc-700/80 mx-1" />
+                      <button
+                        type="button"
+                        onClick={handleRotate}
+                        title="تدوير 90 درجة"
+                        className="p-1 rounded-full hover:bg-zinc-800 hover:text-white transition-colors"
+                      >
+                        <RotateCw className="size-3.5 sm:size-4" />
+                      </button>
+                    </div>
                   </div>
                 )
               ) : (
-                <div className="flex flex-col items-center justify-center min-h-[200px] gap-2 text-center">
-                  <p className="text-sm font-medium text-destructive">
+                <div className="flex flex-col items-center justify-center min-h-[200px] gap-2.5 text-center">
+                  <p className="text-sm font-medium text-red-400">
                     فشل جلب المعاينة للملف المحدد
                   </p>
                   <button
                     type="button"
                     onClick={() => handleOpenPreview(selectedFile)}
-                    className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-background px-3 py-1.5 text-xs font-medium text-foreground hover:bg-muted"
+                    className="inline-flex items-center gap-1.5 rounded-xl border border-zinc-700 bg-zinc-800 px-3.5 py-1.5 text-xs font-medium text-zinc-200 hover:bg-zinc-700 transition-colors"
                   >
                     <RefreshCw className="size-3.5" />
                     <span>إعادة المحاولة</span>
