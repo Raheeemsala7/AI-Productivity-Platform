@@ -26,6 +26,7 @@ import ChatAttachmentDropdown from "./chat-attachment-dropdown";
 import ChatSubmitButton from "./chat-submit-button";
 import VoiceTranscribeBar from "./transcription/voice-transcribe-bar";
 import { useVoiceTranscribe } from "../hooks/use-voice-transcribe";
+import { USER_PROFILE_QUERY_KEY } from "@/features/auth/hooks/use-user-profile";
 
 export default function ChatInput() {
   const t = useTranslations("Chat");
@@ -79,6 +80,7 @@ export default function ChatInput() {
     cancelRecording,
   } = useVoiceTranscribe({
     onSuccess: (transcribedText) => {
+      queryClient.invalidateQueries({ queryKey: USER_PROFILE_QUERY_KEY });
       const current = form.getValues("message")?.trim();
       const nextMessage = current ? `${current} ${transcribedText}` : transcribedText;
       form.setValue("message", nextMessage, { shouldValidate: true, shouldDirty: true });
@@ -269,6 +271,9 @@ export default function ChatInput() {
           );
           useChatStore.getState().setStatus("streaming");
         }
+
+        // Always invalidate user profile to update credits after message
+        queryClient.invalidateQueries({ queryKey: USER_PROFILE_QUERY_KEY });
       } catch (error) {
         console.error("SEND MESSAGE ERROR:", error);
         toast.error(t("sendFailed"));

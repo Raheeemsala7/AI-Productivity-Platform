@@ -1,22 +1,29 @@
 "use client"
 
-import { useInfiniteQuery, useMutation } from "@tanstack/react-query"
+import { useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { sendFileMessageAction, sendMessageAction } from "../apis/chat.action"
 import { useSearchParams } from "next/navigation"
 import { ApiResponse } from "@/shared/types/api"
 import { responseGetConversations } from "../types/chat"
-
-
+import { USER_PROFILE_QUERY_KEY } from "@/features/auth/hooks/use-user-profile"
 
 export function sendMessageMutation() {
+  const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: sendMessageAction
+    mutationFn: sendMessageAction,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: USER_PROFILE_QUERY_KEY })
+    },
   })
 }
 
 export function sendFileMessageMutation() {
+  const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: sendFileMessageAction
+    mutationFn: sendFileMessageAction,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: USER_PROFILE_QUERY_KEY })
+    },
   })
 }
 
