@@ -1,71 +1,46 @@
 "use client";
 
-import { cn } from "@/shared/lib/utils";
-import {
-  ArrowUp,
-  Image as ImageIcon,
-  Mic,
-  Paperclip,
-  Plus,
-  Square,
-} from "lucide-react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { Mic } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+import { cn } from "@/shared/lib/utils";
+
 import { sendFileMessageMutation, sendMessageMutation } from "../hooks/use-chat-history";
 import { useChatStore } from "../store/chat.store";
-import { useForm } from "react-hook-form";
-import { ChatInputForm, StagedAttachment, Message, responseSendMessage } from "../types/chat";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { chatInputSchema } from "../schema/chat.schema";
-import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
-import AttachmentPreview from "./attachment-preview";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/shared/components/ui/dropdown-menu";
+import { ChatInputForm, StagedAttachment, Message, responseSendMessage } from "../types/chat";
 import {
   getFileKind,
   isSupportedFile,
   MAX_ATTACHMENTS,
   MAX_ATTACHMENT_SIZE,
-  SUPPORTED_ATTACHMENT_EXTENSIONS,
 } from "../constant/chat.attachment";
 
-const IMAGE_ACCEPT = [
-  "png",
-  "jpg",
-  "jpeg",
-  "gif",
-  "webp",
-  "bmp",
-]
-  .map((ext) => `.${ext}`)
-  .join(",");
-
-const FILE_ACCEPT = SUPPORTED_ATTACHMENT_EXTENSIONS.map(
-  (ext) => `.${ext}`,
-).join(",");
+import AttachmentPreview from "./attachment-preview";
+import ChatAttachmentDropdown from "./chat-attachment-dropdown";
+import ChatSubmitButton from "./chat-submit-button";
+import VoiceTranscribeBar from "./transcription/voice-transcribe-bar";
+import { useVoiceTranscribe } from "../hooks/use-voice-transcribe";
 
 export default function ChatInput() {
-  // Translation
   const t = useTranslations("Chat");
-  // Hooks
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  // Store Actions
+  // Store
   const setConversationId = useChatStore((state) => state.setConversationId);
   const setPendingNewChat = useChatStore((state) => state.setPendingNewChat);
   const pendingSuggestion = useChatStore((state) => state.pendingSuggestion);
-  const setPendingSuggestion = useChatStore(
-    (state) => state.setPendingSuggestion,
-  );
+  const setPendingSuggestion = useChatStore((state) => state.setPendingSuggestion);
+  const status = useChatStore((state) => state.status);
+  const isStreaming = status === "streaming";
 
-  // Mutations 
+  // Mutations
   const { mutateAsync: mutateMessageAsync, isPending: isPendingMessage } = sendMessageMutation();
   const { mutateAsync: mutateFileAsync, isPending: isPendingFile } = sendFileMessageMutation();
 
@@ -77,37 +52,57 @@ export default function ChatInput() {
     },
   });
 
-  // State
+  // Attachments State
   const [attachments, setAttachments] = useState<StagedAttachment[]>([]);
+  const [isVoiceMode, setIsVoiceMode] = useState(false);
 
-  const status = useChatStore((state) => state.status);
-  const isStreaming = status === "streaming";
-
-  // Refs
-  const imageInputRef = useRef<HTMLInputElement | null>(null);
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  // Clean object URLs
   const mediaUrlsRef = useRef<string[]>([]);
-
   const trackUrl = (url: string) => {
     mediaUrlsRef.current.push(url);
     return url;
   };
 
-  useEffect(
-    () => () => {
+  useEffect(() => {
+    return () => {
       mediaUrlsRef.current.forEach((url) => URL.revokeObjectURL(url));
-    },
-    [],
-  );
+    };
+  }, []);
 
-  const handleStop = useCallback(() => {
+  // Voice Transcribe Hook
+  const {
+    isRecording,
+    isTranscribing,
+    seconds,
+    startRecording,
+    stopAndTranscribe,
+    cancelRecording,
+  } = useVoiceTranscribe({
+    onSuccess: (transcribedText) => {
+      const current = form.getValues("message")?.trim();
+      const nextMessage = current ? `${current} ${transcribedText}` : transcribedText;
+      form.setValue("message", nextMessage, { shouldValidate: true, shouldDirty: true });
+      setIsVoiceMode(false);
+      setTimeout(() => form.setFocus("message"), 50);
+    },
+    onCancel: () => {
+      setIsVoiceMode(false);
+    },
+  });
+
+  const handleStartVoice = async () => {
+    if (isPendingMessage || isPendingFile || isStreaming) return;
+    setIsVoiceMode(true);
+    await startRecording();
+  };
+
+  const handleStopStream = useCallback(() => {
     useChatStore.getState().setStatus("idle");
     const currentId = useChatStore.getState().conversationId;
     if (currentId) {
       queryClient.setQueryData<Message[]>(
         ["conversation", currentId],
-        (old = []) =>
-          old.map((m) => (m.streaming ? { ...m, streaming: false } : m)),
+        (old = []) => old.map((m) => (m.streaming ? { ...m, streaming: false } : m)),
       );
     }
   }, [queryClient]);
@@ -160,14 +155,6 @@ export default function ChatInput() {
     ]);
   };
 
-  const handleImagePick = (list: FileList | null) => {
-    if (list && list.length > 0) addFiles(Array.from(list));
-  };
-
-  const handleFilePick = (list: FileList | null) => {
-    if (list && list.length > 0) addFiles(Array.from(list));
-  };
-
   const removeAttachment = (id: string) => {
     const target = attachments.find((a) => a.id === id);
     if (target?.previewUrl) URL.revokeObjectURL(target.previewUrl);
@@ -178,7 +165,7 @@ export default function ChatInput() {
     async (data: ChatInputForm) => {
       const value = data.message?.trim();
       const hasAttachments = attachments.length > 0;
-      if (isPendingFile || isPendingMessage || isStreaming) return;
+      if (isPendingFile || isPendingMessage || isStreaming || isVoiceMode) return;
       if (!value && !hasAttachments) return;
 
       const currentConvId = useChatStore.getState().conversationId;
@@ -304,6 +291,7 @@ export default function ChatInput() {
       isPendingFile,
       isPendingMessage,
       isStreaming,
+      isVoiceMode,
       mutateMessageAsync,
       mutateFileAsync,
       router,
@@ -314,6 +302,7 @@ export default function ChatInput() {
     ],
   );
 
+  // Suggestions handler
   useEffect(() => {
     if (!pendingSuggestion) return;
     const { text, autoSend } = pendingSuggestion;
@@ -323,7 +312,6 @@ export default function ChatInput() {
     form.setValue("message", text, { shouldValidate: true, shouldDirty: true });
 
     if (autoSend) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect -- Intentional: auto-send after picking a suggestion.
       onSubmit({ message: text });
     } else {
       form.setFocus("message");
@@ -348,7 +336,8 @@ export default function ChatInput() {
           )}
         >
           <div className="flex flex-col gap-1.5">
-            {hasAttachments ? (
+            {/* Staged attachments preview */}
+            {hasAttachments && !isVoiceMode ? (
               <AttachmentPreview
                 attachments={attachments}
                 uploading={isBusy}
@@ -356,98 +345,61 @@ export default function ChatInput() {
               />
             ) : null}
 
-            <div className="flex items-end gap-1.5">
-              <DropdownMenu>
-                <DropdownMenuTrigger
-                  aria-label={t("attachFile")}
-                  className="mb-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground md:h-7 md:w-7"
-                  render={(props) => <button type="button" {...props} />}
-                >
-                  <Plus size={15} />
-                </DropdownMenuTrigger>
-
-                <DropdownMenuContent
-                  align="start"
-                  side="top"
-                  sideOffset={8}
-                  className="min-w-44 p-1.5"
-                >
-                  <DropdownMenuItem
-                    onClick={() => imageInputRef.current?.click()}
-                  >
-                    <ImageIcon size={15} strokeWidth={1.75} />
-                    {t("addImage")}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() => fileInputRef.current?.click()}
-                  >
-                    <Paperclip size={15} strokeWidth={1.75} />
-                    {t("addFile")}
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-
-              <input
-                ref={imageInputRef}
-                type="file"
-                accept={IMAGE_ACCEPT}
-                multiple
-                hidden
-                onChange={(e) => handleImagePick(e.target.files)}
+            {/* If in voice mode: show VoiceTranscribeBar in place of typing inputs */}
+            {isVoiceMode ? (
+              <VoiceTranscribeBar
+                isRecording={isRecording}
+                isTranscribing={isTranscribing}
+                seconds={seconds}
+                onStop={stopAndTranscribe}
+                onCancel={cancelRecording}
               />
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept={FILE_ACCEPT}
-                multiple
-                hidden
-                onChange={(e) => handleFilePick(e.target.files)}
-              />
+            ) : (
+              <div className="flex items-end gap-1.5">
+                {/* File Attachment Dropdown */}
+                <ChatAttachmentDropdown
+                  onFilesSelected={addFiles}
+                  disabled={isBusy}
+                />
 
-              <textarea
-                rows={1}
-                placeholder={t("inputPlaceholder")}
-                disabled={isBusy}
-                className="field-sizing-content max-h-32 min-h-7 min-w-0 flex-1 resize-none bg-transparent py-1 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
-                onKeyDown={(event) => {
-                  if (event.key === "Enter" && !event.shiftKey) {
-                    event.preventDefault();
-                    if (canSend) {
-                      form.handleSubmit(onSubmit)();
+                {/* Textarea Input */}
+                <textarea
+                  rows={1}
+                  placeholder={t("inputPlaceholder")}
+                  disabled={isBusy}
+                  className="field-sizing-content max-h-32 min-h-7 min-w-0 flex-1 resize-none bg-transparent py-1 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter" && !event.shiftKey) {
+                      event.preventDefault();
+                      if (canSend) {
+                        form.handleSubmit(onSubmit)();
+                      }
                     }
-                  }
-                }}
-                {...form.register("message")}
-              />
+                  }}
+                  {...form.register("message")}
+                />
 
-              <button
-                type="button"
-                aria-label={t("recordVoice")}
-                disabled={isBusy}
-                className="mb-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:cursor-not-allowed disabled:opacity-40 md:h-7 md:w-7"
-              >
-                <Mic size={16} />
-              </button>
+                {/* Mic Transcribe Trigger Button */}
+                <button
+                  type="button"
+                  aria-label={t("recordVoice")}
+                  disabled={isBusy}
+                  onClick={handleStartVoice}
+                  title="تحويل الصوت إلى نص"
+                  className="mb-1 flex size-8 shrink-0 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:cursor-not-allowed disabled:opacity-40 md:size-7"
+                >
+                  <Mic size={16} />
+                </button>
 
-              <button
-                type={isStreaming ? "button" : "submit"}
-                onClick={isStreaming ? handleStop : undefined}
-                disabled={!canSend && !isStreaming}
-                aria-label={isBusy ? t("stop") : t("send")}
-                className={cn(
-                  "mb-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-all",
-                  "bg-[image:var(--gradient-primary)] text-white shadow-sm",
-                  "hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-30",
-                  "md:h-8 md:w-8",
-                )}
-              >
-                {isBusy ? (
-                  <Square size={13} fill="currentColor" />
-                ) : (
-                  <ArrowUp size={16} />
-                )}
-              </button>
-            </div>
+                {/* Submit / Stop streaming Button */}
+                <ChatSubmitButton
+                  isBusy={isBusy}
+                  isStreaming={isStreaming}
+                  canSend={canSend}
+                  onStop={handleStopStream}
+                />
+              </div>
+            )}
           </div>
         </form>
       </div>
