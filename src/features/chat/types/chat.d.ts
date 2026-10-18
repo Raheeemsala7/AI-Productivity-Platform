@@ -23,6 +23,7 @@ export type Message = {
   role: "user" | "assistant";
   text: string;
   thinking?: boolean;
+  streaming?: boolean;
   attachments?: MessageAttachment[];
   audio?: MessageAudio | null;
 };

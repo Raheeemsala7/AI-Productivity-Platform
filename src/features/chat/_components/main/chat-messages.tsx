@@ -55,13 +55,14 @@ export default function ChatMessages() {
             ) : messages.length === 0 ? (
                 <EmptyState onPick={(suggestion) => setPendingSuggestion({ text: suggestion, autoSend: true })} />
             ) : (
-                <div className="mx-auto flex w-full max-w-2xl flex-col gap-8 pb-4">
+                <div className="mx-auto flex w-full max-w-3xl flex-col gap-8 pb-4">
                     {messages.map((message) => (
                         <MessageBubble
                             key={message.id}
                             role={message.role}
                             text={message.text}
                             isThinking={message.thinking}
+                            isStreaming={message.streaming}
                             attachments={message.attachments}
                             audio={message.audio}
                         />

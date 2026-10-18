@@ -11,6 +11,7 @@ type MessageBubbleProps = {
   role: MessageRole;
   text: string;
   isThinking?: boolean;
+  isStreaming?: boolean;
   attachments?: MessageAttachment[];
   audio?: MessageAudio | null;
 };
@@ -19,6 +20,7 @@ export default function MessageBubble({
   role,
   text = "",
   isThinking = false,
+  isStreaming = false,
   attachments,
   audio,
 }: MessageBubbleProps) {
@@ -100,7 +102,12 @@ export default function MessageBubble({
                 {text.replace(/\*\*(.*?)\*\*/g, "$1")}
               </p>
             ) : (
-              <Markdown content={text} />
+              <div className="relative">
+                <Markdown content={text} />
+                {isStreaming && (
+                  <span className="inline-block h-3.5 w-1.5 ms-0.5 bg-brand animate-pulse align-middle rounded-sm" />
+                )}
+              </div>
             )}
           </div>
         ) : null}

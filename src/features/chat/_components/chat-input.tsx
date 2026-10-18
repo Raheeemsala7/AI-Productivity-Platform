@@ -83,11 +83,13 @@ export default function ChatInput() {
   const [audio, setAudio] = useState<MessageAudio | null>(null);
   const [audioFile, setAudioFile] = useState<File | null>(null);
   const [isRecording, setIsRecording] = useState(false);
+  const [isStreaming, setIsStreaming] = useState(false);
 
   // Refs
   const imageInputRef = useRef<HTMLInputElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const mediaUrlsRef = useRef<string[]>([]);
+  const abortStreamRef = useRef<(() => void) | null>(null);
 
   const trackUrl = (url: string) => {
     mediaUrlsRef.current.push(url);
@@ -97,8 +99,77 @@ export default function ChatInput() {
   useEffect(
     () => () => {
       mediaUrlsRef.current.forEach((url) => URL.revokeObjectURL(url));
+      abortStreamRef.current?.();
     },
     [],
+  );
+
+  const streamTextResponse = useCallback(
+    async (convId: string, msgId: string, fullText: string) => {
+      if (!fullText) return;
+      setIsStreaming(true);
+
+      if (abortStreamRef.current) {
+        abortStreamRef.current();
+        abortStreamRef.current = null;
+      }
+
+      const totalSteps = Math.min(60, Math.max(15, Math.floor(fullText.length / 8)));
+      const stepDelay = 20;
+      const stepSize = Math.max(1, Math.ceil(fullText.length / totalSteps));
+
+      let currentIndex = 0;
+
+      await new Promise<void>((resolve) => {
+        let aborted = false;
+
+        const interval = setInterval(() => {
+          if (aborted) {
+            clearInterval(interval);
+            resolve();
+            return;
+          }
+
+          currentIndex = Math.min(currentIndex + stepSize, fullText.length);
+          const currentText = fullText.slice(0, currentIndex);
+          const isDone = currentIndex >= fullText.length;
+
+          queryClient.setQueryData<Message[]>(
+            ['conversation', convId],
+            (old = []) => old.map(msg => msg.id === msgId ? {
+              ...msg,
+              thinking: false,
+              streaming: !isDone,
+              text: currentText,
+            } : msg)
+          );
+
+          if (isDone) {
+            clearInterval(interval);
+            abortStreamRef.current = null;
+            resolve();
+          }
+        }, stepDelay);
+
+        abortStreamRef.current = () => {
+          aborted = true;
+          clearInterval(interval);
+          queryClient.setQueryData<Message[]>(
+            ['conversation', convId],
+            (old = []) => old.map(msg => msg.id === msgId ? {
+              ...msg,
+              thinking: false,
+              streaming: false,
+              text: fullText,
+            } : msg)
+          );
+          resolve();
+        };
+      });
+
+      setIsStreaming(false);
+    },
+    [queryClient],
   );
 
   const addFiles = (files: File[]) => {
@@ -180,7 +251,7 @@ export default function ChatInput() {
     async (data: ChatInputForm) => {
       const value = data.message?.trim();
       const hasMedia = attachments.length > 0 || audioFile != null;
-      if (isPendingFile || isPendingMessage || isRecording) return;
+      if (isPendingFile || isPendingMessage || isRecording || isStreaming) return;
       if (!value && !hasMedia) return;
 
       const currentConvId = useChatStore.getState().conversationId;
@@ -254,22 +325,27 @@ export default function ChatInput() {
         if (isNewChat) {
           queryClient.setQueryData<Message[]>(
             ['conversation', realConvId],
-            [userMessage, { ...thinkingMessage, thinking: false, text: result.response }]
+            [userMessage, { ...thinkingMessage, thinking: false, streaming: true, text: "" }]
           );
           queryClient.removeQueries({ queryKey: ['conversation', activeConvId] });
           setConversationId(realConvId);
           setPendingNewChat(false);
           router.refresh();
+
+          await streamTextResponse(realConvId, thinkingMessageId, result.response);
         } else {
           queryClient.setQueryData<Message[]>(
             ['conversation', currentConvId],
-            (old = []) => old.map(msg => msg.id === thinkingMessageId ? { ...msg, thinking: false, text: result.response } : msg)
+            (old = []) => old.map(msg => msg.id === thinkingMessageId ? { ...msg, thinking: false, streaming: true, text: "" } : msg)
           );
+
+          await streamTextResponse(currentConvId, thinkingMessageId, result.response);
         }
       } catch (error) {
         console.error("SEND MESSAGE ERROR:", error);
         toast.error(t("sendFailed"));
         setPendingNewChat(false);
+        setIsStreaming(false);
         if (isNewChat) {
           queryClient.removeQueries({ queryKey: ['conversation', activeConvId] });
           setConversationId(null);
@@ -289,11 +365,13 @@ export default function ChatInput() {
       isPendingFile,
       isPendingMessage,
       isRecording,
+      isStreaming,
       mutateMessageAsync,
       mutateFileAsync,
       router,
       setConversationId,
       setPendingNewChat,
+      streamTextResponse,
       t,
       queryClient
     ],
