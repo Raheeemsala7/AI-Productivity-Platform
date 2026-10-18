@@ -21,7 +21,7 @@ type AttachmentPreviewProps = {
   audio?: MessageAudio | null;
   uploading: boolean;
   onRemoveAttachment: (id: string) => void;
-  onRemoveAudio: () => void;
+  onRemoveAudio?: () => void;
 };
 
 export default function AttachmentPreview({
@@ -57,7 +57,7 @@ export default function AttachmentPreview({
         ),
       )}
 
-      {audio ? (
+      {audio && onRemoveAudio ? (
         <AudioPreview
           audio={audio}
           uploading={uploading}

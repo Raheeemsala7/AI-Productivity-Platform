@@ -15,13 +15,12 @@ import { useQueryClient } from "@tanstack/react-query";
 import { sendFileMessageMutation, sendMessageMutation } from "../hooks/use-chat-history";
 import { useChatStore } from "../store/chat.store";
 import { useForm } from "react-hook-form";
-import { ChatInputForm, MessageAudio, StagedAttachment, Message, responseSendMessage } from "../types/chat";
+import { ChatInputForm, StagedAttachment, Message, responseSendMessage } from "../types/chat";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { chatInputSchema } from "../schema/chat.schema";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import AttachmentPreview from "./attachment-preview";
-import VoiceRecorder from "./voice-recorder";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -80,9 +79,6 @@ export default function ChatInput() {
 
   // State
   const [attachments, setAttachments] = useState<StagedAttachment[]>([]);
-  const [audio, setAudio] = useState<MessageAudio | null>(null);
-  const [audioFile, setAudioFile] = useState<File | null>(null);
-  const [isRecording, setIsRecording] = useState(false);
 
   const status = useChatStore((state) => state.status);
   const isStreaming = status === "streaming";
@@ -109,9 +105,9 @@ export default function ChatInput() {
     const currentId = useChatStore.getState().conversationId;
     if (currentId) {
       queryClient.setQueryData<Message[]>(
-        ['conversation', currentId],
+        ["conversation", currentId],
         (old = []) =>
-          old.map((m) => (m.streaming ? { ...m, streaming: false } : m))
+          old.map((m) => (m.streaming ? { ...m, streaming: false } : m)),
       );
     }
   }, [queryClient]);
@@ -178,25 +174,12 @@ export default function ChatInput() {
     setAttachments((prev) => prev.filter((a) => a.id !== id));
   };
 
-  const handleAudioComplete = (file: File, duration: number) => {
-    if (audio) URL.revokeObjectURL(audio.url);
-    setAudio({ url: trackUrl(URL.createObjectURL(file)), duration, type: file.type });
-    setAudioFile(file);
-    setIsRecording(false);
-  };
-
-  const removeAudio = () => {
-    if (audio) URL.revokeObjectURL(audio.url);
-    setAudio(null);
-    setAudioFile(null);
-  };
-
   const onSubmit = useCallback(
     async (data: ChatInputForm) => {
       const value = data.message?.trim();
-      const hasMedia = attachments.length > 0 || audioFile != null;
-      if (isPendingFile || isPendingMessage || isRecording || isStreaming) return;
-      if (!value && !hasMedia) return;
+      const hasAttachments = attachments.length > 0;
+      if (isPendingFile || isPendingMessage || isStreaming) return;
+      if (!value && !hasAttachments) return;
 
       const currentConvId = useChatStore.getState().conversationId;
       const isNewChat = !currentConvId || currentConvId.startsWith("temp-");
@@ -210,15 +193,14 @@ export default function ChatInput() {
         attachments:
           attachments.length > 0
             ? attachments.map((a) => ({
-              id: a.id,
-              kind: a.kind,
-              name: a.file.name,
-              type: a.file.type,
-              size: a.file.size,
-              url: a.previewUrl,
-            }))
+                id: a.id,
+                kind: a.kind,
+                name: a.file.name,
+                type: a.file.type,
+                size: a.file.size,
+                url: a.previewUrl,
+              }))
             : undefined,
-        audio: audio ? { url: audio.url, duration: audio.duration } : null,
       };
 
       const thinkingMessageId = crypto.randomUUID();
@@ -235,15 +217,13 @@ export default function ChatInput() {
       }
 
       queryClient.setQueryData<Message[]>(
-        ['conversation', activeConvId],
-        (old = []) => [...old, userMessage, thinkingMessage]
+        ["conversation", activeConvId],
+        (old = []) => [...old, userMessage, thinkingMessage],
       );
 
       const stagedFiles = attachments.map((a) => a.file);
       form.reset();
       setAttachments([]);
-      setAudio(null);
-      setAudioFile(null);
       useChatStore.getState().setStatus("submitted");
 
       try {
@@ -269,7 +249,7 @@ export default function ChatInput() {
 
         if (isNewChat) {
           queryClient.setQueryData<Message[]>(
-            ['conversation', realConvId],
+            ["conversation", realConvId],
             [
               userMessage,
               {
@@ -278,16 +258,16 @@ export default function ChatInput() {
                 streaming: true,
                 text: result.response,
               },
-            ]
+            ],
           );
-          queryClient.removeQueries({ queryKey: ['conversation', activeConvId] });
+          queryClient.removeQueries({ queryKey: ["conversation", activeConvId] });
           setConversationId(realConvId);
           setPendingNewChat(false);
           useChatStore.getState().setStatus("streaming");
           router.refresh();
         } else {
           queryClient.setQueryData<Message[]>(
-            ['conversation', currentConvId],
+            ["conversation", currentConvId],
             (old = []) =>
               old.map((msg) =>
                 msg.id === thinkingMessageId
@@ -297,8 +277,8 @@ export default function ChatInput() {
                       streaming: true,
                       text: result.response,
                     }
-                  : msg
-              )
+                  : msg,
+              ),
           );
           useChatStore.getState().setStatus("streaming");
         }
@@ -308,24 +288,21 @@ export default function ChatInput() {
         setPendingNewChat(false);
         useChatStore.getState().setStatus("idle");
         if (isNewChat) {
-          queryClient.removeQueries({ queryKey: ['conversation', activeConvId] });
+          queryClient.removeQueries({ queryKey: ["conversation", activeConvId] });
           setConversationId(null);
         } else {
           queryClient.setQueryData<Message[]>(
-            ['conversation', currentConvId],
-            (old = []) => old.filter((msg) => msg.id !== thinkingMessageId)
+            ["conversation", currentConvId],
+            (old = []) => old.filter((msg) => msg.id !== thinkingMessageId),
           );
         }
       }
     },
     [
       attachments,
-      audio,
-      audioFile,
       form,
       isPendingFile,
       isPendingMessage,
-      isRecording,
       isStreaming,
       mutateMessageAsync,
       mutateFileAsync,
@@ -355,10 +332,9 @@ export default function ChatInput() {
 
   const messageValue = form.watch("message");
   const hasText = Boolean(messageValue && messageValue.trim().length > 0);
-  const hasMedia = attachments.length > 0 || audioFile != null;
+  const hasAttachments = attachments.length > 0;
   const isBusy = isPendingMessage || isPendingFile || isStreaming;
-  const canSend = (hasText || hasMedia) && !isBusy && !isRecording;
-  const showMedia = hasMedia && !isRecording;
+  const canSend = (hasText || hasAttachments) && !isBusy;
 
   return (
     <div className="shrink-0 border-t border-border bg-background px-3 py-2.5 pb-[env(safe-area-inset-bottom)] backdrop-blur-sm sm:px-4 sm:py-3">
@@ -372,20 +348,11 @@ export default function ChatInput() {
           )}
         >
           <div className="flex flex-col gap-1.5">
-            {showMedia ? (
+            {hasAttachments ? (
               <AttachmentPreview
                 attachments={attachments}
-                audio={audio}
                 uploading={isBusy}
                 onRemoveAttachment={removeAttachment}
-                onRemoveAudio={removeAudio}
-              />
-            ) : null}
-
-            {isRecording ? (
-              <VoiceRecorder
-                onComplete={handleAudioComplete}
-                onCancel={() => setIsRecording(false)}
               />
             ) : null}
 
@@ -440,7 +407,7 @@ export default function ChatInput() {
               <textarea
                 rows={1}
                 placeholder={t("inputPlaceholder")}
-                disabled={isBusy || isRecording}
+                disabled={isBusy}
                 className="field-sizing-content max-h-32 min-h-7 min-w-0 flex-1 resize-none bg-transparent py-1 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
                 onKeyDown={(event) => {
                   if (event.key === "Enter" && !event.shiftKey) {
@@ -453,21 +420,14 @@ export default function ChatInput() {
                 {...form.register("message")}
               />
 
-              {!isRecording ? (
-                <button
-                  type="button"
-                  aria-label={t("recordVoice")}
-                  disabled={isBusy}
-                  onClick={() => setIsRecording(true)}
-                  className={cn(
-                    "mb-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:cursor-not-allowed disabled:opacity-40 md:h-7 md:w-7",
-                    audio &&
-                    "text-brand hover:bg-muted hover:text-brand",
-                  )}
-                >
-                  <Mic size={16} />
-                </button>
-              ) : null}
+              <button
+                type="button"
+                aria-label={t("recordVoice")}
+                disabled={isBusy}
+                className="mb-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:cursor-not-allowed disabled:opacity-40 md:h-7 md:w-7"
+              >
+                <Mic size={16} />
+              </button>
 
               <button
                 type={isStreaming ? "button" : "submit"}
@@ -478,7 +438,7 @@ export default function ChatInput() {
                   "mb-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-all",
                   "bg-[image:var(--gradient-primary)] text-white shadow-sm",
                   "hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-30",
-                  "md:h-8 md:w-8"
+                  "md:h-8 md:w-8",
                 )}
               >
                 {isBusy ? (
