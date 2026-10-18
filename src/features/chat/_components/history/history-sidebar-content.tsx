@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/shared/lib/utils";
-import { Images, MessageSquarePlus, Sparkles } from "lucide-react";
+import { Images, MessageSquarePlus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useChatStore } from "../../store/chat.store";
 import type { Conversation } from "../../types/chat";
@@ -13,7 +13,7 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
 } from "@/shared/components/ui/sidebar";
-import { Link } from "@/i18n/navigation";
+import { Link, useRouter } from "@/i18n/navigation";
 
 type HistorySidebarContentProps = {
   title?: string;
@@ -31,6 +31,7 @@ export default function HistorySidebarContent({
   const { isMobile, setOpenMobile } = useSidebar();
 
   const [conversations, setConversations] = useState<Conversation[]>(initialConversations);
+  const router = useRouter();
 
   const activeId = useChatStore((state) => state.conversationId);
   const resetChat = useChatStore((state) => state.resetChat);
@@ -40,11 +41,13 @@ export default function HistorySidebarContent({
   const isPendingNewChat = useChatStore((state) => state.isPendingNewChat);
 
   const handleNew = () => {
+    
     resetChat();
     setConversationId(null);
     if (isMobile) {
       setOpenMobile(false);
     }
+    router.push("/dashboard/chat")
   };
 
   const handleSelect = async (conversation: Conversation) => {
@@ -83,6 +86,7 @@ export default function HistorySidebarContent({
                 size="lg"
                 aria-label={t("library")}
                 tooltip={t("library")}
+                render={<Link href="/dashboard/chat/library" />}
               >
                 <Images />
                 <span>{t("library")}</span>
@@ -105,7 +109,7 @@ export default function HistorySidebarContent({
             <button
               type="button"
               onClick={handleNew}
-              className="group flex h-10 w-full items-center justify-between rounded-lg px-4 text-sm font-medium text-brand-foreground shadow-xs transition-all hover:border-brand/40 hover:bg-muted hover:text-brand active:scale-[0.98]"
+              className="group flex h-10 w-full items-center justify-between rounded-lg bg-brand px-4 text-sm font-medium text-brand-foreground shadow-xs transition-all hover:bg-brand/90 active:scale-[0.98]"
             >
               <div className="flex items-center gap-2.5">
                 <MessageSquarePlus size={16} className="shrink-0" />
@@ -116,7 +120,10 @@ export default function HistorySidebarContent({
             {/* Library Button */}
             <Link
               href="/dashboard/chat/library"
-              className="group flex h-10 w-full items-center gap-2.5 rounded-lg  px-4 text-sm font-medium text-foreground transition-all hover:border-brand/40 hover:bg-muted hover:text-brand active:scale-[0.98]"
+              onClick={() => {
+                if (isMobile) setOpenMobile(false);
+              }}
+              className="group flex h-10 w-full items-center gap-2.5 rounded-lg border border-border/70 bg-card/50 px-4 text-sm font-medium text-foreground transition-all hover:border-brand/40 hover:bg-muted hover:text-brand active:scale-[0.98]"
             >
               <Images size={16} className="shrink-0 text-muted-foreground transition-colors group-hover:text-brand" />
               <span>{t("library")}</span>
