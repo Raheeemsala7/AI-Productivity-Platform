@@ -7,6 +7,9 @@ export async function ConversationsHistory() {
     const t = await getTranslations("Chat");
     const conversations = await getAllConversations();
 
+    console.log(conversations);
+    
+
     if (!conversations.success) {
         return <p className="text-destructive">{conversations.message || "Failed get conversations"}</p>;
     }

@@ -433,7 +433,8 @@
     "thinking": "Thinking…",
     "errorOccurred": "An error occurred",
     "failedLoadConversations": "Failed to load conversations",
-    "defaultUserName": "User"
+    "defaultUserName": "User",
+    "scrollToBottom": "Scroll to bottom"
   },
   "LocaleSwitcher": {
     "en": "English",

@@ -13,7 +13,7 @@ export const getAllConversations = async () => {
     if (!token?.token) return RESPONSES.unauthorizedS
 
     try {
-        const res = await fetch(`${process.env.API_URL}/user/conversations`, {
+        const res = await fetch(`${process.env.API_URL}/user/conversations?next_page=2`, {
             next: {
                 tags: ["conversations"],
             },

@@ -462,7 +462,8 @@
     "thinking": "يفكر…",
     "errorOccurred": "حدث خطأ",
     "failedLoadConversations": "فشل تحميل المحادثات",
-    "defaultUserName": "مستخدم"
+    "defaultUserName": "مستخدم",
+    "scrollToBottom": "النزول للأسفل"
   },
   "LocaleSwitcher": {
     "en": "English",
