@@ -7,7 +7,6 @@ import { responseSendMessage, SendMessageRequest, Message, SendFileMessageReques
 import { revalidateTag } from "next/cache"
 import {
   getFileExtension,
-  isSupportedAudio,
   isSupportedFile,
   MAX_ATTACHMENTS,
   MAX_ATTACHMENT_SIZE,
@@ -15,28 +14,11 @@ import {
   SUPPORTED_ATTACHMENT_TYPES,
 } from "../constant/chat.attachment"
 
-type EncodedAttachment = {
-  name: string;
-  type: string;
-  extension: string;
-  size: number;
-  base64: string;
-};
 
 const cleanFileName = (name: string) =>
   name.trim().replace(/^.*[\\/]/, "").replace(/[^\x20-\x7E]/g, "") || "file";
 
-const encodeFile = async (file: File): Promise<EncodedAttachment> => {
-  const name = cleanFileName(file.name);
-  const buffer = Buffer.from(await file.arrayBuffer());
-  return {
-    name,
-    type: file.type || "application/octet-stream",
-    extension: getFileExtension(name),
-    size: buffer.length,
-    base64: buffer.toString("base64"),
-  };
-};
+
 
 const validateAttachments = (files: File[]) => {
   if (files.length > MAX_ATTACHMENTS) {
