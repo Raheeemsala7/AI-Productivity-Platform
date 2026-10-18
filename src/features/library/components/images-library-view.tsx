@@ -1,19 +1,17 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useTransition } from "react";
 import {
   Download,
-  ExternalLink,
   FileText,
   Image as ImageIcon,
   Loader2,
   MessageSquare,
   RefreshCw,
-  Search,
   X,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useQuery } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { cn } from "@/shared/lib/utils";
 import { SidebarTrigger } from "@/shared/components/ui/sidebar";
@@ -24,49 +22,29 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/shared/components/ui/dialog";
-import { LibraryFile } from "../apis/library.api";
+import { getOneFileLibrary, LibraryFile, OneFileLibraryResult } from "../apis/library.api";
 import {
-  extractFilePath,
   getFileExtension,
   getFileType,
-  getFileViewUrl,
   isPdfFile,
   isSupportedLibraryFile,
 } from "../utils/library.util";
 
 interface ImagesLibraryViewProps {
-  initialFiles?: LibraryFile[];
+  files: LibraryFile[];
 }
 
-export default function ImagesLibraryView({ initialFiles = [] }: ImagesLibraryViewProps) {
+export default function ImagesLibraryView({ files = [] }: ImagesLibraryViewProps) {
   const t = useTranslations("Chat");
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
 
-  const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState<"all" | "images" | "pdf">("all");
   const [selectedFile, setSelectedFile] = useState<LibraryFile | null>(null);
-  const [isImageLoading, setIsImageLoading] = useState(true);
+  const [fileData, setFileData] = useState<OneFileLibraryResult | null>(null);
+  const [isLoadingPreview, setIsLoadingPreview] = useState(false);
 
-  // TanStack Query for library files with SSR initialData
-  const {
-    data: files = initialFiles,
-    isFetching,
-    refetch,
-  } = useQuery<LibraryFile[]>({
-    queryKey: ["library-files"],
-    queryFn: async () => {
-      const res = await fetch("/api/user/library");
-      if (!res.ok) {
-        throw new Error("Failed to fetch library files");
-      }
-      const json = await res.json();
-      return (json.payload?.files || []) as LibraryFile[];
-    },
-    initialData: initialFiles,
-    staleTime: 1000 * 60 * 3, // 3 minutes
-    refetchOnWindowFocus: false,
-  });
-
-  // Filter ONLY images and PDFs, ignoring unsupported file types
+  // Filter ONLY supported files (images & PDFs)
   const supportedFiles = useMemo(() => {
     return files.filter((file) => isSupportedLibraryFile(file.name));
   }, [files]);
@@ -89,44 +67,63 @@ export default function ImagesLibraryView({ initialFiles = [] }: ImagesLibraryVi
     };
   }, [supportedFiles]);
 
-  // Filter based on active tab and search query
+  // Filter based on active tab
   const filteredFiles = useMemo(() => {
     return supportedFiles.filter((file) => {
       const type = getFileType(file.name);
-      const matchesTab =
-        activeTab === "all" ||
-        (activeTab === "images" && type === "image") ||
-        (activeTab === "pdf" && type === "pdf");
-
-      const matchesSearch =
-        searchQuery.trim() === "" ||
-        file.name.toLowerCase().includes(searchQuery.trim().toLowerCase());
-
-      return matchesTab && matchesSearch;
+      if (activeTab === "images") return type === "image";
+      if (activeTab === "pdf") return type === "pdf";
+      return true;
     });
-  }, [supportedFiles, activeTab, searchQuery]);
+  }, [supportedFiles, activeTab]);
 
-  // Download handler
+  // Handle opening preview modal using authenticated Server Action
+  const handleOpenPreview = async (file: LibraryFile) => {
+    setSelectedFile(file);
+    setFileData(null);
+    setIsLoadingPreview(true);
+
+    try {
+      const res = await getOneFileLibrary(file.view_url || file.name);
+      if (res.success && res.dataUrl) {
+        setFileData(res);
+      } else {
+        toast.error(res.message || t("downloadError") || "فشل تحميل الملف");
+      }
+    } catch (error) {
+      console.error("Error fetching file preview:", error);
+      toast.error(t("downloadError") || "فشل تحميل الملف");
+    } finally {
+      setIsLoadingPreview(false);
+    }
+  };
+
+  // Download handler directly using dataUrl or Server Action
   const handleDownload = async (file: LibraryFile, e?: React.MouseEvent) => {
     e?.stopPropagation();
     const toastId = `dl-${file.name}`;
+
     try {
       toast.loading(t("downloading") || "جاري تجهيز التحميل...", { id: toastId });
-      const cleanPath = extractFilePath(file.view_url || file.name);
-      const downloadUrl = getFileViewUrl(cleanPath, { download: true });
 
-      const res = await fetch(downloadUrl);
-      if (!res.ok) throw new Error("Download failed");
+      let dataUrl = fileData?.dataUrl;
 
-      const blob = await res.blob();
-      const blobUrl = window.URL.createObjectURL(blob);
+      // If we don't have the dataUrl in state, fetch it via Server Action
+      if (!dataUrl || selectedFile?.name !== file.name) {
+        const res = await getOneFileLibrary(file.view_url || file.name);
+        if (!res.success || !res.dataUrl) {
+          throw new Error(res.message || "Failed to download");
+        }
+        dataUrl = res.dataUrl;
+      }
+
+      // Trigger download using the in-memory dataUrl
       const link = document.createElement("a");
-      link.href = blobUrl;
+      link.href = dataUrl;
       link.download = file.name;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      window.URL.revokeObjectURL(blobUrl);
 
       toast.success(t("downloadSuccess") || "تم تحميل الملف بنجاح", { id: toastId });
     } catch (error) {
@@ -135,9 +132,14 @@ export default function ImagesLibraryView({ initialFiles = [] }: ImagesLibraryVi
     }
   };
 
+  // Server refresh trigger
+  const handleRefresh = () => {
+    startTransition(() => {
+      router.refresh();
+    });
+  };
+
   const selectedIsPdf = selectedFile ? isPdfFile(selectedFile.name) : false;
-  const selectedCleanPath = selectedFile ? extractFilePath(selectedFile.view_url || selectedFile.name) : "";
-  const previewUrl = selectedCleanPath ? getFileViewUrl(selectedCleanPath) : "";
 
   return (
     <div className="flex h-dvh w-full flex-1 flex-col min-h-0 overflow-hidden bg-background">
@@ -170,12 +172,12 @@ export default function ImagesLibraryView({ initialFiles = [] }: ImagesLibraryVi
         <div className="flex items-center gap-2">
           <button
             type="button"
-            onClick={() => refetch()}
-            disabled={isFetching}
+            onClick={handleRefresh}
+            disabled={isPending}
             title={t("refresh") || "تحديث"}
             className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-background/80 px-3 py-2 text-xs font-medium text-foreground transition-all hover:bg-muted disabled:opacity-50"
           >
-            <RefreshCw className={cn("size-3.5", isFetching && "animate-spin text-brand")} />
+            <RefreshCw className={cn("size-3.5", isPending && "animate-spin text-brand")} />
             <span className="hidden sm:inline">{t("refresh") || "تحديث"}</span>
           </button>
 
@@ -192,30 +194,8 @@ export default function ImagesLibraryView({ initialFiles = [] }: ImagesLibraryVi
       {/* Main Content Area */}
       <div className="flex flex-1 min-h-0 flex-col overflow-hidden px-4 py-4 sm:px-6 sm:py-5">
         <div className="mx-auto flex w-full max-w-7xl flex-1 min-h-0 flex-col gap-4">
-          {/* Controls Bar: Search & Filter Tabs */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-            {/* Search Input */}
-            <div className="relative flex-1 max-w-md">
-              <Search className="absolute start-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder={t("searchFiles") || "البحث عن ملف أو صورة بالاسم..."}
-                className="w-full rounded-xl border border-border/80 bg-muted/40 py-2 ps-9 pe-8 text-xs text-foreground placeholder:text-muted-foreground focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand/30"
-              />
-              {searchQuery && (
-                <button
-                  type="button"
-                  onClick={() => setSearchQuery("")}
-                  className="absolute end-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                >
-                  <X className="size-3.5" />
-                </button>
-              )}
-            </div>
-
-            {/* Filter Tabs */}
+          {/* Controls Bar: Filter Tabs Only (NO Search) */}
+          <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-1 rounded-xl bg-muted/50 p-1">
               <button
                 type="button"
@@ -292,10 +272,7 @@ export default function ImagesLibraryView({ initialFiles = [] }: ImagesLibraryVi
                   return (
                     <div
                       key={file.name}
-                      onClick={() => {
-                        setIsImageLoading(true);
-                        setSelectedFile(file);
-                      }}
+                      onClick={() => handleOpenPreview(file)}
                       className="group relative flex flex-col justify-between items-center p-3.5 sm:p-4 rounded-2xl border border-border/70 bg-card/60 backdrop-blur-xs transition-all duration-200 hover:-translate-y-1 hover:border-brand/40 hover:shadow-lg hover:shadow-brand/5 cursor-pointer overflow-hidden text-center"
                     >
                       {/* Top Badges & Quick Action */}
@@ -370,6 +347,7 @@ export default function ImagesLibraryView({ initialFiles = [] }: ImagesLibraryVi
           onOpenChange={(open) => {
             if (!open) {
               setSelectedFile(null);
+              setFileData(null);
             }
           }}
         >
@@ -404,22 +382,11 @@ export default function ImagesLibraryView({ initialFiles = [] }: ImagesLibraryVi
               </div>
 
               <div className="flex items-center gap-2 shrink-0">
-                <a
-                  href={previewUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-background px-3 py-1.5 text-xs font-medium text-foreground hover:bg-muted transition-colors"
-                >
-                  <ExternalLink className="size-3.5" />
-                  <span className="hidden sm:inline">
-                    {t("openInNewTab") || "فتح في نافذة جديدة"}
-                  </span>
-                </a>
-
                 <button
                   type="button"
                   onClick={(e) => handleDownload(selectedFile, e)}
-                  className="inline-flex items-center gap-1.5 rounded-xl bg-brand px-3 py-1.5 text-xs font-medium text-brand-foreground hover:opacity-90 shadow-xs transition-opacity"
+                  disabled={isLoadingPreview || !fileData?.dataUrl}
+                  className="inline-flex items-center gap-1.5 rounded-xl bg-brand px-3.5 py-1.5 text-xs font-medium text-brand-foreground hover:opacity-90 shadow-xs transition-opacity disabled:opacity-50"
                 >
                   <Download className="size-3.5" />
                   <span>{t("download") || "تحميل"}</span>
@@ -429,36 +396,43 @@ export default function ImagesLibraryView({ initialFiles = [] }: ImagesLibraryVi
 
             {/* Modal Body Preview */}
             <div className="flex flex-col items-center justify-center p-3 sm:p-6 bg-muted/10 min-h-[360px] max-h-[75vh] overflow-auto custom-scrollbar">
-              {selectedIsPdf ? (
-                <div className="w-full flex flex-col items-center gap-3">
-                  <iframe
-                    src={previewUrl}
-                    className="w-full h-[60vh] rounded-2xl border border-border/60 bg-background shadow-xs"
-                    title={selectedFile.name}
-                  />
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <span>{selectedFile.name}</span>
-                  </div>
+              {isLoadingPreview ? (
+                <div className="flex flex-col items-center justify-center min-h-[280px] gap-2">
+                  <Loader2 className="size-8 animate-spin text-brand" />
+                  <span className="text-xs text-muted-foreground">جاري تحميل المعاينة بأمان...</span>
                 </div>
+              ) : fileData?.dataUrl ? (
+                selectedIsPdf ? (
+                  <div className="w-full flex flex-col items-center gap-3">
+                    <iframe
+                      src={fileData.dataUrl}
+                      className="w-full h-[60vh] rounded-2xl border border-border/60 bg-background shadow-xs"
+                      title={selectedFile.name}
+                    />
+                  </div>
+                ) : (
+                  <div className="relative flex items-center justify-center max-w-full">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={fileData.dataUrl}
+                      alt={selectedFile.name}
+                      className="max-h-[68vh] w-auto max-w-full rounded-2xl object-contain shadow-md"
+                    />
+                  </div>
+                )
               ) : (
-                <div className="relative flex items-center justify-center max-w-full">
-                  {isImageLoading && (
-                    <div className="flex flex-col items-center justify-center min-h-[280px] gap-2">
-                      <Loader2 className="size-8 animate-spin text-brand" />
-                      <span className="text-xs text-muted-foreground">جاري تحميل المعاينة...</span>
-                    </div>
-                  )}
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={previewUrl}
-                    alt={selectedFile.name}
-                    onLoad={() => setIsImageLoading(false)}
-                    onError={() => setIsImageLoading(false)}
-                    className={cn(
-                      "max-h-[68vh] w-auto max-w-full rounded-2xl object-contain shadow-md transition-opacity duration-300",
-                      isImageLoading ? "hidden" : "block"
-                    )}
-                  />
+                <div className="flex flex-col items-center justify-center min-h-[200px] gap-2 text-center">
+                  <p className="text-sm font-medium text-destructive">
+                    فشل جلب المعاينة للملف المحدد
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => handleOpenPreview(selectedFile)}
+                    className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-background px-3 py-1.5 text-xs font-medium text-foreground hover:bg-muted"
+                  >
+                    <RefreshCw className="size-3.5" />
+                    <span>إعادة المحاولة</span>
+                  </button>
                 </div>
               )}
             </div>

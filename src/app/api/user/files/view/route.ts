@@ -38,7 +38,9 @@ export async function GET(request: NextRequest) {
 
         const headers: Record<string, string> = {
             "Content-Type": contentType,
-            "Cache-Control": "public, max-age=3600, stale-while-revalidate=86400",
+            "Cache-Control": "private, no-cache, no-store, max-age=0, must-revalidate",
+            "Pragma": "no-cache",
+            "Expires": "0",
         };
 
         if (isDownload) {
