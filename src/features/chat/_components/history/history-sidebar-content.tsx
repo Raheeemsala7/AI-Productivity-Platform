@@ -97,11 +97,11 @@ export default function HistorySidebarContent({
 
         {/* Expanded sidebar: full content. Hidden when collapsed. */}
         <div className="flex min-h-0 flex-1 flex-col group-data-[collapsible=icon]:hidden">
-          {title && (
+          {/* {title && (
             <div className="flex items-center justify-between border-b border-border px-4 py-3">
               <p className="text-sm font-medium text-foreground">{title}</p>
             </div>
-          )}
+          )} */}
 
           {/* Action Buttons: New Chat & Images Library */}
           <div className="flex flex-col gap-2 border-b border-border p-3">
@@ -109,7 +109,7 @@ export default function HistorySidebarContent({
             <button
               type="button"
               onClick={handleNew}
-              className="group flex h-10 w-full items-center justify-between rounded-lg bg-brand px-4 text-sm font-medium text-brand-foreground shadow-xs transition-all hover:bg-brand/90 active:scale-[0.98]"
+              className="group flex  w-full items-center justify-between rounded-lg bg-brand px-4 py-2 text-sm font-medium text-brand-foreground shadow-xs transition-all hover:bg-brand/90 active:scale-[0.98]"
             >
               <div className="flex items-center gap-2.5">
                 <MessageSquarePlus size={16} className="shrink-0" />
@@ -123,7 +123,7 @@ export default function HistorySidebarContent({
               onClick={() => {
                 if (isMobile) setOpenMobile(false);
               }}
-              className="group flex h-10 w-full items-center gap-2.5 rounded-lg border border-border/70 bg-card/50 px-4 text-sm font-medium text-foreground transition-all hover:border-brand/40 hover:bg-muted hover:text-brand active:scale-[0.98]"
+              className="group flex w-full items-center gap-2.5 rounded-lg border border-border/70 bg-card/50 px-4 py-2 text-sm font-medium text-foreground transition-all hover:border-brand/40 hover:bg-muted hover:text-brand active:scale-[0.98]"
             >
               <Images size={16} className="shrink-0 text-muted-foreground transition-colors group-hover:text-brand" />
               <span>{t("library")}</span>

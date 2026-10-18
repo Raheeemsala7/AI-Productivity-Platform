@@ -10,18 +10,18 @@ type StreamingTextProps = {
 };
 
 function getTypingDelay(token: string, totalTokens: number): number {
-  // Base delay per word: ~68ms creates a natural, human-like typing cadence
-  const base = totalTokens > 200 ? 45 : totalTokens > 100 ? 55 : 68;
+  // Fast, snappy streaming cadence (ChatGPT/Claude style: ~12-22ms per token)
+  const base = totalTokens > 300 ? 12 : totalTokens > 150 ? 16 : 22;
 
-  // Natural rhythmic pauses at punctuation and paragraphs
+  // Subtle micro-pauses at punctuation and paragraphs
   if (token.includes("\n")) {
-    return base + 200; // paragraph / line break pause
+    return base + 35; // short pause on paragraph break
   }
   if (/[.!؟?][\s]*$/.test(token)) {
-    return base + 240; // end of sentence pause
+    return base + 45; // short pause on sentence end
   }
   if (/[,،:;][\s]*$/.test(token)) {
-    return base + 140; // comma / pause
+    return base + 20; // tiny pause on comma
   }
   return base;
 }
@@ -66,13 +66,18 @@ export default function StreamingText({
         return;
       }
 
-      accumulatedText += tokens[currentIndex];
-      const token = tokens[currentIndex];
-      currentIndex++;
+      // For longer replies, advance 2 tokens at a time for swift, fluent delivery
+      const step = totalTokens > 300 ? 2 : 1;
+      let lastToken = "";
+      for (let i = 0; i < step && currentIndex < tokens.length; i++) {
+        accumulatedText += tokens[currentIndex];
+        lastToken = tokens[currentIndex];
+        currentIndex++;
+      }
 
       setDisplayedText(accumulatedText);
 
-      // Smoothly keep chat scrolled to the bottom as each word appears
+      // Smoothly keep chat scrolled to the bottom as words appear
       const container = document.querySelector('[data-slot="chat-messages-container"]');
       if (container) {
         const isNearBottom = container.scrollHeight - container.scrollTop - container.clientHeight < 400;
@@ -87,7 +92,7 @@ export default function StreamingText({
         return;
       }
 
-      const delay = getTypingDelay(token, totalTokens);
+      const delay = getTypingDelay(lastToken, totalTokens);
       timeoutId = setTimeout(typeNext, delay);
     };
 
