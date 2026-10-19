@@ -1658,5 +1658,20 @@
       "title": "Profile",
       "description": "User profile details."
     }
+  },
+  "TemplatesCatalog": {
+    "titlePrefix": "Smart",
+    "titleHighlight": "Writing Tools",
+    "subtitle": "Use artificial intelligence to create content efficiently.",
+    "cards": {
+      "writing": {
+        "title": "Content Writing",
+        "description": "With a single click, generate content from blogs, articles, emails, posts, and more."
+      },
+      "business": {
+        "title": "Business Tools",
+        "description": "Easily create business content from emails, reports, and more."
+      }
+    }
   }
 }

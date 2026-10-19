@@ -19,8 +19,8 @@ export interface TemplateToolItem {
 
 export const TEMPLATES_DATA: TemplateToolItem[] = [
   {
-    id: "content-writing",
-    slug: "content-writing",
+    id: "writing",
+    slug: "writing",
     title: "كتابة المحتوى",
     subtitle: "أدوات متقدمة لتوليد المحتوى التسويقي والإعلاني والاجتماعي",
     description: "بضغطة زر، انشئ المحتوى من مدونات ومقالات وإيميلات ومنشورات والمزيد.",
@@ -67,8 +67,8 @@ export const TEMPLATES_DATA: TemplateToolItem[] = [
     ],
   },
   {
-    id: "business-tools",
-    slug: "business-tools",
+    id: "business",
+    slug: "business",
     title: "أدوات الشركات",
     subtitle: "صياغة مستندات الأعمال، المقترحات التجارية، والتقارير التنفيذية",
     description: "أنشئ محتوى الأعمال بسهولة من رسائل البريد الإلكتروني والتقارير والمزيد.",
