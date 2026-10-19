@@ -26,12 +26,18 @@ import ChatAttachmentDropdown from "./chat-attachment-dropdown";
 import ChatSubmitButton from "./chat-submit-button";
 import VoiceTranscribeBar from "./transcription/voice-transcribe-bar";
 import { useVoiceTranscribe } from "../hooks/use-voice-transcribe";
-import { USER_PROFILE_QUERY_KEY } from "@/features/auth/hooks/use-user-profile";
+import { useUserProfile, USER_PROFILE_QUERY_KEY } from "@/features/auth/hooks/use-user-profile";
+import ChatOutOfCreditsBanner from "./chat-out-of-credits-banner";
 
 export default function ChatInput() {
   const t = useTranslations("Chat");
   const router = useRouter();
   const queryClient = useQueryClient();
+
+  // User Profile & Credits
+  const { data: user, isLoading: isUserLoading } = useUserProfile();
+  const credits = user?.credits ?? 0;
+  const isOutOfCredits = Boolean(!isUserLoading && user && credits <= 0);
 
   // Store
   const setConversationId = useChatStore((state) => state.setConversationId);
@@ -93,7 +99,12 @@ export default function ChatInput() {
   });
 
   const handleStartVoice = async () => {
-    if (isPendingMessage || isPendingFile || isStreaming) return;
+    if (isPendingMessage || isPendingFile || isStreaming || isOutOfCredits) {
+      if (isOutOfCredits) {
+        toast.error(t("outOfCreditsTitle"));
+      }
+      return;
+    }
     setIsVoiceMode(true);
     await startRecording();
   };
@@ -110,6 +121,10 @@ export default function ChatInput() {
   }, [queryClient]);
 
   const addFiles = (files: File[]) => {
+    if (isOutOfCredits) {
+      toast.error(t("outOfCreditsTitle"));
+      return;
+    }
     let skipped = 0;
     const accepted: File[] = [];
 
@@ -165,6 +180,10 @@ export default function ChatInput() {
 
   const onSubmit = useCallback(
     async (data: ChatInputForm) => {
+      if (isOutOfCredits) {
+        toast.error(t("outOfCreditsTitle"));
+        return;
+      }
       const value = data.message?.trim();
       const hasAttachments = attachments.length > 0;
       if (isPendingFile || isPendingMessage || isStreaming || isVoiceMode) return;
@@ -304,6 +323,7 @@ export default function ChatInput() {
       setPendingNewChat,
       t,
       queryClient,
+      isOutOfCredits,
     ],
   );
 
@@ -317,26 +337,34 @@ export default function ChatInput() {
     form.setValue("message", text, { shouldValidate: true, shouldDirty: true });
 
     if (autoSend) {
+      if (isOutOfCredits) {
+        toast.error(t("outOfCreditsTitle"));
+        return;
+      }
       onSubmit({ message: text });
     } else {
       form.setFocus("message");
     }
-  }, [pendingSuggestion, form, setPendingSuggestion, setConversationId, onSubmit]);
+  }, [pendingSuggestion, form, setPendingSuggestion, setConversationId, onSubmit, isOutOfCredits, t]);
 
   const messageValue = form.watch("message");
   const hasText = Boolean(messageValue && messageValue.trim().length > 0);
   const hasAttachments = attachments.length > 0;
   const isBusy = isPendingMessage || isPendingFile || isStreaming;
-  const canSend = (hasText || hasAttachments) && !isBusy;
+  const canSend = (hasText || hasAttachments) && !isBusy && !isOutOfCredits;
 
   return (
     <div className="shrink-0 border-t border-border bg-background px-3 py-2.5 pb-[env(safe-area-inset-bottom)] backdrop-blur-sm sm:px-4 sm:py-3">
       <div className="mx-auto w-full max-w-3xl">
+        {/* Out of credits warning message banner */}
+        {isOutOfCredits && <ChatOutOfCreditsBanner credits={credits} />}
+
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className={cn(
             "rounded-2xl border border-border bg-muted/50 px-2.5 py-2 transition-colors",
-            "focus-within:border-brand/50 focus-within:ring-1 focus-within:ring-brand/20",
+            !isOutOfCredits && "focus-within:border-brand/50 focus-within:ring-1 focus-within:ring-brand/20",
+            isOutOfCredits && "border-border/60 bg-muted/30 opacity-75",
             "sm:px-3",
           )}
         >
@@ -364,18 +392,25 @@ export default function ChatInput() {
                 {/* File Attachment Dropdown */}
                 <ChatAttachmentDropdown
                   onFilesSelected={addFiles}
-                  disabled={isBusy}
+                  disabled={isBusy || isOutOfCredits}
                 />
 
                 {/* Textarea Input */}
                 <textarea
                   rows={1}
-                  placeholder={t("inputPlaceholder")}
-                  disabled={isBusy}
-                  className="field-sizing-content max-h-32 min-h-7 min-w-0 flex-1 resize-none bg-transparent py-1 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
+                  placeholder={isOutOfCredits ? t("outOfCreditsPlaceholder") : t("inputPlaceholder")}
+                  disabled={isBusy || isOutOfCredits}
+                  className={cn(
+                    "field-sizing-content max-h-32 min-h-7 min-w-0 flex-1 resize-none bg-transparent py-1 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none",
+                    isOutOfCredits && "cursor-not-allowed opacity-60",
+                  )}
                   onKeyDown={(event) => {
                     if (event.key === "Enter" && !event.shiftKey) {
                       event.preventDefault();
+                      if (isOutOfCredits) {
+                        toast.error(t("outOfCreditsTitle"));
+                        return;
+                      }
                       if (canSend) {
                         form.handleSubmit(onSubmit)();
                       }
@@ -388,9 +423,9 @@ export default function ChatInput() {
                 <button
                   type="button"
                   aria-label={t("recordVoice")}
-                  disabled={isBusy}
+                  disabled={isBusy || isOutOfCredits}
                   onClick={handleStartVoice}
-                  title="تحويل الصوت إلى نص"
+                  title={isOutOfCredits ? t("outOfCreditsTitle") : "تحويل الصوت إلى نص"}
                   className="mb-1 flex size-8 shrink-0 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:cursor-not-allowed disabled:opacity-40 md:size-7"
                 >
                   <Mic size={16} />

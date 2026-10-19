@@ -385,6 +385,11 @@
     "loadingMessages": "Loading conversation...",
     "creditsRemaining": "Credits remaining",
     "backToDashboard": "Back to Dashboard",
+    "outOfCredits": "You have run out of credits",
+    "outOfCreditsTitle": "You've run out of credits",
+    "outOfCreditsDesc": "You have consumed all your available credits. Upgrade your plan to continue chatting with AI.",
+    "outOfCreditsPlaceholder": "Cannot send message because your credits are exhausted...",
+    "upgradePlan": "Upgrade Plan",
     "emptyState": {
       "title": "What are we building today?",
       "description": "Bring an idea, a napkin sketch, or a half-finished deck — ORICO helps you shape it into something investors can read.",
