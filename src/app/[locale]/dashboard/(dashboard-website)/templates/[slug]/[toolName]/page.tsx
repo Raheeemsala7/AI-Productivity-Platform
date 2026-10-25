@@ -1,53 +1,59 @@
-import { notFound } from "next/navigation";
-import { TEMPLATES_DATA } from "@/features/templates/data/templates.data";
-import { TemplateToolWorkspace } from "@/features/templates/components/template-tool-workspace";
+import React, { Suspense } from "react";
 import type { Metadata } from "next";
+import { getTemplateDetailsServer } from "@/features/templates/apis/templates.api";
+import { TemplateDetailsView } from "@/features/templates/components/template-details-view";
+import { TemplateDetailsSkeleton } from "@/features/templates/components/template-details-skeleton";
 
 interface Props {
   params: Promise<{
     locale: string;
     slug: string;
-    toolName?: string;
+    toolName: string;
   }>;
 }
 
-export async function generateStaticParams() {
-  return TEMPLATES_DATA.map((tool) => ({
-    slug: tool.slug,
-  }));
-}
-
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug, toolName } = await params;
-  const tool =
-    TEMPLATES_DATA.find((item) => item.slug === slug) ||
-    TEMPLATES_DATA.find((item) => item.slug === toolName);
+  const { slug, toolName, locale } = await params;
+  const templateSlug = toolName || slug;
 
-  if (!tool) {
-    return {
-      title: "أداة كتابة — ORICO",
-    };
+  try {
+    const res = await getTemplateDetailsServer({
+      slug: templateSlug,
+      lang: locale,
+    });
+
+    if (res.success && res.data?.name) {
+      return {
+        title: `${res.data.name} — ORICO`,
+        description: res.data.description,
+      };
+    }
+  } catch {
+    // Fallback if network or auth error occurs during metadata generation
   }
 
   return {
-    title: `${tool.title} — أدوات الكتابة الذكية`,
-    description: tool.description,
+    title: locale === "ar" ? "أداة ذكية — ORICO" : "AI Template — ORICO",
   };
 }
 
 export default async function TemplateToolPage({ params }: Props) {
-  const { slug, toolName } = await params;
-  const tool =
-    TEMPLATES_DATA.find((item) => item.slug === slug) ||
-    TEMPLATES_DATA.find((item) => item.slug === toolName);
-
-  if (!tool) {
-    notFound();
-  }
+  const { slug, toolName, locale } = await params;
+  const templateSlug = toolName || slug;
+  const categoryType = toolName ? slug : "writing";
 
   return (
     <div className="w-full flex-1 min-h-full">
-      <TemplateToolWorkspace tool={tool} />
+      <Suspense
+        key={`${templateSlug}-${locale}`}
+        fallback={<TemplateDetailsSkeleton />}
+      >
+        <TemplateDetailsView
+          slug={templateSlug}
+          type={categoryType}
+          locale={locale}
+        />
+      </Suspense>
     </div>
   );
 }

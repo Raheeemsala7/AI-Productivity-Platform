@@ -1704,5 +1704,50 @@
         "badge": "For Business"
       }
     }
+  },
+  "TemplateDetails": {
+    "breadcrumb": {
+      "dashboard": "Dashboard",
+      "templates": "Templates",
+      "library": "Library"
+    },
+    "types": {
+      "writing": "Content Writing",
+      "business": "Business Tools"
+    },
+    "backToTemplates": "Back to Templates",
+    "formSectionTitle": "Template Inputs & Details",
+    "formSectionSubtitle": "Fill in the required fields to generate accurate content.",
+    "previewSectionTitle": "Generation Output",
+    "previewSectionSubtitle": "Preview the resulting data or submission payload.",
+    "requiredField": "Required field",
+    "placeholders": {
+      "textarea": "Enter details or paste your text here...",
+      "text": "Type here...",
+      "select": "Select from options..."
+    },
+    "validation": {
+      "fieldRequired": "{field} is required",
+      "numberInvalid": "Please enter a valid number for {field}",
+      "emailInvalid": "Please enter a valid email address",
+      "urlInvalid": "Please enter a valid URL"
+    },
+    "submitButton": "Generate Content",
+    "generating": "Generating...",
+    "resetForm": "Reset Form",
+    "copyValues": "Copy Data",
+    "copied": "Copied",
+    "copySuccess": "Data copied to clipboard successfully!",
+    "copyError": "Failed to copy data.",
+    "submitSuccess": "Data validated and payload prepared successfully!",
+    "submitError": "An error occurred while processing data.",
+    "emptyInputsTitle": "No Inputs Required",
+    "emptyInputsMessage": "This template does not require any additional inputs.",
+    "previewPlaceholderTitle": "Awaiting Input Submission",
+    "previewPlaceholderDesc": "Fill out the fields and click 'Generate Content' to view results here.",
+    "backendNotice": "Note: This payload will be sent to the AI engine once the generation endpoint is connected.",
+    "errorTitle": "Failed to load template details",
+    "errorMessage": "An error occurred while fetching details for this template. Please try again.",
+    "retryButton": "Try Again"
   }
 }

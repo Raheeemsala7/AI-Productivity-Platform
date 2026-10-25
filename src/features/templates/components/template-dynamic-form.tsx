@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useEffect, useMemo, useState, useTransition } from "react";
+import React, { useMemo, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useTranslations, useLocale } from "next-intl";
+import { useTranslations } from "next-intl";
 import {
   Sparkles,
   Loader2,
@@ -15,7 +15,6 @@ import {
   FileCheck2,
 } from "lucide-react";
 import { toast } from "sonner";
-import { cn } from "@/shared/lib/utils";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { Textarea } from "@/shared/components/ui/textarea";
@@ -27,7 +26,6 @@ import {
 } from "@/shared/components/ui/field";
 import {
   TemplateDetails,
-  TemplateInput,
   isInputRequired,
 } from "../types/template";
 
@@ -37,8 +35,6 @@ interface TemplateDynamicFormProps {
 
 export function TemplateDynamicForm({ template }: TemplateDynamicFormProps) {
   const t = useTranslations("TemplateDetails");
-  const locale = useLocale();
-  const isRtl = locale === "ar";
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submittedValues, setSubmittedValues] = useState<Record<string, unknown> | null>(null);
@@ -57,7 +53,7 @@ export function TemplateDynamicForm({ template }: TemplateDynamicFormProps) {
           if (required) {
             shape[input.name] = z.coerce
               .number({
-                invalid_type_error: t("validation.numberInvalid", { field: label }),
+                message: t("validation.numberInvalid", { field: label }),
               })
               .refine((val) => !isNaN(val), {
                 message: t("validation.fieldRequired", { field: label }),
@@ -150,13 +146,7 @@ export function TemplateDynamicForm({ template }: TemplateDynamicFormProps) {
     mode: "onBlur",
   });
 
-  // 4. Reset form whenever template slug changes to avoid state leaks
-  useEffect(() => {
-    reset(defaultValues);
-    setSubmittedValues(null);
-  }, [template.slug, template.id, reset, defaultValues]);
-
-  // 5. Handle form submission
+  // 4. Handle form submission
   const onSubmit = async (values: Record<string, unknown>) => {
     setIsSubmitting(true);
     try {
@@ -164,7 +154,7 @@ export function TemplateDynamicForm({ template }: TemplateDynamicFormProps) {
       await new Promise((resolve) => setTimeout(resolve, 600));
       setSubmittedValues(values);
       toast.success(t("submitSuccess"));
-    } catch (err) {
+    } catch {
       toast.error(t("submitError"));
     } finally {
       setIsSubmitting(false);

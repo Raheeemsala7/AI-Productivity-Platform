@@ -1733,5 +1733,50 @@
         "badge": "للشركات"
       }
     }
+  },
+  "TemplateDetails": {
+    "breadcrumb": {
+      "dashboard": "الرئيسية",
+      "templates": "القوالب",
+      "library": "المكتبة"
+    },
+    "types": {
+      "writing": "كتابة المحتوى",
+      "business": "أدوات الشركات"
+    },
+    "backToTemplates": "العودة للقوالب",
+    "formSectionTitle": "بيانات ومدخلات القالب",
+    "formSectionSubtitle": "املأ الحقول المطلوبة لتوليد المحتوى المطلوب بدقة.",
+    "previewSectionTitle": "مخرجات التوليد",
+    "previewSectionSubtitle": "معاينة البيانات الناتجة أو حمولة النموذج.",
+    "requiredField": "حقل مطلوب",
+    "placeholders": {
+      "textarea": "أدخل النص أو التفاصيل هنا...",
+      "text": "اكتب هنا...",
+      "select": "اختر من القائمة..."
+    },
+    "validation": {
+      "fieldRequired": "حقل {field} مطلوب",
+      "numberInvalid": "يرجى إدخال رقم صحيح لـ {field}",
+      "emailInvalid": "يرجى إدخال بريد إلكتروني صالح",
+      "urlInvalid": "يرجى إدخال رابط صالح"
+    },
+    "submitButton": "توليد المحتوى",
+    "generating": "جارٍ التوليد...",
+    "resetForm": "إعادة تعيين",
+    "copyValues": "نسخ البيانات",
+    "copied": "تم النسخ",
+    "copySuccess": "تم نسخ البيانات إلى الحافظة بنجاح!",
+    "copyError": "تعذر نسخ البيانات.",
+    "submitSuccess": "تم التحقق من البيانات وتجهيز الحمولة بنجاح!",
+    "submitError": "حدث خطأ أثناء معالجة البيانات.",
+    "emptyInputsTitle": "لا توجد مدخلات مطلوبة",
+    "emptyInputsMessage": "هذا القالب لا يتطلب أي مدخلات إضافية حالياً.",
+    "previewPlaceholderTitle": "في انتظار إدخال البيانات",
+    "previewPlaceholderDesc": "املأ الحقول واضغط على 'توليد المحتوى' لعرض النتائج هنا.",
+    "backendNotice": "ملاحظة: سيتم إرسال هذه الحمولة إلى خادم الذكاء الاصطناعي عند ربط واجهة التوليد.",
+    "errorTitle": "تعذر تحميل تفاصيل القالب",
+    "errorMessage": "حدث خطأ أثناء جلب تفاصيل هذا القالب، يرجى المحاولة مرة أخرى.",
+    "retryButton": "إعادة المحاولة"
   }
 }
