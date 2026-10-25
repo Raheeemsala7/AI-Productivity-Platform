@@ -73,3 +73,31 @@ export function isInputRequired(isRequired: string | number | boolean | null | u
   return false;
 }
 
+export type GeneratedResultItem = {
+  id: string;
+  generationNumber: number;
+  content: string;
+  createdAt: string;
+  isCollapsed: boolean;
+  isNewlyGenerated?: boolean;
+};
+
+export interface GenerateTemplateResultPayload {
+  slug: string;
+  template_id?: number | string;
+  lang?: string;
+  inputs?: Record<string, unknown>;
+  [key: string]: unknown;
+}
+
+export type GenerateTemplateResultResponse = {
+  success: boolean;
+  message?: string;
+  data?: unknown;
+  payload?: unknown;
+  result?: string;
+  output?: string;
+  content?: string;
+  errors?: Record<string, string[]>;
+};
+

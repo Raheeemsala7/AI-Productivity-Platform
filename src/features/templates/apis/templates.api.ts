@@ -150,3 +150,106 @@ export async function getTemplateDetailsApi({
   }
   return data;
 }
+
+/**
+ * Safely extracts generated result text from various potential API response shapes.
+ */
+export function extractGeneratedResultText(data: unknown): string {
+  if (!data) return "";
+  if (typeof data === "string") return data.trim();
+
+  if (typeof data === "object") {
+    const record = data as Record<string, unknown>;
+
+    // Priority 1: Direct string candidate keys
+    const directKeys = [
+      "result",
+      "content",
+      "output",
+      "generated_text",
+      "text",
+      "response",
+      "data",
+      "payload",
+    ];
+
+    for (const key of directKeys) {
+      const val = record[key];
+      if (typeof val === "string" && val.trim() !== "") {
+        return val.trim();
+      }
+    }
+
+    // Priority 2: Nested data or payload objects
+    if (record.data && typeof record.data === "object") {
+      const extracted = extractGeneratedResultText(record.data);
+      if (extracted) return extracted;
+    }
+
+    if (record.payload && typeof record.payload === "object") {
+      const extracted = extractGeneratedResultText(record.payload);
+      if (extracted) return extracted;
+    }
+  }
+
+  return "";
+}
+
+export interface GenerateTemplateResultResult {
+  success: boolean;
+  message?: string;
+  generatedText: string;
+  raw: unknown;
+}
+
+/**
+ * Client-side API caller for generating template results via POST /api/user/templates/result.
+ */
+export async function generateTemplateResultApi(
+  payload: Record<string, unknown>
+): Promise<GenerateTemplateResultResult> {
+  const res = await fetch("/api/user/templates/result", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  const data = await res.json().catch(() => null);
+
+  if (!res.ok || (data && data.success === false)) {
+    const errorMsg =
+      data?.message ||
+      (data?.errors ? Object.values(data.errors).flat().join(", ") : null) ||
+      `Generation failed with status ${res.status}`;
+    throw new Error(errorMsg);
+  }
+
+  const generatedText = extractGeneratedResultText(data);
+
+  if (!generatedText) {
+    // If the backend returned a success without text, check if there's a fallback message
+    const fallback =
+      typeof data?.message === "string" && data.message !== "Success"
+        ? data.message
+        : "";
+    if (fallback) {
+      return {
+        success: true,
+        message: data?.message,
+        generatedText: fallback,
+        raw: data,
+      };
+    }
+    throw new Error("No generated content received from the template API.");
+  }
+
+  return {
+    success: true,
+    message: data?.message,
+    generatedText,
+    raw: data,
+  };
+}

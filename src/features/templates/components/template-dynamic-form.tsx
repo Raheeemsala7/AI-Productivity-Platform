@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useCallback } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -8,8 +8,6 @@ import { useTranslations } from "next-intl";
 import {
   Sparkles,
   Loader2,
-  Copy,
-  Check,
   RotateCcw,
   AlertCircle,
   FileCheck2,
@@ -27,7 +25,21 @@ import {
 import {
   TemplateDetails,
   isInputRequired,
+  GeneratedResultItem,
 } from "../types/template";
+import { generateTemplateResultApi } from "../apis/templates.api";
+import { TemplateResultsHistory } from "./template-results-history";
+
+function createResultId(): string {
+  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+    return crypto.randomUUID();
+  }
+  return `result-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+}
+
+function createTimestamp(): string {
+  return new Date().toISOString();
+}
 
 interface TemplateDynamicFormProps {
   template: TemplateDetails;
@@ -37,8 +49,8 @@ export function TemplateDynamicForm({ template }: TemplateDynamicFormProps) {
   const t = useTranslations("TemplateDetails");
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submittedValues, setSubmittedValues] = useState<Record<string, unknown> | null>(null);
-  const [copied, setCopied] = useState(false);
+  // In-memory results collection strictly scoped to the page session
+  const [results, setResults] = useState<GeneratedResultItem[]>([]);
 
   // 1. Build dynamic Zod Schema based on inputs
   const validationSchema = useMemo(() => {
@@ -146,37 +158,85 @@ export function TemplateDynamicForm({ template }: TemplateDynamicFormProps) {
     mode: "onBlur",
   });
 
-  // 4. Handle form submission
+  // 4. Handle form submission & API Generation
   const onSubmit = async (values: Record<string, unknown>) => {
+    if (isSubmitting) return;
     setIsSubmitting(true);
+
     try {
-      // Simulate submission & validate payload
-      await new Promise((resolve) => setTimeout(resolve, 600));
-      setSubmittedValues(values);
-      toast.success(t("submitSuccess"));
-    } catch {
-      toast.error(t("submitError"));
+      // Assemble payload preserving exact input names
+      const payload: Record<string, unknown> = {
+        ...values,
+        slug: template.slug,
+        template_id: template.id,
+        inputs: values,
+      };
+
+      const response = await generateTemplateResultApi(payload);
+
+      const newResult: GeneratedResultItem = {
+        id: createResultId(),
+        generationNumber: results.length + 1,
+        content: response.generatedText,
+        createdAt: createTimestamp(),
+        isCollapsed: false, // newest is expanded by default
+        isNewlyGenerated: true,
+      };
+
+      // Prepend newest result, collapse previous results to save space
+      setResults((prev) => [
+        newResult,
+        ...prev.map((item) => ({
+          ...item,
+          isCollapsed: true,
+          isNewlyGenerated: false,
+        })),
+      ]);
+
+      toast.success(t("generateSuccess"));
+    } catch (error) {
+      console.error("[TemplateDynamicForm] Generation failed:", error);
+      const message =
+        error instanceof Error ? error.message : t("generateError");
+      toast.error(message);
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const handleCopyPayload = async () => {
-    if (!submittedValues) return;
-    try {
-      await navigator.clipboard.writeText(JSON.stringify(submittedValues, null, 2));
-      setCopied(true);
-      toast.success(t("copySuccess"));
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      toast.error(t("copyError"));
-    }
-  };
+  // 5. Result history item handlers
+  const handleToggleCollapse = useCallback((id: string) => {
+    setResults((prev) =>
+      prev.map((r) =>
+        r.id === id ? { ...r, isCollapsed: !r.isCollapsed } : r
+      )
+    );
+  }, []);
+
+  const handleSaveEdit = useCallback(
+    (id: string, updatedContent: string) => {
+      setResults((prev) =>
+        prev.map((r) =>
+          r.id === id ? { ...r, content: updatedContent } : r
+        )
+      );
+      toast.success(t("saveSuccess"));
+    },
+    [t]
+  );
+
+  const handleAnimationComplete = useCallback((id: string) => {
+    setResults((prev) =>
+      prev.map((r) =>
+        r.id === id ? { ...r, isNewlyGenerated: false } : r
+      )
+    );
+  }, []);
 
   // 6. Handle empty inputs state
   if (!template.inputs || template.inputs.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center p-8 sm:p-12 rounded-2xl bg-muted/20 border border-dashed border-border/70 text-center my-6">
+      <div className="flex flex-col items-center justify-center p-8 sm:p-12 rounded-3xl bg-muted/20 border border-dashed border-border/70 text-center my-6">
         <div className="flex size-12 items-center justify-center rounded-2xl bg-muted text-muted-foreground mb-3">
           <FileCheck2 className="size-6" />
         </div>
@@ -191,9 +251,9 @@ export function TemplateDynamicForm({ template }: TemplateDynamicFormProps) {
   }
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start mt-6">
-      {/* Form Column */}
-      <div className="lg:col-span-7 flex flex-col gap-6 rounded-2xl border border-border/80 bg-card/60 p-5 sm:p-6 shadow-xs backdrop-blur-sm">
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start mt-6">
+      {/* Form Column (Inputs) */}
+      <div className="lg:col-span-5 flex flex-col gap-6 rounded-3xl border border-border/80 bg-card/60 p-5 sm:p-6 shadow-xs backdrop-blur-sm">
         <div className="border-b border-border/40 pb-3">
           <h2 className="text-base sm:text-lg font-bold text-foreground">
             {t("formSectionTitle")}
@@ -212,7 +272,10 @@ export function TemplateDynamicForm({ template }: TemplateDynamicFormProps) {
             return (
               <Field key={input.name} data-invalid={Boolean(errorMessage)}>
                 {/* Field Label & Required Mark */}
-                <FieldLabel htmlFor={input.name} className="flex items-center gap-1.5 font-semibold text-xs sm:text-sm text-foreground">
+                <FieldLabel
+                  htmlFor={input.name}
+                  className="flex items-center gap-1.5 font-semibold text-xs sm:text-sm text-foreground"
+                >
                   <span>{input.label || input.name}</span>
                   {required && (
                     <span className="text-brand font-bold" title={t("requiredField")}>
@@ -237,13 +300,16 @@ export function TemplateDynamicForm({ template }: TemplateDynamicFormProps) {
                       return (
                         <Textarea
                           id={input.name}
-                          rows={4}
+                          autoResize={true}
+                          minHeight={110}
+                          maxHeight={380}
                           placeholder={input.placeholder || t("placeholders.textarea")}
                           aria-invalid={Boolean(errorMessage)}
                           className="bg-background/80"
                           value={String(field.value ?? "")}
                           onChange={field.onChange}
                           onBlur={field.onBlur}
+                          disabled={isSubmitting}
                         />
                       );
                     }
@@ -257,6 +323,7 @@ export function TemplateDynamicForm({ template }: TemplateDynamicFormProps) {
                             checked={Boolean(field.value)}
                             onChange={(e) => field.onChange(e.target.checked)}
                             onBlur={field.onBlur}
+                            disabled={isSubmitting}
                             className="size-4.5 rounded-md border-border text-brand focus:ring-brand"
                           />
                           <label
@@ -277,6 +344,7 @@ export function TemplateDynamicForm({ template }: TemplateDynamicFormProps) {
                           value={String(field.value ?? "")}
                           onChange={field.onChange}
                           onBlur={field.onBlur}
+                          disabled={isSubmitting}
                           className="h-10 w-full rounded-2xl border border-transparent bg-input/50 px-3.5 text-sm text-foreground transition-all outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 bg-background/80"
                         >
                           <option value="">{t("placeholders.select")}</option>
@@ -312,6 +380,7 @@ export function TemplateDynamicForm({ template }: TemplateDynamicFormProps) {
                         value={String(field.value ?? "")}
                         onChange={field.onChange}
                         onBlur={field.onBlur}
+                        disabled={isSubmitting}
                       />
                     );
                   }}
@@ -333,7 +402,7 @@ export function TemplateDynamicForm({ template }: TemplateDynamicFormProps) {
             <Button
               type="submit"
               disabled={isSubmitting}
-              className="gap-2 bg-brand text-brand-foreground hover:bg-brand/90 font-semibold px-5 py-2.5 rounded-full shadow-md shadow-brand/20 transition-all cursor-pointer"
+              className="gap-2 bg-brand text-brand-foreground hover:bg-brand/90 font-semibold px-6 py-2.5 rounded-full shadow-md shadow-brand/20 transition-all cursor-pointer"
             >
               {isSubmitting ? (
                 <>
@@ -362,61 +431,14 @@ export function TemplateDynamicForm({ template }: TemplateDynamicFormProps) {
         </form>
       </div>
 
-      {/* Output / Preview Column */}
-      <div className="lg:col-span-5 flex flex-col gap-4 rounded-2xl border border-border/80 bg-card/60 p-5 sm:p-6 shadow-xs backdrop-blur-sm">
-        <div className="flex items-center justify-between border-b border-border/40 pb-3">
-          <div>
-            <h3 className="text-base font-bold text-foreground">
-              {t("previewSectionTitle")}
-            </h3>
-            <p className="text-xs text-muted-foreground mt-0.5">
-              {t("previewSectionSubtitle")}
-            </p>
-          </div>
-
-          {submittedValues && (
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={handleCopyPayload}
-              className="rounded-full gap-1.5 text-xs cursor-pointer"
-            >
-              {copied ? (
-                <>
-                  <Check className="size-3.5 text-green-500" />
-                  <span>{t("copied")}</span>
-                </>
-              ) : (
-                <>
-                  <Copy className="size-3.5" />
-                  <span>{t("copyValues")}</span>
-                </>
-              )}
-            </Button>
-          )}
-        </div>
-
-        {submittedValues ? (
-          <div className="flex flex-col gap-3 animate-in fade-in-50 duration-300">
-            <div className="rounded-xl bg-background/80 border border-border/60 p-4 font-mono text-xs overflow-x-auto text-foreground dir-ltr leading-relaxed max-h-96">
-              <pre>{JSON.stringify(submittedValues, null, 2)}</pre>
-            </div>
-            <p className="text-xs text-muted-foreground italic">
-              {t("backendNotice")}
-            </p>
-          </div>
-        ) : (
-          <div className="flex flex-col items-center justify-center p-8 sm:p-12 text-center text-muted-foreground my-6">
-            <Sparkles className="size-8 stroke-[1.3] text-muted-foreground/60 mb-2" />
-            <p className="text-xs sm:text-sm font-medium">
-              {t("previewPlaceholderTitle")}
-            </p>
-            <p className="text-xs text-muted-foreground/80 mt-1 max-w-xs">
-              {t("previewPlaceholderDesc")}
-            </p>
-          </div>
-        )}
+      {/* Results Workspace Column */}
+      <div className="lg:col-span-7 flex flex-col gap-6 rounded-3xl border border-border/80 bg-card/60 p-5 sm:p-7 shadow-xs backdrop-blur-sm">
+        <TemplateResultsHistory
+          results={results}
+          onToggleCollapse={handleToggleCollapse}
+          onSaveEdit={handleSaveEdit}
+          onAnimationComplete={handleAnimationComplete}
+        />
       </div>
     </div>
   );
