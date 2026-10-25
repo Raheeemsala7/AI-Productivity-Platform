@@ -53,9 +53,9 @@ function TemplateCard({ item }: { item: TemplateToolItem }) {
     <Link
       href={item.href}
       className={cn(
-        "group relative flex-1 max-w-[420px] w-full flex flex-col justify-between overflow-hidden rounded-xl",
-        "bg-[#131418] border border-white/5 transition-all duration-300",
-        "hover:bg-[#161820] hover:border-[#ea5b39]/40 hover:-translate-y-1.5",
+        "group relative flex-1 max-w-105 w-full flex flex-col justify-between overflow-hidden rounded-xl",
+        "bg-card border border-white/5 transition-all duration-300",
+        "hover:bg-card/60 hover:border-[#ea5b39]/40 hover:-translate-y-1.5",
         "hover:shadow-2xl hover:shadow-[#ea5b39]/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ea5b39]",
       )}
     >
