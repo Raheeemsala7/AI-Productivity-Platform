@@ -7,6 +7,7 @@ interface Props {
   params: Promise<{
     locale: string;
     slug: string;
+    toolName?: string;
   }>;
 }
 
@@ -17,8 +18,10 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params;
-  const tool = TEMPLATES_DATA.find((item) => item.slug === slug);
+  const { slug, toolName } = await params;
+  const tool =
+    TEMPLATES_DATA.find((item) => item.slug === slug) ||
+    TEMPLATES_DATA.find((item) => item.slug === toolName);
 
   if (!tool) {
     return {
@@ -33,8 +36,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function TemplateToolPage({ params }: Props) {
-  const { slug } = await params;
-  const tool = TEMPLATES_DATA.find((item) => item.slug === slug);
+  const { slug, toolName } = await params;
+  const tool =
+    TEMPLATES_DATA.find((item) => item.slug === slug) ||
+    TEMPLATES_DATA.find((item) => item.slug === toolName);
 
   if (!tool) {
     notFound();

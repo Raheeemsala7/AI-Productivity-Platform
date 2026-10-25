@@ -1673,5 +1673,36 @@
         "description": "Easily create business content from emails, reports, and more."
       }
     }
+  },
+  "TemplatesLibrary": {
+    "breadcrumb": {
+      "dashboard": "Dashboard",
+      "catalog": "Templates Catalog"
+    },
+    "backToCatalog": "Back to Templates",
+    "categoriesLabel": "Categories",
+    "templatesCount": "templates",
+    "updating": "Updating...",
+    "openTemplate": "Open Template",
+    "startNow": "Start Now",
+    "defaultDescription": "Professional AI-powered template for higher productivity.",
+    "errorTitle": "Failed to load templates",
+    "errorMessage": "An error occurred while fetching templates. Please try again.",
+    "retryButton": "Try Again",
+    "emptyTitle": "No templates in this category",
+    "emptyMessage": "No templates are currently available for the selected category.",
+    "viewAllCategories": "View first category",
+    "types": {
+      "writing": {
+        "title": "Content Writing Tools",
+        "subtitle": "Advanced AI templates for creating articles, newsletters, ads, and social content.",
+        "badge": "Content Writing"
+      },
+      "business": {
+        "title": "Business Tools",
+        "subtitle": "Specialized templates for crafting proposals, executive reports, and strategy plans.",
+        "badge": "For Business"
+      }
+    }
   }
 }
