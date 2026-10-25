@@ -35,3 +35,41 @@ export interface FetchTemplatesParams {
   type: TemplateType;
   category_id?: number | string | null;
 }
+
+export type TemplateInput = {
+  name: string;
+  is_required: string | number | boolean;
+  label: string;
+  type: string;
+  description?: string | null;
+  placeholder?: string | null;
+  options?: Array<{ label: string; value: string | number }> | string[];
+};
+
+export type TemplateDetails = {
+  id: number;
+  name: string;
+  description: string;
+  logo: string;
+  slug: string;
+  inputs: TemplateInput[];
+};
+
+export type TemplateDetailsResponse = {
+  success: boolean;
+  message: string;
+  data: TemplateDetails;
+};
+
+export interface FetchTemplateDetailsParams {
+  slug: string;
+  lang: string;
+}
+
+export function isInputRequired(isRequired: string | number | boolean | null | undefined): boolean {
+  if (isRequired === true || isRequired === 1 || isRequired === "1") {
+    return true;
+  }
+  return false;
+}
+
