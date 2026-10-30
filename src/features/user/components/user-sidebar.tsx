@@ -31,6 +31,8 @@ import {
   Settings,
   User,
   LogOut,
+  Clapperboard,
+  Briefcase,
 } from "lucide-react"
 import { Link, usePathname, useRouter } from "@/i18n/navigation"
 import { Button } from "@/shared/components/ui/button"
@@ -49,7 +51,7 @@ export function UserSidebar({
 
   const locale = useLocale()
   const dir = locale === "ar" ? "rtl" : "ltr"
-  
+
   const data = [
     {
       title: t("groups.overview"),
@@ -61,13 +63,23 @@ export function UserSidebar({
         },
       ],
     },
-        {
+    {
       title: t("groups.resources"),
       items: [
         {
           title: t("items.templates"),
           url: "/dashboard/templates",
           icon: FolderKanban,
+        },
+        {
+          title: t("items.mediaTools"),
+          url: "/dashboard/templates/writing",
+          icon: Clapperboard,
+        },
+        {
+          title: t("items.businessTools"),
+          url: "/dashboard/templates/business",
+          icon: Briefcase,
         },
         {
           title: t("items.chat"),
@@ -91,7 +103,6 @@ export function UserSidebar({
         },
       ],
     },
-
     {
       title: t("groups.account"),
       items: [
@@ -117,7 +128,7 @@ export function UserSidebar({
         <Link href={"/dashboard"} className="block w-full">
           <div className="flex h-full items-center gap-2">
             <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold">
-               OU
+              OU
             </div>
             <div className="flex flex-col">
               <p className="font-bold">{t("user.brand")}</p>
@@ -139,7 +150,9 @@ export function UserSidebar({
                 {group.items.map((item) => {
                   const isActive =
                     pathname === item.url ||
-                    (item.url !== "/dashboard" && pathname?.startsWith(`${item.url}/`))
+                    (item.url !== "/dashboard" &&
+                      item.url !== "/dashboard/templates" &&
+                      pathname?.startsWith(`${item.url}/`))
 
                   if ("isLogout" in item && item.isLogout) {
                     return (
@@ -191,10 +204,10 @@ export function UserSidebar({
             </div>
           </SheetTrigger>
           <SheetContent>
-             <div className="p-4">
-                 <h2 className="text-lg font-bold">{t("profileSheet.title")}</h2>
-                 <p className="text-muted-foreground">{t("profileSheet.description")}</p>
-             </div>
+            <div className="p-4">
+              <h2 className="text-lg font-bold">{t("profileSheet.title")}</h2>
+              <p className="text-muted-foreground">{t("profileSheet.description")}</p>
+            </div>
           </SheetContent>
         </Sheet>
       </SidebarFooter>

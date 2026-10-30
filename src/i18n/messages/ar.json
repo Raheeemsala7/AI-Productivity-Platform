@@ -1697,7 +1697,9 @@
       "profile": "الملف الشخصي",
       "admins": "المديرون",
       "permissions": "الصلاحيات",
-      "logout": "تسجيل الخروج"
+      "logout": "تسجيل الخروج",
+      "mediaTools": "أدوات الميديا",
+      "businessTools": "أدوات الأعمال"
     },
     "logoutDialog": {
       "title": "هل أنت متأكد من تسجيل الخروج؟",

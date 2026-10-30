@@ -1673,7 +1673,9 @@
       "profile": "Profile",
       "admins": "Admins",
       "permissions": "Permissions",
-      "logout": "Logout"
+      "logout": "Logout",
+      "mediaTools": "Media Tools",
+      "businessTools": "Business Tools"
     },
     "logoutDialog": {
       "title": "Are you sure you want to log out?",
