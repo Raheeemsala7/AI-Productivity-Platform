@@ -48,12 +48,7 @@
     "password": "كلمة المرور",
     "confirmPassword": "تأكيد كلمة المرور",
     "rememberMe": "إبقني مسجلاً",
-    "forgotPassword": {
-      "statement": "نسيت",
-      "statementAccent": "كلمة المرور؟",
-      "note": "أدخل بريدك الإلكتروني وسنرسل لك رابطاً آمناً للعودة إلى مساحة عملك.",
-      "mobileLead": "سنساعدك على العودة."
-    },
+    "forgotPassword": "هل نسيت كلمة المرور؟",
     "signingIn": "جارٍ تسجيل الدخول...",
     "signIn": "تسجيل الدخول",
     "signingUp": "جارٍ إنشاء الحساب...",
