@@ -1808,7 +1808,19 @@
   "Settings": {
     "header": {
       "title": "Account Settings",
-      "description": "Manage your profile information and view your live credits and subscription balance without caching."
+      "description": "Manage your profile information and view your live credits and subscription balance in real-time."
+    },
+    "tabs": {
+      "profile": "Profile & Account",
+      "billing": "Credits & Billing",
+      "security": "Security & Privacy"
+    },
+    "hero": {
+      "verifiedUser": "Verified Account",
+      "creditsRemaining": "{count} credits remaining",
+      "refreshTooltip": "Live instant sync without cache",
+      "liveBadge": "Live Real-time",
+      "refreshing": "Refreshing..."
     },
     "creditsCard": {
       "title": "Credits & Subscription",
@@ -1828,12 +1840,30 @@
       "manageSubscription": "Manage Subscription",
       "upgradePlan": "Upgrade Plan"
     },
+    "billingTab": {
+      "title": "Usage & Credits Breakdown",
+      "description": "Detailed insights on your available credits, plan limits, and next renewal date.",
+      "remaining": "Remaining Credits",
+      "totalPlan": "Total Allowance",
+      "consumed": "Consumed Credits",
+      "renewalDate": "Next Renewal Date",
+      "featuresTitle": "Features Included in Your Current Plan",
+      "feature1": "Unlimited AI Chat Assistant Access",
+      "feature2": "High Precision Professional Templates Generation",
+      "feature3": "Priority Processing & Ultra-fast Response",
+      "feature4": "Automatic Credits Renewal on Due Date",
+      "upgradeCta": "Need more credits? Upgrade your plan to get extra credits and advanced features.",
+      "upgradeButton": "Upgrade Plan Now",
+      "manageButton": "Manage Billing & Subscription"
+    },
     "profileForm": {
-      "title": "Personal Information",
+      "title": "Personal Information & Appearance",
       "description": "Update your name, personal slogan, and avatar profile color.",
       "avatarLabel": "Avatar & Profile Color",
       "avatarUploadHint": "Click to change avatar image (PNG, JPG)",
       "chooseColor": "Choose Profile Accent Color",
+      "previewTitle": "Live Platform Preview",
+      "previewDesc": "This is how your avatar appears across chat and top navigation.",
       "name": "Full Name",
       "namePlaceholder": "Enter your full name",
       "email": "Email Address",
@@ -1845,6 +1875,18 @@
       "saveChanges": "Save Changes",
       "successMessage": "Profile updated successfully!",
       "errorMessage": "Failed to update profile"
+    },
+    "securityTab": {
+      "title": "Account Security & Sessions",
+      "description": "Account information and email verification status.",
+      "emailStatus": "Email Verification Status",
+      "emailVerified": "Email is active and securely bound to this account",
+      "roleTitle": "Account Role & Permissions",
+      "sessionTitle": "Current Active Session",
+      "sessionDesc": "You are currently logged in with a session protected by encrypted JWT.",
+      "passwordNotice": "To protect your account, always make sure to use strong, complex passwords.",
+      "resetPasswordBtn": "Reset Password",
+      "resetInfo": "If you wish to change your password, you can proceed to the password recovery page."
     }
   }
 }
