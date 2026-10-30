@@ -1804,5 +1804,47 @@
     "toolbarNumberList": "Numbered List",
     "toolbarQuote": "Quote",
     "toolbarCode": "Code Block"
+  },
+  "Settings": {
+    "header": {
+      "title": "Account Settings",
+      "description": "Manage your profile information and view your live credits and subscription balance without caching."
+    },
+    "creditsCard": {
+      "title": "Credits & Subscription",
+      "description": "Credits available for content generation and AI chat conversations.",
+      "liveStatus": "Real-Time Sync",
+      "refreshButton": "Refresh Credits",
+      "remainingCredits": "Remaining Credits",
+      "percentageLeft": "Percentage Left",
+      "currentPlan": "Current Plan",
+      "activeBadge": "Active",
+      "planIncludes": "Includes {count} credits",
+      "renewalDate": "Next Renewal Date",
+      "autoRenewNote": "Credits renew automatically on due date",
+      "usageProgress": "Usage from Total Plan",
+      "creditsUnit": "credits left",
+      "cacheFreeNotice": "Credits are fetched live from the server with every visit without caching",
+      "manageSubscription": "Manage Subscription",
+      "upgradePlan": "Upgrade Plan"
+    },
+    "profileForm": {
+      "title": "Personal Information",
+      "description": "Update your name, personal slogan, and avatar profile color.",
+      "avatarLabel": "Avatar & Profile Color",
+      "avatarUploadHint": "Click to change avatar image (PNG, JPG)",
+      "chooseColor": "Choose Profile Accent Color",
+      "name": "Full Name",
+      "namePlaceholder": "Enter your full name",
+      "email": "Email Address",
+      "emailNotice": "Linked to account and cannot be modified here",
+      "slogan": "Slogan / Bio",
+      "sloganPlaceholder": "Write a brief slogan or bio",
+      "sloganHelp": "Appears beside your name in chat and profile views.",
+      "saving": "Saving...",
+      "saveChanges": "Save Changes",
+      "successMessage": "Profile updated successfully!",
+      "errorMessage": "Failed to update profile"
+    }
   }
 }

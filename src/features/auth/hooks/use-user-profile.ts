@@ -18,6 +18,8 @@ export function useUserProfile(initialUser?: User) {
     },
     placeholderData: initialUser,
     staleTime: 0,
+    refetchOnMount: "always",
     refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
   });
 }

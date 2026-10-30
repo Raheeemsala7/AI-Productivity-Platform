@@ -1828,5 +1828,47 @@
     "toolbarNumberList": "قائمة مرقمة",
     "toolbarQuote": "اقتباس",
     "toolbarCode": "كتلة برمجية"
+  },
+  "Settings": {
+    "header": {
+      "title": "إعدادات الحساب",
+      "description": "إدارة بيانات حسابك الشخصي، ومتابعة رصيدك واشتراكك بدقة مباشرة بدون تخزين مؤقت."
+    },
+    "creditsCard": {
+      "title": "رصيد الحساب والاشتراك",
+      "description": "الرصيد المتاح للاستهلاك في توليد المحتوى والمحادثات الذكية.",
+      "liveStatus": "مباشر وحي",
+      "refreshButton": "تحديث الرصيد",
+      "remainingCredits": "الرصيد المتبقي",
+      "percentageLeft": "النسبة المتبقية",
+      "currentPlan": "الباقة الحالية",
+      "activeBadge": "نشطة",
+      "planIncludes": "تشمل {count} نقطة رصيد",
+      "renewalDate": "تاريخ التجديد القادم",
+      "autoRenewNote": "يتم تجديد النقاط تلقائياً في موعد الاستحقاق",
+      "usageProgress": "استهلاك الرصيد من إجمالي الباقة",
+      "creditsUnit": "نقطة رصيد متبقية",
+      "cacheFreeNotice": "يتم جلب الرصيد مباشرة من الخادم مع كل زيارة دون تخزين مؤقت",
+      "manageSubscription": "إدارة الاشتراك",
+      "upgradePlan": "ترقية الباقة"
+    },
+    "profileForm": {
+      "title": "البيانات الشخصية",
+      "description": "تعديل اسمك، الشعار الخاص بك، ولون صورتك الرمزية.",
+      "avatarLabel": "الصورة الرمزية ولون الحساب",
+      "avatarUploadHint": "اضغط لتغيير الصورة الرمزية (PNG, JPG)",
+      "chooseColor": "اختر لون تمييز الحساب (Avatar Color)",
+      "name": "الاسم الكامل",
+      "namePlaceholder": "أدخل اسمك الكامل",
+      "email": "البريد الإلكتروني",
+      "emailNotice": "مرتبط بالحساب ولا يمكن تغييره هنا",
+      "slogan": "الشعار / الوصف المختصر (Slogan)",
+      "sloganPlaceholder": "اكتب شعاراً مختصراً أو وصفاً",
+      "sloganHelp": "يظهر بجانب اسمك في واجهات المحادثة والملف الشخصي.",
+      "saving": "جارٍ الحفظ والتحديث...",
+      "saveChanges": "حفظ التعديلات",
+      "successMessage": "تم تحديث البيانات بنجاح!",
+      "errorMessage": "حدث خطأ أثناء تحديث البيانات"
+    }
   }
 }
