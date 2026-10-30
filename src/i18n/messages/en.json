@@ -1873,7 +1873,11 @@
       "saveChanges": "Save Changes",
       "successMessage": "Profile updated successfully!",
       "errorMessage": "Failed to update profile",
-      "avatarSystemNote": "Your avatar is automatically generated based on your account color and name initials."
+      "avatarSystemNote": "Your avatar is automatically generated based on your account color and name initials.",
+      "previewSidebar": "Chat & Sidebar Preview",
+      "previewSlogan": "Account Slogan & Bio",
+      "previewStatus": "Active & Linked Account",
+      "previewRole": "Account Role"
     },
     "securityTab": {
       "title": "Account Security & Sessions",

@@ -4,19 +4,31 @@ import { Card, CardContent, CardHeader } from "@/shared/components/ui/card";
 export function SettingsSkeleton() {
   return (
     <div className="space-y-6 max-w-5xl mx-auto pb-12">
-      {/* Top Hero Banner Skeleton */}
-      <div className="rounded-2xl border border-border/80 bg-card p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-6 shadow-xs">
-        <div className="flex items-center gap-4">
-          <Skeleton className="size-20 rounded-full" />
-          <div className="space-y-2">
-            <Skeleton className="h-6 w-48" />
-            <Skeleton className="h-4 w-36" />
-            <Skeleton className="h-5 w-24 rounded-full" />
+      {/* Top Hero Banner Skeleton with Full-width credit bar */}
+      <div className="rounded-2xl border border-border/80 bg-card p-6 space-y-6 shadow-xs">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <Skeleton className="size-16 sm:size-20 rounded-full" />
+            <div className="space-y-2">
+              <Skeleton className="h-6 w-48" />
+              <Skeleton className="h-4 w-36" />
+              <Skeleton className="h-5 w-24 rounded-full" />
+            </div>
           </div>
+          <Skeleton className="h-9 w-28 rounded-md" />
         </div>
-        <div className="flex items-center gap-3">
-          <Skeleton className="h-16 w-52 rounded-xl" />
-          <Skeleton className="h-10 w-28 rounded-md" />
+
+        {/* Full width credit bar skeleton */}
+        <div className="w-full rounded-xl border border-border/60 bg-background/80 p-4 sm:p-5 space-y-3">
+          <div className="flex justify-between items-center">
+            <Skeleton className="h-4 w-36" />
+            <Skeleton className="h-6 w-40" />
+          </div>
+          <Skeleton className="h-3 w-full rounded-full" />
+          <div className="flex justify-between items-center pt-1">
+            <Skeleton className="h-3 w-48" />
+            <Skeleton className="h-3 w-24" />
+          </div>
         </div>
       </div>
 
@@ -36,7 +48,7 @@ export function SettingsSkeleton() {
               <Skeleton className="h-4 w-72" />
             </CardHeader>
             <CardContent className="space-y-4">
-              <Skeleton className="h-32 rounded-xl" />
+              <Skeleton className="h-28 rounded-xl" />
               <div className="grid gap-4 sm:grid-cols-2">
                 <Skeleton className="h-10 rounded-md" />
                 <Skeleton className="h-10 rounded-md" />
@@ -57,8 +69,7 @@ export function SettingsSkeleton() {
               <Skeleton className="h-4 w-48" />
             </CardHeader>
             <CardContent className="space-y-3">
-              <Skeleton className="h-20 rounded-xl" />
-              <Skeleton className="h-12 rounded-xl" />
+              <Skeleton className="h-24 rounded-xl" />
               <Skeleton className="h-14 rounded-xl" />
             </CardContent>
           </Card>

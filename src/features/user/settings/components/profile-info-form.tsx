@@ -114,39 +114,6 @@ export function ProfileInfoForm({ user }: ProfileInfoFormProps) {
 
           <CardContent>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-              {/* Dynamic Color Avatar Banner */}
-              <div className="rounded-xl border border-border/70 bg-muted/20 p-5 flex flex-col sm:flex-row items-center gap-5">
-                <div className="relative shrink-0">
-                  <Avatar className="size-16 ring-3 ring-border/80 shadow-xs transition-transform duration-300">
-                    <AvatarFallback
-                      className="text-xl font-bold text-white transition-all duration-300"
-                      style={{ backgroundColor: avatarColor }}
-                    >
-                      {getInitials(currentName)}
-                    </AvatarFallback>
-                  </Avatar>
-                  <span
-                    className="absolute -bottom-1 -end-1 size-4.5 rounded-full ring-2 ring-card"
-                    style={{ backgroundColor: avatarColor }}
-                  />
-                </div>
-
-                <div className="space-y-1 text-center sm:text-start flex-1">
-                  <span className="text-xs font-semibold text-foreground flex items-center justify-center sm:justify-start gap-1.5">
-                    <Sparkles className="size-3.5 text-brand" />
-                    <span>{t("profileForm.avatarLabel")}</span>
-                  </span>
-                  <p className="text-xs text-muted-foreground">
-                    {t("profileForm.avatarSystemNote")}
-                  </p>
-                  <div className="flex items-center justify-center sm:justify-start gap-2 pt-1 text-[11px] text-muted-foreground">
-                    <span>لون الحساب:</span>
-                    <span className="font-mono font-semibold" style={{ color: avatarColor }}>
-                      {avatarColor}
-                    </span>
-                  </div>
-                </div>
-              </div>
 
               {/* Form Inputs Grid */}
               <div className="grid gap-4 sm:grid-cols-2">
@@ -256,30 +223,37 @@ export function ProfileInfoForm({ user }: ProfileInfoFormProps) {
 
           <CardContent className="space-y-4">
             {/* Header / Sidebar Footer Preview */}
-            <div className="rounded-xl border border-border/80 bg-background p-3.5 shadow-2xs">
-              <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground block mb-2.5">
-                معاينة شريط المحادثة والسايدبار
-              </span>
+            <div className="rounded-xl border border-border/80 bg-background/90 p-4 shadow-2xs space-y-3">
+              <div className="flex items-center justify-between border-b border-border/50 pb-2">
+                <span className="text-[11px] font-semibold text-muted-foreground flex items-center gap-1.5">
+                  <span className="size-2 rounded-full bg-emerald-500 animate-pulse" />
+                  {t("profileForm.previewSidebar")}
+                </span>
+                <span className="text-[10px] rounded-full bg-primary/10 px-2 py-0.5 font-semibold text-primary">
+                  {t("profileForm.previewStatus")}
+                </span>
+              </div>
+
               <div className="flex items-center gap-3">
-                <Avatar className="size-11 ring-2 ring-border/80 shadow-2xs">
+                <Avatar className="size-10 sm:size-11 ring-2 ring-border/80 shadow-2xs shrink-0">
                   <AvatarFallback
                     style={{ backgroundColor: avatarColor }}
-                    className="text-xs font-bold text-white transition-colors duration-300"
+                    className="text-xs sm:text-sm font-bold text-white transition-colors duration-300"
                   >
                     {getInitials(currentName)}
                   </AvatarFallback>
                 </Avatar>
 
-                <div className="min-w-0 flex-1">
+                <div className="min-w-0 flex-1 space-y-0.5">
                   <div className="flex items-center justify-between gap-1">
-                    <span className="text-xs font-bold text-foreground truncate">
+                    <span className="text-xs sm:text-sm font-bold text-foreground truncate">
                       {currentName}
                     </span>
-                    <span className="rounded-md bg-brand/10 px-1.5 py-0.5 text-[9px] font-semibold text-brand border border-brand/20">
+                    <span className="shrink-0 rounded-md bg-primary/10 px-1.5 py-0.5 text-[9px] font-bold text-primary border border-primary/20">
                       {user?.plan?.name || "Starter"}
                     </span>
                   </div>
-                  <span className="text-[10px] text-muted-foreground truncate block">
+                  <span className="text-[11px] text-muted-foreground truncate block">
                     {user?.email}
                   </span>
                 </div>
@@ -287,16 +261,16 @@ export function ProfileInfoForm({ user }: ProfileInfoFormProps) {
             </div>
 
             {/* Slogan preview chip */}
-            {currentSlogan && (
-              <div className="rounded-xl border border-border/80 bg-background p-3 shadow-2xs">
-                <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground block mb-1">
-                  الشعار التعريفي
+            {currentSlogan ? (
+              <div className="rounded-xl border border-border/80 bg-background/90 p-3.5 shadow-2xs space-y-1.5">
+                <span className="text-[11px] font-semibold text-muted-foreground block">
+                  {t("profileForm.previewSlogan")}
                 </span>
-                <span className="inline-block rounded-md bg-muted px-2.5 py-1 text-xs font-medium text-foreground border border-border/60">
-                  {currentSlogan}
-                </span>
+                <div className="inline-flex items-center gap-1.5 rounded-lg bg-muted/80 px-2.5 py-1 text-xs font-medium text-foreground border border-border/60 max-w-full">
+                  <span className="truncate">{currentSlogan}</span>
+                </div>
               </div>
-            )}
+            ) : null}
           </CardContent>
         </Card>
       </div>
