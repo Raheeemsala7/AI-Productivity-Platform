@@ -1893,5 +1893,85 @@
       "resetPasswordBtn": "Reset Password",
       "resetInfo": "If you wish to change your password, you can proceed to the password recovery page."
     }
+  },
+  "MediaTools": {
+    "badge": "Media AI Studio",
+    "titlePrefix": "Smart",
+    "titleHighlight": "Media Tools",
+    "subtitle": "Create and edit ultra-realistic images, videos, and studio-grade audio with state-of-the-art AI models.",
+    "filterAll": "All Tools",
+    "filterImage": "Images",
+    "filterVideo": "Video",
+    "filterAudio": "Audio",
+    "startNow": "Start Now",
+    "exploreTool": "Explore Tool",
+    "badgeAi": "AI Powered",
+    "tools": {
+      "generateImage": {
+        "title": "Generate Image",
+        "tagline": "Text-to-Image in stunning 4K",
+        "description": "Transform descriptive text prompts into breathtaking, high-resolution 4K artwork and visual concepts.",
+        "badge": "AI Vision",
+        "features": [
+          "4K Ultra-HD Resolution",
+          "Multiple Art & Photo Styles",
+          "Ultra-fast Instant Render"
+        ]
+      },
+      "generateVideo": {
+        "title": "Generate Video",
+        "tagline": "Cinematic AI Video & Motion Engine",
+        "description": "Create fluid, cinematic video sequences and dynamic animations from text prompts or reference images.",
+        "badge": "Cinematic AI",
+        "features": [
+          "Cinematic Camera Motions",
+          "1080p & 4K Scene Generation",
+          "Realistic Physics & Lighting"
+        ]
+      },
+      "textToSpeech": {
+        "title": "Text to Speech",
+        "tagline": "Lifelike human voices & accents",
+        "description": "Convert scripts and articles into natural, expressive human speech tailored for podcasts, videos, and ads.",
+        "badge": "Studio Voice",
+        "features": [
+          "100% Lifelike Human Tones",
+          "Arabic & Multilingual Accents",
+          "Custom Pitch & Speed Controls"
+        ]
+      },
+      "imageEditor": {
+        "title": "Image Editor",
+        "tagline": "AI-powered one-click photo editing",
+        "description": "Advanced editing suite: instant background removal, generative uncrop expand, object cleanup, and upscaling.",
+        "badge": "Smart Editing",
+        "features": [
+          "One-Click Background Removal",
+          "Generative Fill & Expand",
+          "Intelligent Object Eraser"
+        ]
+      },
+      "audioTranscription": {
+        "title": "Audio Transcription",
+        "tagline": "Speech-to-Text with 99.8% precision",
+        "description": "Transcribe recordings, interviews, and videos into cleanly formatted text with speaker diarization and subtitles.",
+        "badge": "Whisper Pro",
+        "features": [
+          "High Dialect Precision",
+          "Speaker Diarization & Timestamps",
+          "Export to SRT, VTT, and Docx"
+        ]
+      }
+    },
+    "toolWorkspace": {
+      "backToMedia": "Back to Media Tools",
+      "statusBadge": "Preview Studio",
+      "readyTitle": "Tool Studio",
+      "readySubtitle": "Configuring the AI inference pipeline and cloud compute engines for this model.",
+      "creditsPerGen": "Consumes 5 credits per generation",
+      "startPrompt": "Enter your prompt or upload a file to begin processing...",
+      "comingSoon": "Coming soon for all plans",
+      "exploreOther": "Explore other tools"
+    }
   }
 }

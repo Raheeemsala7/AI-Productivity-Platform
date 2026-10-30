@@ -73,7 +73,7 @@ export function UserSidebar({
         },
         {
           title: t("items.mediaTools"),
-          url: "/dashboard/templates/writing",
+          url: "/dashboard/media",
           icon: Clapperboard,
         },
         {
