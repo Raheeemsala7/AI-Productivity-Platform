@@ -23,30 +23,15 @@ import {
   Save,
   User as UserIcon,
   Mail,
-  Palette,
-  Sparkles,
-  Check,
   Eye,
-  CheckCircle2,
+  Camera,
 } from "lucide-react";
 import { useRouter } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
-import { cn } from "@/shared/lib/utils";
 
 interface ProfileInfoFormProps {
   user: User | null;
 }
-
-const PRESET_COLORS = [
-  { name: "Sky Blue", value: "#42a5f5" },
-  { name: "Royal Purple", value: "#8b5cf6" },
-  { name: "Emerald Green", value: "#10b981" },
-  { name: "Coral Rose", value: "#f43f5e" },
-  { name: "Warm Amber", value: "#f59e0b" },
-  { name: "Indigo Night", value: "#6366f1" },
-  { name: "Electric Cyan", value: "#06b6d4" },
-  { name: "Slate Deep", value: "#334155" },
-];
 
 export function ProfileInfoForm({ user }: ProfileInfoFormProps) {
   const t = useTranslations("Settings");
@@ -61,7 +46,6 @@ export function ProfileInfoForm({ user }: ProfileInfoFormProps) {
     register,
     handleSubmit,
     watch,
-    setValue,
     formState: { errors, isDirty },
   } = useForm<UpdateProfileSchemaType>({
     resolver: zodResolver(updateProfileSchema),
@@ -72,7 +56,6 @@ export function ProfileInfoForm({ user }: ProfileInfoFormProps) {
     },
   });
 
-  const selectedColor = watch("avatar_color") || "#42a5f5";
   const currentName = watch("name") || user?.name || "User";
   const currentSlogan = watch("slogan") || user?.slogan || "";
 
@@ -84,7 +67,9 @@ export function ProfileInfoForm({ user }: ProfileInfoFormProps) {
       if (values.slogan) {
         formData.append("slogan", values.slogan);
       }
-      formData.append("avatar_color", values.avatar_color);
+      if (user?.avatar_color) {
+        formData.append("avatar_color", user.avatar_color);
+      }
 
       if (avatarFile) {
         formData.append("avatar", avatarFile);
@@ -155,93 +140,29 @@ export function ProfileInfoForm({ user }: ProfileInfoFormProps) {
           <CardContent>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               {/* Avatar Uploader Section */}
-              <div className="rounded-xl border border-border/70 bg-muted/20 p-4 space-y-4">
-                <Label className="text-xs font-semibold text-foreground">
-                  {t("profileForm.avatarLabel")}
-                </Label>
+              <div className="rounded-xl border border-border/70 bg-muted/20 p-5 flex flex-col sm:flex-row items-center gap-5">
+                <div className="shrink-0 flex flex-col items-center gap-2">
+                  <AvatarUploader
+                    imageUrl={avatarPreview}
+                    fallbackText={getInitials(currentName)}
+                    size="md"
+                    onImageChange={handleImageChange}
+                    onImageRemove={handleImageRemove}
+                    showRemoveButton={Boolean(avatarPreview)}
+                  />
+                </div>
 
-                <div className="flex flex-col sm:flex-row items-center gap-6">
-                  {/* Avatar Uploader */}
-                  <div className="shrink-0 flex flex-col items-center gap-2">
-                    <AvatarUploader
-                      imageUrl={avatarPreview}
-                      fallbackText={getInitials(currentName)}
-                      borderColor={selectedColor}
-                      glowColor={selectedColor}
-                      size="md"
-                      onImageChange={handleImageChange}
-                      onImageRemove={handleImageRemove}
-                      showRemoveButton={Boolean(avatarPreview)}
-                    />
-                    <span className="text-[11px] text-muted-foreground text-center">
-                      {t("profileForm.avatarUploadHint")}
-                    </span>
-                  </div>
-
-                  {/* Color Presets */}
-                  <div className="flex-1 space-y-2.5 w-full">
-                    <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
-                      <Palette className="size-3.5" />
-                      <span>{t("profileForm.chooseColor")}</span>
-                    </div>
-
-                    <div className="flex flex-wrap gap-2 items-center">
-                      {PRESET_COLORS.map((color) => {
-                        const isSelected =
-                          selectedColor.toLowerCase() === color.value.toLowerCase();
-                        return (
-                          <button
-                            key={color.value}
-                            type="button"
-                            onClick={() =>
-                              setValue("avatar_color", color.value, {
-                                shouldDirty: true,
-                              })
-                            }
-                            className={cn(
-                              "size-7 rounded-full transition-all relative flex items-center justify-center hover:scale-110 focus:outline-hidden",
-                              isSelected
-                                ? "ring-2 ring-primary ring-offset-2 ring-offset-background scale-105"
-                                : "opacity-80 hover:opacity-100"
-                            )}
-                            style={{ backgroundColor: color.value }}
-                            title={color.name}
-                          >
-                            {isSelected && (
-                              <Check className="size-3.5 text-white drop-shadow-xs" />
-                            )}
-                          </button>
-                        );
-                      })}
-
-                      {/* Custom Color Input */}
-                      <div className="flex items-center gap-1.5 ms-2">
-                        <input
-                          type="color"
-                          id="customColor"
-                          value={selectedColor}
-                          onChange={(e) =>
-                            setValue("avatar_color", e.target.value, {
-                              shouldDirty: true,
-                            })
-                          }
-                          className="size-7 cursor-pointer rounded-full border border-border bg-transparent p-0 overflow-hidden"
-                        />
-                        <Label
-                          htmlFor="customColor"
-                          className="text-[11px] text-muted-foreground cursor-pointer font-mono"
-                        >
-                          {selectedColor}
-                        </Label>
-                      </div>
-                    </div>
-
-                    {errors.avatar_color && (
-                      <p className="text-xs text-destructive">
-                        {errors.avatar_color.message}
-                      </p>
-                    )}
-                  </div>
+                <div className="space-y-1.5 text-center sm:text-start flex-1">
+                  <span className="text-xs font-semibold text-foreground flex items-center justify-center sm:justify-start gap-1.5">
+                    <Camera className="size-3.5 text-brand" />
+                    <span>{t("profileForm.avatarLabel")}</span>
+                  </span>
+                  <p className="text-xs text-muted-foreground">
+                    {t("profileForm.avatarUploadHint")}
+                  </p>
+                  <p className="text-[11px] text-muted-foreground/80">
+                    يدعم ملفات JPG, PNG بحجم أقصى 5 ميجابايت.
+                  </p>
                 </div>
               </div>
 
@@ -353,17 +274,14 @@ export function ProfileInfoForm({ user }: ProfileInfoFormProps) {
 
           <CardContent className="space-y-4">
             {/* Header / Sidebar Footer Preview */}
-            <div className="rounded-xl border border-border/80 bg-background p-3 shadow-2xs">
-              <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground block mb-2">
+            <div className="rounded-xl border border-border/80 bg-background p-3.5 shadow-2xs">
+              <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground block mb-2.5">
                 معاينة شريط المحادثة والسايدبار
               </span>
               <div className="flex items-center gap-3">
-                <Avatar className="size-10 ring-2 ring-border/80 shadow-2xs">
+                <Avatar className="size-11 ring-2 ring-border/80 shadow-2xs">
                   <AvatarImage src={avatarPreview || undefined} alt={currentName} />
-                  <AvatarFallback
-                    style={{ backgroundColor: selectedColor }}
-                    className="text-xs font-bold text-white"
-                  >
+                  <AvatarFallback className="text-xs font-bold text-white bg-primary">
                     {getInitials(currentName)}
                   </AvatarFallback>
                 </Avatar>
@@ -395,20 +313,6 @@ export function ProfileInfoForm({ user }: ProfileInfoFormProps) {
                 </span>
               </div>
             )}
-
-            {/* Color Accent Preview */}
-            <div className="rounded-xl border border-border/80 bg-background p-3 shadow-2xs space-y-2">
-              <div className="flex items-center justify-between text-xs">
-                <span className="text-muted-foreground">لون التمييز النشط:</span>
-                <span className="font-mono font-semibold" style={{ color: selectedColor }}>
-                  {selectedColor}
-                </span>
-              </div>
-              <div
-                className="h-2 w-full rounded-full transition-all duration-300"
-                style={{ backgroundColor: selectedColor }}
-              />
-            </div>
           </CardContent>
         </Card>
       </div>

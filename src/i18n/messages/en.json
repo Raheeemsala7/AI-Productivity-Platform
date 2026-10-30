@@ -1858,10 +1858,9 @@
     },
     "profileForm": {
       "title": "Personal Information & Appearance",
-      "description": "Update your name, personal slogan, and avatar profile color.",
-      "avatarLabel": "Avatar & Profile Color",
+      "description": "Update your name, personal slogan, and avatar photo.",
+      "avatarLabel": "Avatar Photo",
       "avatarUploadHint": "Click to change avatar image (PNG, JPG)",
-      "chooseColor": "Choose Profile Accent Color",
       "previewTitle": "Live Platform Preview",
       "previewDesc": "This is how your avatar appears across chat and top navigation.",
       "name": "Full Name",

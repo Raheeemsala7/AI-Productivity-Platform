@@ -11,11 +11,7 @@ export const updateProfileSchema = z.object({
     .trim()
     .max(150, { message: "Slogan must be less than 150 characters" })
     .optional(),
-  avatar_color: z
-    .string()
-    .regex(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, {
-      message: "Please select a valid hex color",
-    }),
+  avatar_color: z.string().optional(),
 });
 
 export type UpdateProfileSchemaType = z.infer<typeof updateProfileSchema>;
