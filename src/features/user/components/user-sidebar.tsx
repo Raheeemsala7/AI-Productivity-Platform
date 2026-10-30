@@ -61,6 +61,21 @@ export function UserSidebar({
         },
       ],
     },
+        {
+      title: t("groups.resources"),
+      items: [
+        {
+          title: t("items.templates"),
+          url: "/dashboard/templates",
+          icon: FolderKanban,
+        },
+        {
+          title: t("items.chat"),
+          url: "/dashboard/chat",
+          icon: MessageSquare,
+        },
+      ],
+    },
     {
       title: t("groups.usageAndBilling"),
       items: [
@@ -76,21 +91,7 @@ export function UserSidebar({
         },
       ],
     },
-    {
-      title: t("groups.resources"),
-      items: [
-        {
-          title: t("items.templates"),
-          url: "/dashboard/templates",
-          icon: FolderKanban,
-        },
-        {
-          title: t("items.chat"),
-          url: "/dashboard/chat",
-          icon: MessageSquare,
-        },
-      ],
-    },
+
     {
       title: t("groups.account"),
       items: [

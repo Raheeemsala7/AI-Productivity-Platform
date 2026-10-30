@@ -29,7 +29,7 @@ export async function TemplateDetailsView({
 
   if (!response.success || !response.data) {
     return (
-      <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6">
+      <div className="mx-auto w-full max-w-6xl py-8">
         <div className="flex flex-col items-center justify-center text-center p-8 sm:p-12 rounded-2xl bg-destructive/5 border border-destructive/20 my-8">
           <div className="flex size-12 items-center justify-center rounded-full bg-destructive/10 text-destructive mb-3">
             <AlertCircle className="size-6" />
