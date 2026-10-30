@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -15,8 +15,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/sha
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
-import { AvatarUploader } from "@/shared/components/ui/avatar-uploader";
-import { Avatar, AvatarFallback, AvatarImage } from "@/shared/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/shared/components/ui/avatar";
 import { toast } from "sonner";
 import {
   Loader2,
@@ -24,7 +23,7 @@ import {
   User as UserIcon,
   Mail,
   Eye,
-  Camera,
+  Sparkles,
 } from "lucide-react";
 import { useRouter } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
@@ -37,10 +36,8 @@ export function ProfileInfoForm({ user }: ProfileInfoFormProps) {
   const t = useTranslations("Settings");
   const router = useRouter();
   const queryClient = useQueryClient();
-  const [avatarFile, setAvatarFile] = useState<File | null>(null);
-  const [avatarPreview, setAvatarPreview] = useState<string | null>(
-    user?.avatar ?? null
-  );
+
+  const avatarColor = user?.avatar_color || "#42a5f5";
 
   const {
     register,
@@ -52,7 +49,6 @@ export function ProfileInfoForm({ user }: ProfileInfoFormProps) {
     defaultValues: {
       name: user?.name || "",
       slogan: user?.slogan || "",
-      avatar_color: user?.avatar_color || "#42a5f5",
     },
   });
 
@@ -62,20 +58,11 @@ export function ProfileInfoForm({ user }: ProfileInfoFormProps) {
   // React Query mutation wrapping Server Action
   const mutation = useMutation({
     mutationFn: async (values: UpdateProfileSchemaType) => {
-      const formData = new FormData();
-      formData.append("name", values.name);
-      if (values.slogan) {
-        formData.append("slogan", values.slogan);
-      }
-      if (user?.avatar_color) {
-        formData.append("avatar_color", user.avatar_color);
-      }
+      const res = await updateProfileAction({
+        name: values.name,
+        slogan: values.slogan,
+      });
 
-      if (avatarFile) {
-        formData.append("avatar", avatarFile);
-      }
-
-      const res = await updateProfileAction(formData);
       if (!res.success) {
         throw new Error(res.message || "Failed to update profile");
       }
@@ -95,16 +82,6 @@ export function ProfileInfoForm({ user }: ProfileInfoFormProps) {
     mutation.mutate(values);
   };
 
-  const handleImageChange = (file: File, previewUrl: string) => {
-    setAvatarFile(file);
-    setAvatarPreview(previewUrl);
-  };
-
-  const handleImageRemove = () => {
-    setAvatarFile(null);
-    setAvatarPreview(null);
-  };
-
   const getInitials = (name?: string) =>
     name
       ? name
@@ -115,8 +92,6 @@ export function ProfileInfoForm({ user }: ProfileInfoFormProps) {
           .toUpperCase()
           .slice(0, 2)
       : "U";
-
-  const hasChanges = isDirty || Boolean(avatarFile);
 
   return (
     <div className="grid gap-6 lg:grid-cols-3">
@@ -139,30 +114,37 @@ export function ProfileInfoForm({ user }: ProfileInfoFormProps) {
 
           <CardContent>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-              {/* Avatar Uploader Section */}
+              {/* Dynamic Color Avatar Banner */}
               <div className="rounded-xl border border-border/70 bg-muted/20 p-5 flex flex-col sm:flex-row items-center gap-5">
-                <div className="shrink-0 flex flex-col items-center gap-2">
-                  <AvatarUploader
-                    imageUrl={avatarPreview}
-                    fallbackText={getInitials(currentName)}
-                    size="md"
-                    onImageChange={handleImageChange}
-                    onImageRemove={handleImageRemove}
-                    showRemoveButton={Boolean(avatarPreview)}
+                <div className="relative shrink-0">
+                  <Avatar className="size-16 ring-3 ring-border/80 shadow-xs transition-transform duration-300">
+                    <AvatarFallback
+                      className="text-xl font-bold text-white transition-all duration-300"
+                      style={{ backgroundColor: avatarColor }}
+                    >
+                      {getInitials(currentName)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <span
+                    className="absolute -bottom-1 -end-1 size-4.5 rounded-full ring-2 ring-card"
+                    style={{ backgroundColor: avatarColor }}
                   />
                 </div>
 
-                <div className="space-y-1.5 text-center sm:text-start flex-1">
+                <div className="space-y-1 text-center sm:text-start flex-1">
                   <span className="text-xs font-semibold text-foreground flex items-center justify-center sm:justify-start gap-1.5">
-                    <Camera className="size-3.5 text-brand" />
+                    <Sparkles className="size-3.5 text-brand" />
                     <span>{t("profileForm.avatarLabel")}</span>
                   </span>
                   <p className="text-xs text-muted-foreground">
-                    {t("profileForm.avatarUploadHint")}
+                    {t("profileForm.avatarSystemNote")}
                   </p>
-                  <p className="text-[11px] text-muted-foreground/80">
-                    يدعم ملفات JPG, PNG بحجم أقصى 5 ميجابايت.
-                  </p>
+                  <div className="flex items-center justify-center sm:justify-start gap-2 pt-1 text-[11px] text-muted-foreground">
+                    <span>لون الحساب:</span>
+                    <span className="font-mono font-semibold" style={{ color: avatarColor }}>
+                      {avatarColor}
+                    </span>
+                  </div>
                 </div>
               </div>
 
@@ -229,12 +211,12 @@ export function ProfileInfoForm({ user }: ProfileInfoFormProps) {
               {/* Submit Action */}
               <div className="flex items-center justify-between pt-3 border-t border-border/60">
                 <span className="text-xs text-muted-foreground">
-                  {hasChanges ? "لديك تعديلات غير محفوظة" : "البيانات متزامنة بالكامل"}
+                  {isDirty ? "لديك تعديلات غير محفوظة" : "البيانات متزامنة بالكامل"}
                 </span>
 
                 <Button
                   type="submit"
-                  disabled={mutation.isPending || !hasChanges}
+                  disabled={mutation.isPending || !isDirty}
                   className="gap-2 px-5 text-xs h-9"
                 >
                   {mutation.isPending ? (
@@ -280,8 +262,10 @@ export function ProfileInfoForm({ user }: ProfileInfoFormProps) {
               </span>
               <div className="flex items-center gap-3">
                 <Avatar className="size-11 ring-2 ring-border/80 shadow-2xs">
-                  <AvatarImage src={avatarPreview || undefined} alt={currentName} />
-                  <AvatarFallback className="text-xs font-bold text-white bg-primary">
+                  <AvatarFallback
+                    style={{ backgroundColor: avatarColor }}
+                    className="text-xs font-bold text-white transition-colors duration-300"
+                  >
                     {getInitials(currentName)}
                   </AvatarFallback>
                 </Avatar>

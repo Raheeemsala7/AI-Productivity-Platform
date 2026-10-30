@@ -79,10 +79,6 @@ export function SettingsHeaderHero({
         <div className="flex items-center gap-4">
           <div className="relative">
             <Avatar className="size-16 sm:size-20 ring-3 ring-border/80 shadow-sm transition-transform hover:scale-102">
-              <AvatarImage
-                src={user?.avatar || undefined}
-                alt={user?.name || "User"}
-              />
               <AvatarFallback
                 className="text-lg sm:text-xl font-bold text-white transition-colors duration-300"
                 style={{ backgroundColor: avatarColor }}

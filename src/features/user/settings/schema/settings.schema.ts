@@ -11,7 +11,6 @@ export const updateProfileSchema = z.object({
     .trim()
     .max(150, { message: "Slogan must be less than 150 characters" })
     .optional(),
-  avatar_color: z.string().optional(),
 });
 
 export type UpdateProfileSchemaType = z.infer<typeof updateProfileSchema>;

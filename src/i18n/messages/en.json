@@ -1859,8 +1859,7 @@
     "profileForm": {
       "title": "Personal Information & Appearance",
       "description": "Update your name, personal slogan, and avatar photo.",
-      "avatarLabel": "Avatar Photo",
-      "avatarUploadHint": "Click to change avatar image (PNG, JPG)",
+      "avatarLabel": "Account Avatar",
       "previewTitle": "Live Platform Preview",
       "previewDesc": "This is how your avatar appears across chat and top navigation.",
       "name": "Full Name",
@@ -1873,7 +1872,8 @@
       "saving": "Saving...",
       "saveChanges": "Save Changes",
       "successMessage": "Profile updated successfully!",
-      "errorMessage": "Failed to update profile"
+      "errorMessage": "Failed to update profile",
+      "avatarSystemNote": "Your avatar is automatically generated based on your account color and name initials."
     },
     "securityTab": {
       "title": "Account Security & Sessions",
