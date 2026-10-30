@@ -95,11 +95,6 @@ export function UserSidebar({
       title: t("groups.account"),
       items: [
         {
-          title: t("items.profile"),
-          url: "/dashboard/profile",
-          icon: User,
-        },
-        {
           title: t("items.settings"),
           url: "/dashboard/settings",
           icon: Settings,
@@ -111,6 +106,7 @@ export function UserSidebar({
           isLogout: true,
         }
       ],
+      
     },
   ]
 
