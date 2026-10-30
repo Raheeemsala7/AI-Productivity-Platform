@@ -403,6 +403,33 @@
       "kindPlan": "خطة",
       "kindDeck": "عرض",
       "kindAnalysis": "تحليل"
+    },
+    "userDashboard": {
+      "title": "لوحة التحكم",
+      "description": "مرحباً بعودتك! إليك ملخصاً لمساحة عملك.",
+      "creditsRemaining": "الرصيد المتبقي",
+      "resetsInDays": "يتجدد خلال {days} يوماً",
+      "generationsToday": "توليدات اليوم",
+      "aboveAverage": "أعلى من المعدل بـ {count}",
+      "savedTemplates": "القوالب المحفوظة",
+      "usedTimesToday": "استُخدمت {count} مرات اليوم",
+      "timeSaved": "الوقت الموفَّر",
+      "estimatedThisWeek": "تقديري لهذا الأسبوع",
+      "recentActivity": "النشاط الأخير",
+      "currentPlan": "الخطة الحالية",
+      "professional": "احترافية",
+      "planRenewalNotice": "خطتك نشطة وتتجدد في 25 أكتوبر 2026.",
+      "creditsUsed": "تم استخدام {count} رصيد",
+      "creditsLeft": "متبقي {count}",
+      "activityMarketingEmail": "توليد 'بريد تسويقي'",
+      "activityChatAssistant": "محادثة مع المساعد الذكي",
+      "activitySummarizedReport": "تلخيص مستند 'تقرير الربع الثالث'",
+      "typeTemplate": "قالب",
+      "typeChat": "محادثة",
+      "typeTool": "أداة",
+      "timeMinsAgo": "منذ {count} دقائق",
+      "timeHourAgo": "منذ ساعة واحدة",
+      "timeHoursAgo": "منذ {count} ساعات"
     }
   },
   "Chat": {

@@ -2,59 +2,62 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
 import { Activity, Clock, Zap, MessageSquare } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 export function UserDashboard() {
+  const t = useTranslations("Dashboard.userDashboard");
+
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
+        <h2 className="text-3xl font-bold tracking-tight">{t("title")}</h2>
         <p className="text-muted-foreground">
-          Welcome back! Here is a summary of your workspace.
+          {t("description")}
         </p>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Credits Remaining</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("creditsRemaining")}</CardTitle>
             <Zap className="h-4 w-4 text-brand" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">160 / 1000</div>
-            <p className="text-xs text-muted-foreground">Resets in 12 days</p>
+            <p className="text-xs text-muted-foreground">{t("resetsInDays", { days: 12 })}</p>
           </CardContent>
         </Card>
         
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Generations Today</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("generationsToday")}</CardTitle>
             <Activity className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">24</div>
-            <p className="text-xs text-muted-foreground">4 above average</p>
+            <p className="text-xs text-muted-foreground">{t("aboveAverage", { count: 4 })}</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Saved Templates</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("savedTemplates")}</CardTitle>
             <MessageSquare className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">8</div>
-            <p className="text-xs text-muted-foreground">Used 3 times today</p>
+            <p className="text-xs text-muted-foreground">{t("usedTimesToday", { count: 3 })}</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Time Saved</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("timeSaved")}</CardTitle>
             <Clock className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">4.2h</div>
-            <p className="text-xs text-muted-foreground">Estimated this week</p>
+            <p className="text-xs text-muted-foreground">{t("estimatedThisWeek")}</p>
           </CardContent>
         </Card>
       </div>
@@ -62,14 +65,14 @@ export function UserDashboard() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
         <Card className="col-span-4">
           <CardHeader>
-            <CardTitle>Recent Activity</CardTitle>
+            <CardTitle>{t("recentActivity")}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-8">
               {[
-                { action: "Generated 'Marketing Email'", type: "Template", time: "10 mins ago" },
-                { action: "Chat with AI Assistant", type: "Chat", time: "1 hour ago" },
-                { action: "Summarized Document 'Q3 Report'", type: "Tool", time: "3 hours ago" },
+                { action: t("activityMarketingEmail"), type: t("typeTemplate"), time: t("timeMinsAgo", { count: 10 }) },
+                { action: t("activityChatAssistant"), type: t("typeChat"), time: t("timeHourAgo", { count: 1 }) },
+                { action: t("activitySummarizedReport"), type: t("typeTool"), time: t("timeHoursAgo", { count: 3 }) },
               ].map((activity, i) => (
                 <div key={i} className="flex items-center">
                   <div className="space-y-1 flex-1">
@@ -85,20 +88,20 @@ export function UserDashboard() {
         
         <Card className="col-span-3">
           <CardHeader>
-            <CardTitle>Current Plan</CardTitle>
+            <CardTitle>{t("currentPlan")}</CardTitle>
           </CardHeader>
           <CardContent>
               <div className="flex flex-col h-full">
-                  <div className="text-2xl font-bold mb-2">Professional</div>
-                  <p className="text-muted-foreground mb-6">Your plan is active and renews on October 25, 2026.</p>
+                  <div className="text-2xl font-bold mb-2">{t("professional")}</div>
+                  <p className="text-muted-foreground mb-6">{t("planRenewalNotice")}</p>
                   
                   <div className="mt-auto space-y-4">
                       <div className="w-full h-2 bg-muted rounded-full overflow-hidden">
                           <div className="h-full bg-brand w-[84%] rounded-full"></div>
                       </div>
                       <div className="flex justify-between text-sm">
-                          <span>840 Credits Used</span>
-                          <span className="font-medium text-brand">160 Left</span>
+                          <span>{t("creditsUsed", { count: 840 })}</span>
+                          <span className="font-medium text-brand">{t("creditsLeft", { count: 160 })}</span>
                       </div>
                   </div>
               </div>

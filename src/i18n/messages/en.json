@@ -379,6 +379,33 @@
       "kindPlan": "Plan",
       "kindDeck": "Deck",
       "kindAnalysis": "Analysis"
+    },
+    "userDashboard": {
+      "title": "Dashboard",
+      "description": "Welcome back! Here is a summary of your workspace.",
+      "creditsRemaining": "Credits Remaining",
+      "resetsInDays": "Resets in {days} days",
+      "generationsToday": "Generations Today",
+      "aboveAverage": "{count} above average",
+      "savedTemplates": "Saved Templates",
+      "usedTimesToday": "Used {count} times today",
+      "timeSaved": "Time Saved",
+      "estimatedThisWeek": "Estimated this week",
+      "recentActivity": "Recent Activity",
+      "currentPlan": "Current Plan",
+      "professional": "Professional",
+      "planRenewalNotice": "Your plan is active and renews on October 25, 2026.",
+      "creditsUsed": "{count} Credits Used",
+      "creditsLeft": "{count} Left",
+      "activityMarketingEmail": "Generated 'Marketing Email'",
+      "activityChatAssistant": "Chat with AI Assistant",
+      "activitySummarizedReport": "Summarized Document 'Q3 Report'",
+      "typeTemplate": "Template",
+      "typeChat": "Chat",
+      "typeTool": "Tool",
+      "timeMinsAgo": "{count} mins ago",
+      "timeHourAgo": "{count} hour ago",
+      "timeHoursAgo": "{count} hours ago"
     }
   },
   "Chat": {
