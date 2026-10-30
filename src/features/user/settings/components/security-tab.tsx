@@ -2,7 +2,7 @@
 
 import React from "react";
 import { User } from "@/features/auth/types/auth";
-import { ShieldCheck, Mail, KeyRound, Lock, UserCheck, AlertTriangle } from "lucide-react";
+import { ShieldCheck, Mail, KeyRound, Lock, UserCheck } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/components/ui/card";
 import { buttonVariants } from "@/shared/components/ui/button";
 import { Link } from "@/i18n/navigation";

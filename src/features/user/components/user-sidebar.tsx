@@ -1,5 +1,5 @@
 "use client"
-import { useMemo, useState } from "react"
+import { useState } from "react"
 import {
   Sidebar,
   SidebarContent,
@@ -106,7 +106,7 @@ export function UserSidebar({
           isLogout: true,
         }
       ],
-      
+
     },
   ]
 

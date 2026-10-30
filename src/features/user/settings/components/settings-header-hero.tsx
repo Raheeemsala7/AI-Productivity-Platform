@@ -2,9 +2,9 @@
 
 import React, { useState } from "react";
 import { User } from "@/features/auth/types/auth";
-import { Sparkles, RefreshCw, CheckCircle2, Zap, ShieldCheck } from "lucide-react";
+import { Sparkles, RefreshCw, CheckCircle2 } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/shared/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/shared/components/ui/avatar";
 import { cn } from "@/shared/lib/utils";
 import { toast } from "sonner";
 import { useLocale, useTranslations } from "next-intl";

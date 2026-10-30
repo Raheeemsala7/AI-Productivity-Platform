@@ -10,7 +10,6 @@ import {
   TrendingDown,
   Layers,
   ArrowUpRight,
-  ShieldCheck,
   CreditCard,
 } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/components/ui/card";
