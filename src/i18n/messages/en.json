@@ -2046,5 +2046,95 @@
       "download": "Download",
       "duration": "Duration"
     }
+  },
+  "BusinessTools": {
+    "badge": "Business & Strategy Studio",
+    "titlePrefix": "Smart",
+    "titleHighlight": "Business Tools",
+    "subtitle": "Create comprehensive business plans, investor pitch decks, high-converting landing pages, and partnership proposals with AI.",
+    "filterAll": "All Business Tools",
+    "filterPlanning": "Planning & Strategy",
+    "filterPitch": "Pitch & Sales",
+    "filterGrowth": "Growth & Marketing",
+    "startNow": "Start Now",
+    "badgeAi": "Business AI",
+    "tools": {
+      "businessPlan": {
+        "title": "Business Plan Generator",
+        "tagline": "Comprehensive Feasibility & Strategic Plans",
+        "description": "Draft an investor-ready business plan covering executive summaries, market sizing, revenue models, and financial forecasts.",
+        "badge": "Strategy AI",
+        "features": [
+          "Investor-Grade Executive Summary",
+          "Target Market & TAM/SAM Sizing",
+          "Revenue Model & Cost Projections"
+        ]
+      },
+      "generatePresentation": {
+        "title": "Generate Presentation",
+        "tagline": "Investor Pitch Decks & Slides",
+        "description": "Turn your startup idea into a compelling, cohesive slide deck explaining the problem, solution, market size, and roadmap.",
+        "badge": "Pitch Deck",
+        "features": [
+          "Professional 16:9 Slide Architecture",
+          "Clear Traction & Market Analysis",
+          "PowerPoint & PDF Export Ready"
+        ]
+      },
+      "generateLanding": {
+        "title": "Generate Landing Page",
+        "tagline": "High-Converting Page Structure & Copy",
+        "description": "Craft persuasive headline hooks, benefit breakdowns, social proof sections, and high-impact calls to action (CTA).",
+        "badge": "CRO & Copy",
+        "features": [
+          "High-Impact Headlines & Value Props",
+          "Structured Feature & Proof Sections",
+          "Optimized Conversion-Focused CTAs"
+        ]
+      },
+      "businessProposal": {
+        "title": "Business Proposals & Contracts",
+        "tagline": "Client Proposals & Formal Contracts",
+        "description": "Generate thorough partnership proposals, scopes of work (SOW), and service contracts tailored to close high-ticket deals.",
+        "badge": "Deal Maker",
+        "features": [
+          "Clear Scope of Work & Deliverables",
+          "Transparent Commercial Terms",
+          "Professional B2B Legal Formatting"
+        ]
+      },
+      "businessReports": {
+        "title": "Business Reports & Analytics",
+        "tagline": "Executive KPIs & Competitor SWOT",
+        "description": "Summarize operational performance in executive briefs and perform comprehensive SWOT analyses on market competitors.",
+        "badge": "Executive AI",
+        "features": [
+          "Strategic Competitor SWOT Matrix",
+          "Core KPI Tracking & Trend Analysis",
+          "Actionable Growth Recommendations"
+        ]
+      }
+    },
+    "workspace": {
+      "backLink": "Back to Business Tools",
+      "modelEngine": "Smart Business Intelligence Engine",
+      "statusBadge": "Interactive Workspace",
+      "promptTitle": "Project & Document Specifications",
+      "promptPlaceholder": "Describe your business idea, company name, target audience, and key value propositions...",
+      "charCount": "chars",
+      "generateBtn": "Generate Document",
+      "generating": "Analyzing and drafting document with AI...",
+      "settingsTitle": "Plan Parameters & Scope",
+      "stageLabel": "Current Project Stage",
+      "stageIdea": "Idea & Concept Validation",
+      "stageSeed": "Early Seed Startup",
+      "stageGrowth": "Established Growth Stage",
+      "marketLabel": "Target Geographic Market",
+      "marketSaudi": "Saudi Arabia & GCC",
+      "marketMena": "MENA Region",
+      "marketGlobal": "Global Market",
+      "sampleTitle": "Document Preview Showcase",
+      "readyDesc": "Enter your company details above and click Generate Document to create a polished, ready-to-share business asset."
+    }
   }
 }

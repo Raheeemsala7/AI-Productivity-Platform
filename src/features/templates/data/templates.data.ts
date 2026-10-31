@@ -75,7 +75,7 @@ export const TEMPLATES_DATA: TemplateToolItem[] = [
     category: "إدارة الأعمال والتقارير",
     badge: "للشركات وفرق العمل",
     graphicType: "business",
-    href: "/dashboard/templates/business",
+    href: "/dashboard/business",
     presets: [
       {
         id: "reports",

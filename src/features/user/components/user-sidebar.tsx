@@ -78,7 +78,7 @@ export function UserSidebar({
         },
         {
           title: t("items.businessTools"),
-          url: "/dashboard/templates/business",
+          url: "/dashboard/business",
           icon: Briefcase,
         },
         {
