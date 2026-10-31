@@ -2257,5 +2257,21 @@
       "edit": "Edit Details",
       "copied": "Plan copied successfully!"
     }
+  },
+  "PresentationStudio": {
+    "backLink": "Back to Business Tools",
+    "badge": "AI Presentation Studio",
+    "heroTitle": "Create Exceptional Presentations",
+    "heroSubtitle": "Generate professional presentation decks with AI in seconds",
+    "promptPlaceholder": "Describe the presentation you want... e.g. An investor pitch deck about the future of electric vehicles in Saudi Arabia",
+    "quickIdeas": "Quick ideas",
+    "advancedOptions": "Advanced options",
+    "audience": "Target Audience",
+    "format": "Aspect Ratio",
+    "generateBtn": "Generate Presentation",
+    "generating": "Synthesizing slides with AI...",
+    "recentTitle": "Recent Presentations",
+    "viewAll": "View all",
+    "newDeck": "New Deck"
   }
 }
