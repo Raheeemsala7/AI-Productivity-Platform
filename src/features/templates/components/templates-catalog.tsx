@@ -22,7 +22,7 @@ export function TemplatesCatalog() {
   const t = useTranslations("TemplatesCatalog");
 
   return (
-    <div className="mx-auto w-full max-w-5xl px-4 py-4 sm:py-6 sm:px-6">
+    <div className="mx-auto w-full max-w-5xl  py-4 sm:py-6">
       {/* Hero Section */}
       <div className="my-8 sm:my-12 text-center">
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-foreground">
@@ -35,7 +35,7 @@ export function TemplatesCatalog() {
       </div>
 
       {/* Grid of Cards: Side-by-side matching screenshot */}
-      <div className="flex items-center sm:items-stretch justify-center flex-col sm:flex-row gap-6 max-w-4xl mx-auto w-full">
+      <div className="flex items-center md:items-stretch justify-center flex-col md:flex-row gap-6 max-w-4xl mx-auto w-full">
         {/* Card 1: Content Writing */}
         <TemplateCard item={TEMPLATES_DATA[0]} />
 
@@ -66,7 +66,7 @@ function TemplateCard({ item }: { item: TemplateToolItem }) {
 
       {/* Bottom Content Area */}
       <div className="flex flex-col text-start px-6 pt-5 pb-7">
-        <h3 className="text-lg sm:text-xl font-bold text-white transition-colors duration-200 group-hover:text-[#ea5b39]">
+        <h3 className="text-lg sm:text-xl font-bold dark:text-white text-black transition-colors duration-200 group-hover:text-[#ea5b39]">
           {t(`cards.${item.graphicType}.title`)}
         </h3>
         <p className="mt-2 text-xs sm:text-sm text-[#8e919a] leading-relaxed font-normal">
