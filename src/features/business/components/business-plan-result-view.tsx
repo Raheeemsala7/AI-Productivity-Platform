@@ -141,7 +141,7 @@ export function BusinessPlanResultView() {
   ];
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-8">
+    <div className="w-full max-w-7xl mx-auto sm:px-4 lg:px-8 py-5 sm:py-8">
       {/* Top Breadcrumb & Quick Actions Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-5 mb-6 border-b border-border/60 gap-4">
         <div className="flex items-center gap-3">
@@ -860,3 +860,4 @@ export function BusinessPlanResultView() {
     </div>
   );
 }
+

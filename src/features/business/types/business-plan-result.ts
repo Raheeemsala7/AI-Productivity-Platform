@@ -90,3 +90,4 @@ export interface BusinessPlanResultResponse {
     annualProjections: { year: string; revenue: string; profit: string }[];
   };
 }
+

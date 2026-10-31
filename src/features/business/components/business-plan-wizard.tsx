@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-import { Link } from "@/i18n/navigation";
+import React, { useState, useEffect } from "react";
+import { Link, useRouter } from "@/i18n/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import {
   ArrowLeft,
@@ -17,9 +17,7 @@ import {
   Laptop,
   Users,
   Target,
-  DollarSign,
   TrendingUp,
-  FileText,
   Copy,
   Download,
   RotateCcw,
@@ -40,12 +38,14 @@ interface ProductItem {
 }
 
 export function BusinessPlanWizard() {
+  const router = useRouter();
   const locale = useLocale();
   const isRtl = locale === "ar";
   const t = useTranslations("BusinessPlanWizard");
 
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
+  const [loadingStepIndex, setLoadingStepIndex] = useState<number>(0);
   const [isCompleted, setIsCompleted] = useState<boolean>(false);
   const [isCopied, setIsCopied] = useState<boolean>(false);
 
@@ -117,13 +117,52 @@ export function BusinessPlanWizard() {
     }
   };
 
+  const loadingMessages = isRtl
+    ? [
+        "جاري تحليل فكرة المشروع ونطاق السوق...",
+        "جاري بناء مصفوفة SWOT ومخطط نموذج العمل (BMC)...",
+        "جاري احتساب ميزانية التسويق والتدفقات المالية...",
+        "اكتملت صياغة خطة العمل بنجاح! جاري الانتقال للنتائج...",
+      ]
+    : [
+        "Analyzing project feasibility and market sizing...",
+        "Constructing SWOT matrix & Business Model Canvas...",
+        "Calculating marketing budget allocation & financials...",
+        "Business plan generated successfully! Redirecting to results...",
+      ];
+
   const handleFinalSubmit = () => {
     setIsGenerating(true);
+    setLoadingStepIndex(0);
+
+    const formData = {
+      businessName,
+      valueProp,
+      businessDesc,
+      currency,
+      budget,
+      monthlyCosts,
+      teamSize,
+      targetCountry,
+      marketScope,
+      products,
+    };
+
+    try {
+      sessionStorage.setItem("latest_business_plan_data", JSON.stringify(formData));
+    } catch {
+      // ignore
+    }
+
+    // Step progression simulation
+    setTimeout(() => setLoadingStepIndex(1), 600);
+    setTimeout(() => setLoadingStepIndex(2), 1200);
+    setTimeout(() => setLoadingStepIndex(3), 1800);
+
     setTimeout(() => {
       setIsGenerating(false);
-      setIsCompleted(true);
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }, 1800);
+      router.push("/dashboard/business/business-plan/result");
+    }, 2400);
   };
 
   const handleAddProduct = () => {
@@ -163,6 +202,44 @@ export function BusinessPlanWizard() {
 
   return (
     <div className="w-full max-w-5xl mx-auto sm:px-6 lg:px-8 py-6 sm:py-10">
+      {/* AI Generating Loading Overlay */}
+      {isGenerating && (
+        <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-md flex flex-col items-center justify-center p-4 animate-in fade-in duration-300">
+          <div className="rounded-3xl bg-card border border-brand/30 p-8 sm:p-10 shadow-2xl max-w-md w-full flex flex-col items-center text-center relative overflow-hidden">
+            {/* Ambient glows */}
+            <div className="absolute -top-12 -right-12 size-36 bg-brand/20 rounded-full blur-2xl pointer-events-none" />
+            <div className="absolute -bottom-12 -left-12 size-36 bg-purple-500/20 rounded-full blur-2xl pointer-events-none" />
+
+            <div className="relative size-20 rounded-3xl bg-brand/10 border border-brand/30 flex items-center justify-center text-brand mb-6 shadow-lg shadow-brand/10">
+              <Sparkles className="size-10 animate-spin" style={{ animationDuration: "3s" }} />
+              <span className="absolute inset-0 rounded-3xl border border-brand/40 animate-ping opacity-30" />
+            </div>
+
+            <h3 className="text-lg font-black text-foreground mb-2">
+              {isRtl ? "جارٍ إعداد خطة العمل الذكية..." : "Generating Strategic Business Plan..."}
+            </h3>
+
+            <p className="text-xs sm:text-sm text-brand font-medium h-10 flex items-center justify-center leading-relaxed transition-all duration-300">
+              {loadingMessages[loadingStepIndex]}
+            </p>
+
+            {/* Progress bar */}
+            <div className="w-full bg-muted/60 h-2 rounded-full overflow-hidden mt-4 border border-border/60">
+              <div
+                className="h-full bg-gradient-to-r from-brand to-purple-500 transition-all duration-500 rounded-full"
+                style={{
+                  width: `${((loadingStepIndex + 1) / loadingMessages.length) * 100}%`,
+                }}
+              />
+            </div>
+
+            <span className="text-[10px] font-mono text-muted-foreground mt-3">
+              {loadingStepIndex + 1} / {loadingMessages.length}
+            </span>
+          </div>
+        </div>
+      )}
+
       {/* Top Header & Breadcrumb */}
       <div className="flex items-center justify-between gap-4 mb-6">
         <Link
