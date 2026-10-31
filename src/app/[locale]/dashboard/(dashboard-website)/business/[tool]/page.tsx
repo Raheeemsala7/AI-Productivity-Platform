@@ -1,5 +1,5 @@
 import React from "react";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import type { Metadata } from "next";
 import { BUSINESS_TOOLS_DATA } from "@/features/business/data/business-tools.data";
 import { BusinessToolWorkspace } from "@/features/business/components/business-tool-workspace";
@@ -59,11 +59,7 @@ export default async function BusinessToolSubPage({ params }: Props) {
   }
 
   if (toolItem.id === "generate-presentation") {
-    return (
-      <div className="w-full flex-1 min-h-full">
-        <PresentationStudio />
-      </div>
-    );
+    redirect("/dashboard/presentation");
   }
 
   return (

@@ -39,7 +39,11 @@ import {
 import { GeneratedDeck, RecentDeckItem } from "../types/presentation";
 import { PresentationDeckPlayer } from "./presentation-deck-player";
 
-export function PresentationStudio() {
+interface PresentationStudioProps {
+  hideHeader?: boolean;
+}
+
+export function PresentationStudio({ hideHeader = false }: PresentationStudioProps) {
   const locale = useLocale();
   const isRtl = locale === "ar";
   const t = useTranslations("PresentationStudio");
@@ -173,26 +177,28 @@ export function PresentationStudio() {
   }
 
   return (
-    <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
-      {/* Top Header & Breadcrumb */}
-      <div className="flex items-center justify-between gap-4 mb-6">
-        <Link
-          href="/dashboard/business"
-          className="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors group"
-        >
-          {isRtl ? (
-            <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
-          ) : (
-            <ArrowLeft className="size-4 transition-transform group-hover:-translate-x-0.5" />
-          )}
-          <span>{t("backLink")}</span>
-        </Link>
+    <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
+      {/* Top Header & Breadcrumb (when standalone header not present) */}
+      {!hideHeader && (
+        <div className="flex items-center justify-between gap-4 mb-6">
+          <Link
+            href="/dashboard/business"
+            className="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors group"
+          >
+            {isRtl ? (
+              <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+            ) : (
+              <ArrowLeft className="size-4 transition-transform group-hover:-translate-x-0.5" />
+            )}
+            <span>{t("backLink")}</span>
+          </Link>
 
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-purple-500/10 text-purple-400 border border-purple-500/20">
-          <Sparkles className="size-3.5 animate-pulse" />
-          <span>{t("badge")}</span>
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-purple-500/10 text-purple-400 border border-purple-500/20">
+            <Sparkles className="size-3.5 animate-pulse" />
+            <span>{t("badge")}</span>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* ========================================================
           HERO AI PRESENTATION STUDIO (Matching Reference Image)

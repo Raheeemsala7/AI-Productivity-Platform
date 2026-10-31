@@ -20,7 +20,7 @@ export const BUSINESS_TOOLS_DATA: BusinessToolItem[] = [
     category: "pitch",
     translationKey: "generatePresentation",
     graphicType: "generate-presentation",
-    href: "/dashboard/business/generate-presentation",
+    href: "/dashboard/presentation",
     modelEngine: "Pitch Deck Pro & Slide Engine",
     accentColor: "#8b5cf6",
     gradient: "from-purple-500/20 via-purple-500/5 to-transparent",
