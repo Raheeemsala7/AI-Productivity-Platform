@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from "react";
 import { useTranslations } from "next-intl";
-import { Sparkles, Layers, Image as ImageIcon, Video as VideoIcon, Volume2, Search } from "lucide-react";
+import { Sparkles, Layers, Image as ImageIcon, Video as VideoIcon, Volume2 } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
 import { MEDIA_TOOLS_DATA } from "../data/media-tools.data";
 import { MediaCategory } from "../types/media-tool";
@@ -20,29 +20,12 @@ export function MediaToolsView() {
   ];
 
   const filteredTools = useMemo(() => {
-    return MEDIA_TOOLS_DATA.filter((item) => {
-      const matchesCategory =
-        selectedCategory === "all" || item.category === selectedCategory;
-
-      if (!matchesCategory) return false;
-
-
-      const title = t(`tools.${item.translationKey}.title`).toLowerCase();
-      const desc = t(`tools.${item.translationKey}.description`).toLowerCase();
-      const tagline = t(`tools.${item.translationKey}.tagline`).toLowerCase();
-      const model = item.modelName.toLowerCase();
-
-      return (
-        title.includes(q) ||
-        desc.includes(q) ||
-        tagline.includes(q) ||
-        model.includes(q)
-      );
-    });
-  }, [selectedCategory, t]);
+    if (selectedCategory === "all") return MEDIA_TOOLS_DATA;
+    return MEDIA_TOOLS_DATA.filter((item) => item.category === selectedCategory);
+  }, [selectedCategory]);
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
+    <div className="w-full max-w-7xl mx-auto sm:px-6 lg:px-8 py-6 sm:py-10">
       {/* Hero Header */}
       <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-12">
         {/* Studio Pill */}
@@ -65,10 +48,9 @@ export function MediaToolsView() {
         </p>
       </div>
 
-      {/* Controls Bar: Category Filters & Quick Search */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8">
-        {/* Category Pills */}
-        <div className="flex items-center gap-1.5 p-1 rounded-xl bg-card border border-border/70 backdrop-blur-sm shadow-xs w-full sm:w-auto overflow-x-auto no-scrollbar">
+      {/* Controls Bar: Centered Category Filters */}
+      <div className="flex items-center justify-center mb-10">
+        <div className="inline-flex items-center gap-1.5 p-1.5 rounded-2xl bg-card border border-border/70 backdrop-blur-sm shadow-xs overflow-x-auto no-scrollbar max-w-full">
           {categories.map((cat) => {
             const Icon = cat.icon;
             const isSelected = selectedCategory === cat.key;
@@ -83,7 +65,7 @@ export function MediaToolsView() {
                 type="button"
                 onClick={() => setSelectedCategory(cat.key)}
                 className={cn(
-                  "flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-200 cursor-pointer whitespace-nowrap",
+                  "flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 cursor-pointer whitespace-nowrap",
                   isSelected
                     ? "bg-brand text-white shadow-sm"
                     : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
@@ -93,7 +75,7 @@ export function MediaToolsView() {
                 <span>{cat.label}</span>
                 <span
                   className={cn(
-                    "text-[10px] px-1.5 py-0.2 rounded-full",
+                    "text-[10px] px-1.5 py-0.5 rounded-full font-bold",
                     isSelected ? "bg-white/20 text-white" : "bg-muted text-muted-foreground"
                   )}
                 >
@@ -106,31 +88,11 @@ export function MediaToolsView() {
       </div>
 
       {/* Grid of 5 Cards */}
-      {filteredTools.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7">
-          {filteredTools.map((tool, idx) => (
-            <MediaToolCard key={tool.id} item={tool} index={idx} />
-          ))}
-        </div>
-      ) : (
-        <div className="text-center py-16 px-4 rounded-2xl bg-card border border-border/70">
-          <Layers className="size-10 text-muted-foreground mx-auto mb-3 opacity-50" />
-          <p className="text-sm font-semibold text-foreground">
-            لا توجد أدوات تطابق البحث المحدد
-          </p>
-          <button
-            type="button"
-            onClick={() => {
-              setSelectedCategory("all");
-              setSearchQuery("");
-            }}
-            className="mt-3 text-xs text-brand font-bold underline hover:opacity-80 cursor-pointer"
-          >
-            إعادة تعيين الفلاتر
-          </button>
-        </div>
-      )}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7">
+        {filteredTools.map((tool, idx) => (
+          <MediaToolCard key={tool.id} item={tool} index={idx} />
+        ))}
+      </div>
     </div>
   );
 }
-

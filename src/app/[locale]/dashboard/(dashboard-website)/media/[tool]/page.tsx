@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { MEDIA_TOOLS_DATA } from "@/features/media/data/media-tools.data";
 import { MediaToolWorkspace } from "@/features/media/components/media-tool-workspace";
+import { TextToSpeechStudio } from "@/features/media/components/text-to-speech-studio";
 
 interface Props {
   params: Promise<{
@@ -46,6 +47,14 @@ export default async function MediaToolSubPage({ params }: Props) {
 
   if (!toolItem) {
     notFound();
+  }
+
+  if (toolItem.id === "text-to-speech") {
+    return (
+      <div className="w-full flex-1 min-h-full">
+        <TextToSpeechStudio />
+      </div>
+    );
   }
 
   return (

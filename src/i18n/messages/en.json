@@ -1973,5 +1973,78 @@
       "comingSoon": "Coming soon for all plans",
       "exploreOther": "Explore other tools"
     }
+  },
+  "TextToSpeechStudio": {
+    "backLink": "Back to Media Tools",
+    "badge": "Neural Voice AI Studio",
+    "title": "Text to Speech",
+    "subtitle": "Turn any text into lifelike speech with studio-grade emotion and clarity",
+    "placeholder": "Start typing here or paste any text you want to turn into lifelike speech...",
+    "getStartedWith": "Get started with",
+    "generateBtn": "Generate speech",
+    "generating": "Synthesizing voice waves...",
+    "tabs": {
+      "settings": "Settings",
+      "history": "History"
+    },
+    "proTip": {
+      "title": "Pro tip",
+      "body": "Use commas and '...' for natural pauses. Press Ctrl+Enter to generate."
+    },
+    "voice": {
+      "label": "Voice",
+      "recommend": "Recommend",
+      "selectTitle": "Select a voice for your project",
+      "close": "Close"
+    },
+    "model": {
+      "label": "Model",
+      "multilingualTitle": "Multilingual v2",
+      "multilingualDesc": "Most life-like, emotionally rich",
+      "fasterGen": "Faster generation, lower cost",
+      "tryT25": "Try T2.5"
+    },
+    "language": {
+      "label": "Language",
+      "autoDetect": "Auto detect",
+      "arStandard": "Arabic - Standard (Fusha)",
+      "arEgyptian": "Arabic - Egyptian",
+      "arGulf": "Arabic - Gulf",
+      "enUS": "English - US (Natural)",
+      "enUK": "English - UK (British RP)"
+    },
+    "sliders": {
+      "title": "Voice Tuning",
+      "stability": "Stability",
+      "clarity": "Clarity + Similarity",
+      "style": "Style Exaggeration"
+    },
+    "chips": {
+      "story": "Narrate a story",
+      "joke": "Tell a silly joke",
+      "ad": "Record an advertisement",
+      "languages": "Speak in different languages",
+      "movie": "Direct a dramatic movie scene",
+      "game": "Hear from a video game character",
+      "podcast": "Introduce your podcast",
+      "meditation": "Guide a meditation class"
+    },
+    "player": {
+      "title": "Generated Speech Preview",
+      "download": "Download MP3",
+      "copy": "Copy link",
+      "copied": "Link copied!",
+      "play": "Play",
+      "pause": "Pause",
+      "speed": "Speed",
+      "voiceUsed": "Voice used"
+    },
+    "history": {
+      "title": "Generation History",
+      "empty": "No voice clips generated yet. Type your text and click generate!",
+      "play": "Play",
+      "download": "Download",
+      "duration": "Duration"
+    }
   }
 }
