@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { BUSINESS_TOOLS_DATA } from "@/features/business/data/business-tools.data";
 import { BusinessToolWorkspace } from "@/features/business/components/business-tool-workspace";
+import { BusinessPlanWizard } from "@/features/business/components/business-plan-wizard";
 
 interface Props {
   params: Promise<{
@@ -46,6 +47,14 @@ export default async function BusinessToolSubPage({ params }: Props) {
 
   if (!toolItem) {
     notFound();
+  }
+
+  if (toolItem.id === "business-plan") {
+    return (
+      <div className="w-full flex-1 min-h-full">
+        <BusinessPlanWizard />
+      </div>
+    );
   }
 
   return (
