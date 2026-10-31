@@ -162,7 +162,7 @@ export function BusinessPlanWizard() {
   };
 
   return (
-    <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
+    <div className="w-full max-w-5xl mx-auto sm:px-6 lg:px-8 py-6 sm:py-10">
       {/* Top Header & Breadcrumb */}
       <div className="flex items-center justify-between gap-4 mb-6">
         <Link
