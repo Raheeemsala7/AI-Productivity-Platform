@@ -1,3 +1,10 @@
+export type CreationMode =
+  | "general"
+  | "presentation"
+  | "landing"
+  | "document"
+  | "carousel";
+
 export interface SlideItem {
   id: number;
   title: string;
@@ -21,12 +28,42 @@ export interface GeneratedDeck {
   createdAt: string;
 }
 
-export interface RecentDeckItem {
+export interface LandingPageSection {
   id: string;
+  type: "hero" | "stats" | "features" | "testimonials" | "pricing" | "cta";
   title: string;
-  date: string;
-  slidesCount: number;
-  theme: "obsidian" | "corporate" | "emerald" | "sunset";
-  color: string;
+  subtitle?: string;
+  content?: string;
+  items?: {
+    title: string;
+    description: string;
+    badge?: string;
+  }[];
 }
 
+export interface GeneratedLandingPage {
+  id: string;
+  title: string;
+  tagline: string;
+  prompt: string;
+  theme: "obsidian" | "corporate" | "emerald" | "sunset";
+  language: "ar" | "en";
+  sectionsCount: number;
+  heroCta: string;
+  sections: LandingPageSection[];
+  createdAt: string;
+}
+
+export interface RecentCreationItem {
+  id: string;
+  title: string;
+  type: "presentation" | "landing" | "document" | "carousel";
+  date: string;
+  count: number; // slides count or sections count
+  theme: "obsidian" | "corporate" | "emerald" | "sunset";
+  color: string;
+  slidesCount?: number; // compat
+}
+
+// Retain alias for backward compatibility
+export type RecentDeckItem = RecentCreationItem;

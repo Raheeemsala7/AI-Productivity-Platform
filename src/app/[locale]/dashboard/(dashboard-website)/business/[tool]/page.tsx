@@ -59,7 +59,11 @@ export default async function BusinessToolSubPage({ params }: Props) {
   }
 
   if (toolItem.id === "generate-presentation") {
-    redirect("/dashboard/presentation");
+    redirect("/dashboard/presentation?mode=presentation");
+  }
+
+  if (toolItem.id === "generate-landing") {
+    redirect("/dashboard/presentation?mode=landing");
   }
 
   return (

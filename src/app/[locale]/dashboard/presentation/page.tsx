@@ -10,23 +10,43 @@ interface Props {
   params: Promise<{
     locale: string;
   }>;
+  searchParams: Promise<{
+    mode?: string;
+  }>;
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
   const { locale } = await params;
+  const { mode } = await searchParams;
   const isAr = locale === "ar";
+
+  if (mode === "landing") {
+    return {
+      title: isAr
+        ? "توليد صفحات الهبوط بالذكاء الاصطناعي — ORICO"
+        : "AI Landing Page Generator — ORICO",
+      description: isAr
+        ? "أنشئ صفحات هبوط احترافية عالية التحويل في ثوانٍ معدودة."
+        : "Generate high-converting landing pages with AI in seconds.",
+    };
+  }
+
   return {
     title: isAr
-      ? "إنشاء عروض تقديمية استثنائية — ORICO"
-      : "AI Presentation Studio — ORICO",
+      ? "استوديو العروض وصفحات الهبوط بالذكاء الاصطناعي — ORICO"
+      : "AI Decks & Landing Studio — ORICO",
     description: isAr
-      ? "أنشئ عروضاً تقديمية احترافية بالذكاء الاصطناعي في ثوانٍ معدودة."
-      : "Create stunning, investor-ready pitch decks with AI in seconds.",
+      ? "أنشئ عروضاً تقديمية وصفحات هبوط احترافية بالذكاء الاصطناعي في ثوانٍ معدودة."
+      : "Create stunning, investor-ready pitch decks and landing pages with AI.",
   };
 }
 
-export default async function PresentationStandalonePage({ params }: Props) {
+export default async function PresentationStandalonePage({
+  params,
+  searchParams,
+}: Props) {
   const { locale } = await params;
+  const { mode } = await searchParams;
   const session = await getServerSession(authOptions);
 
   if (!session?.user) {
@@ -35,11 +55,11 @@ export default async function PresentationStandalonePage({ params }: Props) {
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col selection:bg-purple-500/20 selection:text-purple-300 relative overflow-x-hidden">
-      {/* Background ambient radial gradients matching the reference UI */}
+      {/* Background ambient radial gradients matching Gamma & modern AI studio UI */}
       <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[520px] bg-gradient-to-b from-purple-600/12 via-indigo-600/6 to-transparent blur-3xl opacity-80" />
-        <div className="absolute top-[20%] right-[10%] w-[450px] h-[350px] bg-purple-500/8 blur-[120px] rounded-full" />
-        <div className="absolute top-[35%] left-[5%] w-[450px] h-[350px] bg-blue-500/6 blur-[120px] rounded-full" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1100px] h-[520px] bg-gradient-to-b from-blue-600/10 via-purple-600/5 to-transparent blur-3xl opacity-80" />
+        <div className="absolute top-[20%] right-[10%] w-[450px] h-[350px] bg-sky-500/8 blur-[120px] rounded-full" />
+        <div className="absolute top-[35%] left-[5%] w-[450px] h-[350px] bg-purple-500/6 blur-[120px] rounded-full" />
       </div>
 
       {/* Sleek Minimal Studio Top Navbar */}
@@ -51,9 +71,8 @@ export default async function PresentationStandalonePage({ params }: Props) {
 
       {/* Main Studio View - Dedicated full-screen studio without any layouts */}
       <main className="flex-1 w-full pb-16">
-        <PresentationStudio hideHeader />
+        <PresentationStudio initialMode={mode} hideHeader />
       </main>
     </div>
   );
 }
-

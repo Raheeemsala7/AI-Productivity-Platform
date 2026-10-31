@@ -66,11 +66,11 @@ export function PresentationNavbar({
             <div className="flex flex-col min-w-0">
               <div className="flex items-center gap-2">
                 <span className="text-sm sm:text-base font-bold text-foreground truncate">
-                  {isRtl ? "استوديو العروض التقديمية" : "Presentation Studio"}
+                  {isRtl ? "استوديو الإنشاء الذكي" : "AI Creation Studio"}
                 </span>
                 <span className="hidden md:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-purple-500/10 text-purple-400 border border-purple-500/20">
                   <span className="size-1.5 rounded-full bg-purple-500 animate-ping" />
-                  Pitch Deck Pro
+                  Decks & Landing AI
                 </span>
               </div>
             </div>
