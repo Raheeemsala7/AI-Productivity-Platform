@@ -11,7 +11,6 @@ import { MediaToolCard } from "./media-tool-card";
 export function MediaToolsView() {
   const t = useTranslations("MediaTools");
   const [selectedCategory, setSelectedCategory] = useState<MediaCategory>("all");
-  const [searchQuery, setSearchQuery] = useState("");
 
   const categories: { key: MediaCategory; label: string; icon: React.ElementType }[] = [
     { key: "all", label: t("filterAll"), icon: Layers },
@@ -27,9 +26,7 @@ export function MediaToolsView() {
 
       if (!matchesCategory) return false;
 
-      if (!searchQuery.trim()) return true;
 
-      const q = searchQuery.toLowerCase().trim();
       const title = t(`tools.${item.translationKey}.title`).toLowerCase();
       const desc = t(`tools.${item.translationKey}.description`).toLowerCase();
       const tagline = t(`tools.${item.translationKey}.tagline`).toLowerCase();
@@ -42,7 +39,7 @@ export function MediaToolsView() {
         model.includes(q)
       );
     });
-  }, [selectedCategory, searchQuery, t]);
+  }, [selectedCategory, t]);
 
   return (
     <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
@@ -105,18 +102,6 @@ export function MediaToolsView() {
               </button>
             );
           })}
-        </div>
-
-        {/* Search Input */}
-        <div className="relative w-full sm:w-64">
-          <Search className="size-4 absolute top-1/2 -translate-y-1/2 start-3 text-muted-foreground pointer-events-none" />
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder={t("filterAll") + "..."}
-            className="w-full h-10 ps-9 pe-3 text-xs sm:text-sm rounded-xl bg-card border border-border/70 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-brand/50 focus:border-brand transition-all"
-          />
         </div>
       </div>
 
